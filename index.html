@@ -175,6 +175,11 @@ dl.spec dd{margin:0}
 .petbar{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px}
 .mini{display:flex;align-items:center;gap:10px;min-width:0}
 .mini img{width:40px;height:40px;object-fit:contain;background:var(--sky);border-radius:50%;padding:3px}
+img.photo{object-fit:cover!important;padding:0!important;border-radius:50%}
+.photo-pick{display:grid;grid-template-columns:84px minmax(0,1fr);gap:14px;align-items:center;padding-bottom:14px;margin-bottom:6px;border-bottom:1px solid var(--line)}
+.photo-pick img{width:84px;height:84px;border-radius:50%;object-fit:contain;background:var(--amber-soft)}
+.photo-btns{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.btn.sm{padding:8px 14px;font-size:14px;cursor:pointer}
 .mini b{display:block;font-size:14px}
 .mini span{font-size:12px;color:var(--muted)}
 .chat{display:flex;flex-direction:column;gap:10px}
@@ -338,6 +343,7 @@ const BREEDS = {
 const LARGE_BREEDS = ["골든 리트리버","래브라도 리트리버","진돗개"];
 const spName = sp=> sp==="dog"?"강아지":"고양이";
 const avatar = sp=> sp==="dog"?"img/oli-hi.png":"img/seri-hi.png";
+const petImg = pt=> pt.photo || avatar(pt.sp);
 
 function monthsAgo(n){ const d=new Date(); d.setDate(1); d.setMonth(d.getMonth()-n); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`; }
 const EXAMPLE_PETS = [
@@ -440,7 +446,7 @@ $("#tabs").innerHTML = TABS.map(([k,l])=>`<button class="tab" type="button" data
 
 function petLabel(pt){ return `${spName(pt.sp)} · ${ageText(pt)} · ${pt.weight}kg`; }
 function renderChip(){ const pt=cur(); $("#petChip").textContent = (pt.example?"예시 · ":"")+`${pt.name} (${spName(pt.sp)})`; const a=$("#acctBtn"); a.textContent=acctIcon(); a.classList.toggle("in",!!user); }
-function petMini(pt){ return `<div class="mini"><img src="${avatar(pt.sp)}" alt=""><div><b>${esc(pt.name)}</b><span>${petLabel(pt)}${pt.breed?" · "+esc(pt.breed):""}</span></div></div>`; }
+function petMini(pt){ return `<div class="mini"><img class="${pt.photo?"photo":""}" src="${petImg(pt)}" alt=""><div><b>${esc(pt.name)}</b><span>${petLabel(pt)}${pt.breed?" · "+esc(pt.breed):""}</span></div></div>`; }
 
 function pcard(p){
   return `<button class="pcard" type="button" data-open="${p.id}">
@@ -644,7 +650,7 @@ function vShip(){
 function birthdayInfo(pt){
   if(!pt.birth) return "";
   const m=+pt.birth.split("-")[1], now=new Date().getMonth()+1, left=(m-now+12)%12;
-  return `<div class="bday"><img src="${avatar(pt.sp)}" alt=""><div>${left===0
+  return `<div class="bday"><img class="${pt.photo?"photo":""}" src="${petImg(pt)}" alt=""><div>${left===0
     ? `<b>이번 달은 ${esc(pt.name)} 생일이에요!</b><br><span class="small muted">생일 달에는 간식 사은품을 함께 보내 드려요. (예시 혜택)</span>`
     : `<b>${esc(pt.name)} 생일은 ${m}월이에요</b><br><span class="small muted">${left}달 남았어요. 생일 달에 깜짝 선물을 준비할게요. (예시 혜택)</span>`}</div></div>`;
 }
@@ -655,7 +661,7 @@ function vPet(){
     ${sb && !user ? `<button class="shipbanner" type="button" data-go="account"><div><b>로그인하고 어디서나 이어 보기</b><span>지금은 이 휴대폰에만 저장돼요. 가입하면 다른 휴대폰에서도 볼 수 있어요.</span></div><span>로그인</span></button>` : ""}
     ${user ? `<button class="shipbanner" type="button" data-go="account"><div><b>${esc(user.email||"")}</b><span>계정에 저장되고 있어요</span></div><span>내 계정</span></button>` : ""}
     <div class="petlist">${pets.map(x=>`<button class="petcard" type="button" data-pick="${x.id}" aria-pressed="${x.id===curId}">
-      <img src="${avatar(x.sp)}" alt=""><div style="min-width:0"><b>${esc(x.name)}</b> ${x.example?'<span class="badge">예시</span>':""}
+      <img class="${x.photo?"photo":""}" src="${petImg(x)}" alt=""><div style="min-width:0"><b>${esc(x.name)}</b> ${x.example?'<span class="badge">예시</span>':""}
       <div class="sub">${petLabel(x)}${x.breed?" · "+esc(x.breed):""}</div>
       ${(x.allergies||[]).length?`<div class="badges" style="margin-top:4px">${x.allergies.map(a=>`<span class="badge hot">${(ALLERGENS.find(z=>z[0]===a)||[a,a])[1]} 피하기</span>`).join("")}</div>`:""}</div>
       ${x.id===curId?'<span class="on">선택됨</span>':""}</button>`).join("")}
@@ -699,6 +705,12 @@ function vEdit(){
   const d=draft, maxMonth=ymd(new Date()).slice(0,7);
   return `<div class="stack"><span class="eyebrow">${d.isNew?"아이 추가":"프로필 수정"}</span><h1>${d.isNew?"새 아이를 알려 주세요":esc(d.name)+" 정보 수정"}</h1></div>
     <div class="card">
+      <div class="photo-pick">
+        <img class="${d.photo?"photo":""}" src="${petImg(d)}" alt="">
+        <div class="stack"><b>아이 사진</b>
+          <div class="photo-btns"><label class="btn ghost sm">${d.photo?"사진 바꾸기":"사진 올리기"}<input id="e-photo" type="file" accept="image/*" hidden></label>${d.photo?'<button class="link" type="button" data-delphoto>지우기</button>':""}</div>
+          <span class="small muted">사진이 없으면 ${d.sp==="dog"?"올리":"세리"}가 대신 나와요.</span></div>
+      </div>
       <div class="q"><b>종류</b><div class="chips">${[["dog","강아지"],["cat","고양이"]].map(([v,l])=>`<button class="chip" type="button" data-esp="${v}" aria-pressed="${d.sp===v}">${l}</button>`).join("")}</div></div>
       <div class="two">
         <label class="f">이름<input id="e-name" value="${esc(d.name)}" maxlength="12" placeholder="예: 콩이"></label>
@@ -719,6 +731,19 @@ function vEdit(){
       <button class="btn primary" type="button" data-save>저장하기</button>
     </div>
     ${!d.isNew && pets.length>1?`<button class="btn warn block" type="button" data-delpet>${delArm?"한 번 더 누르면 삭제돼요":esc(d.name)+" 프로필 삭제"}</button>`:""}`;
+}
+// 사진은 정사각형 320px로 줄여서 프로필 안에 같이 저장해요 (계정 저장에도 그대로 들어가요).
+function loadPhoto(file){
+  const url=URL.createObjectURL(file), im=new Image();
+  im.onload=()=>{
+    const n=320, c=document.createElement("canvas"), side=Math.min(im.naturalWidth,im.naturalHeight);
+    c.width=c.height=n;
+    c.getContext("2d").drawImage(im,(im.naturalWidth-side)/2,(im.naturalHeight-side)/2,side,side,0,0,n,n);
+    URL.revokeObjectURL(url);
+    draft.photo=c.toDataURL("image/jpeg",0.82); render(false);
+  };
+  im.onerror=()=>{ URL.revokeObjectURL(url); toast("이 사진은 열 수 없어요. 다른 사진을 골라 주세요."); };
+  im.src=url;
 }
 function saveDraft(){
   const d=draft;
@@ -1144,6 +1169,7 @@ document.addEventListener("click",e=>{
   else if(d.esp){ if(draft.sp!==d.esp){ draft.sp=d.esp; draft.breed=""; } render(false); }
   else if(d.eal){ const s=new Set(draft.allergies); s.has(d.eal)?s.delete(d.eal):s.add(d.eal); draft.allergies=[...s]; t.setAttribute("aria-pressed",s.has(d.eal)); }
   else if("save" in d){ saveDraft(); }
+  else if("delphoto" in d){ delete draft.photo; render(false); }
   else if("delpet" in d){ if(delArm){ pets=pets.filter(p=>p.id!==draft.id); autoship.forEach(a=>{ if(a.petId===draft.id) a.petId=null; }); saveShip(); curId=pets[0].id; savePets(); toast(`${draft.name} 프로필을 삭제했어요.`); draft=null; chat=null; go("pet"); } else { delArm=true; render(false); } }
   // 샘플
   else if(d.sample){ toggleSample(d.sample); render(false); }
@@ -1192,6 +1218,7 @@ document.addEventListener("input",e=>{
 document.addEventListener("change",e=>{
   const id=e.target.id, v=e.target.value;
   if(id==="e-birth") draft.birth=v;
+  if(id==="e-photo" && e.target.files[0]) loadPhoto(e.target.files[0]);
   if(id==="e-active") draft.active=v;
   if(id==="e-neutered") draft.neutered=e.target.checked;
   if(id==="v-attach") vetForm.attach=e.target.checked;
