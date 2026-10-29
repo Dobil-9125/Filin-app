@@ -29,7 +29,7 @@ FILIN(필린) 고객용 앱의 첫 시제품이에요. 휴대폰 화면에 맞�
 - `filin-app-onefile.html`: 사진까지 파일 하나에 다 들어 있어요. 이 파일만 받아서 크롬이나 사파리로 열면 사진이 깨지지 않고 보여요. 카톡이나 메일로 보내기에도 이 파일이 편해요.
 - `index.html`: 고쳐 쓰는 원본이에요. `img/` 폴더와 같은 곳에 있어야 사진이 보여요. 저장소 전체를 받거나(Code → Download ZIP) GitHub Pages로 열면 돼요.
 
-`index.html`을 고친 뒤에는 `filin-app-onefile.html`도 다시 만들어야 같은 화면이 돼요.
+`index.html`을 고친 뒤에는 `filin-app-onefile.html`도 다시 만들어야 같은 화면이 돼요. (첫 화면 사진은 통합 브랜드관 기획안 PDF에서 뽑은 올리·세리와 브랜드 이미지예요.)
 
 ## 휴대폰에 앱으로 설치하기
 

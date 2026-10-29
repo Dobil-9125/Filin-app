@@ -3,49 +3,43 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#2c4a52">
+<meta name="theme-color" content="#ffffff">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="필린">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>FILIN 앱 시제품</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@400;500;700&display=swap">
 <style>
-/* Layout: a single phone-width app column with a sticky top bar and a bottom tab bar, colors from the FILIN storefront at dusk */
+/* Layout: one phone-width app column, white top bar, bottom tabs. Bright light look taken from the FILIN logo: navy, sunny yellow, heart red, with pastel tiles */
 :root{
-  --bg:#f6f4f1; --surface:#ffffff; --ink:#1e2a30; --muted:#5f6b70; --line:#e3ded7;
-  --slate:#2c4a52; --slate-ink:#ffffff; --amber:#e3a03a; --amber-soft:#fbefd9; --amber-ink:#5a3a07;
-  --good:#2f7a4f; --warn:#a4561b;
+  --bg:#fffcf7; --surface:#ffffff; --ink:#1b2847; --muted:#636d86; --line:#ede6da;
+  --slate:#17336b; --slate-ink:#ffffff; --amber:#ffc23d; --amber-soft:#fff3cf; --amber-ink:#6a4900;
+  --coral:#ec5446; --sky:#e7f0ff; --peach:#ffeadf; --mint:#e2f5ea; --lilac:#efe9ff;
+  --good:#2f7a4f; --warn:#b4531a;
   --display:"Gowun Dodum","Noto Sans KR",system-ui,sans-serif;
   --body:"Noto Sans KR",system-ui,-apple-system,sans-serif;
-  --r:14px;
+  --r:16px;
+  color-scheme:light;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#141b1e; --surface:#1d2629; --ink:#eef1f1; --muted:#9aa7ab; --line:#2f3b3f;
-  --slate:#3d6870; --slate-ink:#ffffff; --amber:#f0b252; --amber-soft:#3a2d17; --amber-ink:#f6d9a6;
-  --good:#6cc28f; --warn:#e79a5d; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#141b1e; --surface:#1d2629; --ink:#eef1f1; --muted:#9aa7ab; --line:#2f3b3f;
-  --slate:#3d6870; --slate-ink:#ffffff; --amber:#f0b252; --amber-soft:#3a2d17; --amber-ink:#f6d9a6;
-  --good:#6cc28f; --warn:#e79a5d; color-scheme:dark}
-
 html,body{height:100%}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--slate)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
 .app{max-width:460px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;background:var(--bg)}
 @media (min-width:520px){.app{border-left:1px solid var(--line);border-right:1px solid var(--line)}}
 .wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 
-header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--slate);color:var(--slate-ink);padding-block:12px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.logo{font-family:var(--display);font-size:22px;letter-spacing:.12em}
-.logo small{font-family:var(--body);font-size:11px;letter-spacing:.02em;opacity:.8;margin-left:8px}
-.pet-chip{background:rgba(255,255,255,.14);color:var(--slate-ink);border:0;border-radius:999px;padding:5px 12px;font:inherit;font-size:13px;cursor:pointer}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);color:var(--slate);border-bottom:1px solid var(--line);padding-block:12px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-family:var(--body);font-weight:700;font-size:22px;letter-spacing:.06em;color:var(--slate)}
+.logo i{color:var(--coral);font-style:normal;font-size:12px;vertical-align:top;margin-left:1px}
+.logo small{font-family:var(--body);font-weight:400;font-size:11px;letter-spacing:.02em;color:var(--muted);margin-left:6px}
+.pet-chip{background:var(--amber-soft);color:var(--amber-ink);border:0;border-radius:999px;padding:5px 12px;font:inherit;font-size:13px;cursor:pointer}
 
 main{flex:1;padding-block:18px 110px;display:flex;flex-direction:column;gap:22px}
 h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0}
@@ -59,13 +53,51 @@ p{margin:0}
 .stack{display:flex;flex-direction:column;gap:10px}
 .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 
-.hero{border-radius:var(--r);overflow:hidden;position:relative;background:var(--slate);color:var(--slate-ink)}
-.hero img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover}
-.hero .cap{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px}
-.hero .cap p{opacity:.9;font-size:14px}
-
+.hello{position:relative;border-radius:22px;overflow:hidden;background:linear-gradient(170deg,var(--sky) 0%,#f4f8ff 55%,var(--amber-soft) 100%);padding:22px 18px 0;display:flex;flex-direction:column;gap:12px}
+.hello h1{font-size:27px;line-height:1.32;color:var(--slate)}
+.hello h1 em{font-style:normal;color:var(--coral)}
+.hello p{color:var(--muted);font-size:14px;max-width:30ch}
+.hello .duo{display:flex;justify-content:center;align-items:flex-end;gap:0;margin-top:2px;position:relative}
+.hello .duo::before{content:"";position:absolute;left:-18px;right:-18px;bottom:0;height:34px;background:#cfe8c4;border-radius:50% 50% 0 0/100% 100% 0 0}
+.hello .duo img{position:relative;height:170px;width:auto;max-width:48%;object-fit:contain}
+.hello .duo img+img{margin-left:-14px}
+@media (prefers-reduced-motion:no-preference){.hello .duo img:first-child{animation:wave 2.6s ease-in-out infinite;transform-origin:50% 100%}@keyframes wave{0%,100%{transform:rotate(0)}50%{transform:rotate(-3deg)}}}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{border:0;border-radius:var(--r);padding:14px;display:grid;grid-template-columns:38px 1fr;gap:4px 10px;align-items:center;cursor:pointer;text-align:left;font:inherit;color:var(--ink)}
+.tile .ic{grid-row:span 2;width:38px;height:38px;border-radius:12px;background:var(--surface);display:grid;place-items:center;color:var(--slate)}
+.tile .ic svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tile b{font-weight:700;font-size:14.5px}
+.tile span{font-size:12px;color:var(--muted);line-height:1.35}
+.t-sky{background:var(--sky)}.t-peach{background:var(--peach)}.t-mint{background:var(--mint)}.t-amber{background:var(--amber-soft)}
+.worry{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:center;background:var(--lilac);border-radius:var(--r);padding:12px 14px 0 8px;border:0;font:inherit;color:inherit;text-align:left;cursor:pointer}
+.worry img{align-self:end;width:96px;height:auto}
+.worry div{padding-bottom:12px;display:flex;flex-direction:column;gap:4px}
+.worry b{font-size:16px;color:var(--slate);font-weight:700}
+.worry span{font-size:13px;color:var(--muted)}
+.worry u{font-size:13px;color:var(--slate);text-underline-offset:3px}
+.brands{display:grid;grid-auto-flow:column;grid-auto-columns:78%;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:4px}
+.bcard{scroll-snap-align:start;position:relative;border:0;padding:0;border-radius:var(--r);overflow:hidden;cursor:pointer;font:inherit;text-align:left;aspect-ratio:4/3;max-width:100%}
+.bcard img{width:100%;height:100%;object-fit:cover;display:block}
+.bcard div{position:absolute;inset:auto 0 0 0;padding:28px 14px 12px;background:linear-gradient(transparent,rgba(10,20,40,.78));color:#fff;display:flex;flex-direction:column}
+.bcard b{font-size:17px}
+.bcard span{font-size:12px;opacity:.92}
+.start{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column}
+.start img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+.start .in{padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.steps li{display:grid;grid-template-columns:26px 1fr;gap:10px;align-items:center;font-size:14px}
+.steps li i{font-style:normal;width:26px;height:26px;border-radius:50%;background:var(--amber);color:var(--ink);display:grid;place-items:center;font-weight:700;font-size:13px}
+.trust{display:grid;grid-template-columns:110px 1fr;gap:14px;align-items:center;background:var(--mint);border-radius:var(--r);padding:14px}
+.trust img{border-radius:12px;aspect-ratio:1;object-fit:cover}
+.trust ul{margin:6px 0 0;padding-left:18px;font-size:13px;color:var(--ink);display:flex;flex-direction:column;gap:2px}
+.brand-banner{border-radius:var(--r);overflow:hidden;position:relative;aspect-ratio:16/9;max-width:100%}
+.brand-banner img{width:100%;height:100%;object-fit:cover;display:block}
+.brand-banner div{position:absolute;inset:auto 0 0 0;padding:28px 14px 12px;background:linear-gradient(transparent,rgba(10,20,40,.78));color:#fff;font-size:13px}
+.brand-banner b{display:block;font-size:17px}
+.foot{display:flex;flex-direction:column;align-items:center;gap:6px}
+.foot img{width:84px;height:auto}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:0;border-radius:12px;padding:12px 16px;font:inherit;font-weight:500;cursor:pointer;text-decoration:none}
-.btn.primary{background:var(--amber);color:#2a1a02}
+.btn.primary{background:var(--amber);color:var(--ink);box-shadow:0 3px 0 #e2a21c}
 .btn.dark{background:var(--slate);color:var(--slate-ink)}
 .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
 .btn.block{width:100%}
@@ -81,8 +113,6 @@ p{margin:0}
 
 .section-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .link{background:none;border:0;color:var(--slate);font:inherit;font-size:13px;cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:3px}
-:root:not([data-theme="light"]) .link{color:var(--amber)}
-@media (prefers-color-scheme: light){:root:not([data-theme="dark"]) .link{color:var(--slate)}}
 
 .hscroll{display:grid;grid-auto-flow:column;grid-auto-columns:150px;gap:10px;overflow-x:auto;padding-bottom:4px;scroll-snap-type:x mandatory}
 .hscroll>*{scroll-snap-align:start}
@@ -127,8 +157,6 @@ nav.tabs .in{width:100%;max-width:460px;display:grid;grid-template-columns:repea
 .tab{background:none;border:0;font:inherit;font-size:11.5px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0 10px;cursor:pointer}
 .tab svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .tab[aria-current="page"]{color:var(--slate)}
-:root:not([data-theme="light"]) .tab[aria-current="page"]{color:var(--amber)}
-@media (prefers-color-scheme: light){:root:not([data-theme="dark"]) .tab[aria-current="page"]{color:var(--slate)}}
 
 .sheet-bg{position:fixed;inset:0;background:rgba(10,16,18,.5);z-index:20;display:flex;align-items:flex-end;justify-content:center}
 .sheet{background:var(--surface);width:100%;max-width:460px;max-height:88%;overflow-y:auto;border-radius:18px 18px 0 0;padding-block:18px calc(20px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:14px}
@@ -149,7 +177,7 @@ dl.spec dd{margin:0}
 
 <div class="app">
   <header class="top wrap">
-    <div class="logo">FILIN<small>작은 감정까지, 소중하게.</small></div>
+    <div class="logo">FILIN<i>♥</i><small>작은 감정까지, 소중하게.</small></div>
     <button class="pet-chip" id="petChip" type="button"></button>
   </header>
   <main class="wrap" id="main"></main>
@@ -275,32 +303,55 @@ function pcard(p){
 }
 
 /* ---------- 홈 ---------- */
+const BRAND_IMG = {tow:"img/brand-tow.jpg", pv:"img/brand-pv-ns.jpg", ns:"img/brand-pv-ns.jpg", bf:"img/brand-bellfor.jpg"};
+const ic = k=>`<span class="ic"><svg viewBox="0 0 24 24">${ICONS[k]}</svg></span>`;
 function vHome(){
   const top = recommend(pet)[0];
-  return `<section class="hero">
-      <img src="img/filin-store.jpg" alt="올리와 세리가 필린 매장 앞에 서 있는 그림">
-      <div class="cap"><h1>우리 아이 밥,<br>필린에서 같이 골라요</h1>
-      <p>토우·퓨어비타·뉴트리소스·벨포아를 직접 들여오는 공식 수입 스토어예요.</p></div>
+  return `<section class="hello">
+      <span class="eyebrow">반가워요, 보호자님</span>
+      <h1>올리와 세리가<br>우리 아이 밥을<br><em>같이 골라 드려요</em></h1>
+      <p>토우·퓨어비타·뉴트리소스·벨포아를 직접 들여오는 필린 공식 스토어예요.</p>
+      <button class="btn primary" type="button" data-go="find">1분 맞춤 추천 시작하기</button>
+      <div class="duo"><img src="img/oli-hi.png" alt="손을 흔드는 강아지 올리"><img src="img/seri-hi.png" alt="손을 흔드는 고양이 세리"></div>
     </section>
-    <div class="quick">
-      <button class="qcard" type="button" data-go="find"><b>1분 맞춤 추천</b><span>나이·체중·고민으로 골라 드려요</span></button>
-      <button class="qcard" type="button" data-go="feed"><b>급여량 계산</b><span>하루 몇 g, 한 봉지 며칠?</span></button>
-      <button class="qcard" type="button" data-go="pet"><b>샘플 먼저</b><span>맞는지 맛보고 정하기</span></button>
-      <button class="qcard" type="button" data-go="shop"><b>브랜드관</b><span>4개 브랜드 ${P.length}가지 제품</span></button>
+    <div class="tiles">
+      <button class="tile t-sky" type="button" data-go="find">${ic("find")}<b>맞춤 추천</b><span>나이·체중·고민으로</span></button>
+      <button class="tile t-peach" type="button" data-go="feed">${ic("feed")}<b>급여량 계산</b><span>하루 몇 g, 며칠 가요?</span></button>
+      <button class="tile t-mint" type="button" data-go="pet">${ic("pet")}<b>샘플 먼저</b><span>맛보고 정하기</span></button>
+      <button class="tile t-amber" type="button" data-go="shop">${ic("shop")}<b>브랜드관</b><span>${P.length}가지 제품</span></button>
     </div>
+    <button class="worry" type="button" data-go="find">
+      <img src="img/seri-question.png" alt="사료를 보며 고민하는 세리">
+      <div><b>어떤 사료가 맞을지 고민돼요?</b><span>세리도 한 알을 오래 고민해요. 고민 몇 가지만 골라 주면 맞는 사료를 찾아 드려요.</span><u>고민 고르러 가기</u></div>
+    </button>
     ${top?`<section class="stack">
       <div class="section-head"><h2>${esc(josa(pet.name,"이에게","에게"))} 먼저 권하는 사료</h2><button class="link" type="button" data-go="find">다시 고르기</button></div>
       ${recCard(top,0)}
     </section>`:""}
-    <section class="benefit">
-      <b>처음이라면 이렇게 시작해요</b>
-      <ol><li>첫 구매 샘플 키트로 맛부터 보여 주기</li><li>잘 먹으면 7~10일에 걸쳐 천천히 바꾸기</li><li>맞는 사료는 정기배송 7% 할인으로 받기</li></ol>
+    <section class="stack">
+      <div class="section-head"><h2>공식 브랜드관</h2><button class="link" type="button" data-go="shop">전체 제품</button></div>
+      <div class="brands">
+        <button class="bcard" type="button" data-brand="tow"><img src="${BRAND_IMG.tow}" alt="토우 제품과 숲속 폭포"><div><b>토우</b><span>${BRANDS.tow.line}</span></div></button>
+        <button class="bcard" type="button" data-brand="pv"><img src="${BRAND_IMG.pv}" alt="퓨어비타·뉴트리소스와 반려견"><div><b>퓨어비타 · 뉴트리소스</b><span>미국 · Good 4 Life® 시스템</span></div></button>
+        <button class="bcard" type="button" data-brand="bf"><img src="${BRAND_IMG.bf}" alt="벨포아 곤충 단백질 사료"><div><b>벨포아</b><span>${BRANDS.bf.line}</span></div></button>
+      </div>
+    </section>
+    <section class="start">
+      <img src="img/oli-seri-mealtime.jpg" alt="밥그릇 앞에 앉은 올리와 세리">
+      <div class="in"><h2>처음이라면 이렇게 시작해요</h2>
+      <ol class="steps"><li><i>1</i>첫 구매 샘플 키트로 맛부터 보여 주기</li><li><i>2</i>잘 먹으면 7~10일에 걸쳐 천천히 바꾸기</li><li><i>3</i>맞는 사료는 정기배송 7% 할인으로 받기</li></ol>
+      <button class="btn dark" type="button" data-go="pet">샘플 고르러 가기</button></div>
     </section>
     <section class="stack">
       <div class="section-head"><h2>필린에서 많이 찾는 제품</h2><button class="link" type="button" data-go="shop">전체 보기</button></div>
       <div class="hscroll">${P.filter(p=>p.hot).map(pcard).join("")}</div>
     </section>
-    <p class="proto">시제품이에요. 구매·샘플 신청은 실제로 처리되지 않아요.</p>`;
+    <section class="trust">
+      <img src="img/vet.jpg" alt="진료실의 수의사 일러스트">
+      <div><b>공식 수입원이 직접 들여와요</b>
+      <ul><li>미국·독일 제조사에서 직접 수입</li><li>정식 통관을 거친 정품</li><li>유통기한까지 관리해서 배송</li></ul></div>
+    </section>
+    <div class="foot"><img src="img/filin-badge.png" alt="FILIN 올리와 세리"><p class="proto">작은 감정까지, 소중하게.<br>시제품이에요. 구매·샘플 신청은 실제로 처리되지 않아요.</p></div>`;
 }
 
 /* ---------- 맞춤 추천 ---------- */
@@ -356,7 +407,7 @@ function vShop(){
   return `<div class="stack"><span class="eyebrow">공식 브랜드관</span><h1>브랜드별 제품</h1></div>
     <div class="chips">${[["all","전체"],["dog","강아지"],["cat","고양이"]].map(([v,l])=>`<button class="chip" type="button" data-fsp="${v}" aria-pressed="${shopFilter.sp===v}">${l}</button>`).join("")}</div>
     <div class="chips">${[["all","모든 브랜드"],...Object.entries(BRANDS).map(([k,v])=>[k,v.name])].map(([v,l])=>`<button class="chip" type="button" data-fb="${v}" aria-pressed="${shopFilter.b===v}">${l}</button>`).join("")}</div>
-    ${brand?`<p class="small muted"><b style="color:var(--ink)">${brand.name} (${brand.en})</b> · ${brand.line}</p>`:""}
+    ${brand?`<div class="brand-banner"><img src="${BRAND_IMG[shopFilter.b]}" alt="${brand.name} 브랜드 이미지"><div><b>${brand.name} · ${brand.en}</b>${brand.line}</div></div>`:""}
     <div class="pgrid">${list.map(pcard).join("")||'<p class="muted">이 조건의 제품이 아직 없어요.</p>'}</div>`;
 }
 
@@ -465,6 +516,7 @@ document.addEventListener("click",e=>{
   else if(d.concern){ const c=new Set(pet.concerns||[]); c.has(d.concern)?c.delete(d.concern):c.add(d.concern); pet.concerns=[...c]; savePet(); t.setAttribute("aria-pressed",c.has(d.concern)); $("#recs").innerHTML=recsHtml(recommend(pet)); }
   else if(d.fsp){ shopFilter.sp=d.fsp; render(); }
   else if(d.fb){ shopFilter.b=d.fb; render(); }
+  else if(d.brand){ shopFilter={sp:"all",b:d.brand}; go("shop"); }
   else if(d.sample){ toggleSample(d.sample); render(); }
   else if(d.sampleAdd){ const p=byId[d.sampleAdd]; if(p.sp!==pet.sp){toast(`${pet.sp==="dog"?"강아지":"고양이"}용 샘플만 담을 수 있어요.`);return;} if(!samples.includes(p.id)) toggleSample(p.id); closeSheet(); if(current()==="pet")render(); }
   else if(d.store){ toast("시제품이라 여기서 네이버 브랜드스토어 상품 페이지로 이동해요."); }

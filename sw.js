@@ -1,12 +1,16 @@
 // 앱 화면과 사진을 휴대폰에 저장해 두고, 인터넷이 없어도 열리게 하는 파일이에요.
 // index.html이나 사진을 바꾸면 아래 VERSION 숫자를 하나 올려야 휴대폰에 새 화면이 받아져요.
-const VERSION = "filin-v1";
+const VERSION = "filin-v2";
 const FILES = [
   "./", "./index.html", "./manifest.webmanifest",
   "./icons/icon-192.png", "./icons/icon-512.png", "./icons/apple-touch-icon.png",
   "./img/bellfor-landgut-mini.jpg",
   "./img/bellfor-landgut.jpg",
   "./img/bellfor-naturgut-coldpressed.jpg",
+  "./img/brand-bellfor.jpg",
+  "./img/brand-pv-ns.jpg",
+  "./img/brand-tow.jpg",
+  "./img/filin-badge.png",
   "./img/filin-store.jpg",
   "./img/ns-cat-kitten-country.jpg",
   "./img/ns-choice-chicken-barley.jpg",
@@ -17,6 +21,8 @@ const FILES = [
   "./img/ns-choice-whitefish-rice.jpg",
   "./img/ns-gf-chicken-peas.jpg",
   "./img/ns-gf-senior.jpg",
+  "./img/oli-hi.png",
+  "./img/oli-seri-adventure.jpg",
   "./img/oli-seri-mealtime.jpg",
   "./img/oli-seri-walk.jpg",
   "./img/pv-cat-chicken-peas.jpg",
@@ -24,6 +30,8 @@ const FILES = [
   "./img/pv-dog-chicken-brownrice.jpg",
   "./img/pv-dog-pork-blueberry.jpg",
   "./img/pv-dog-salmon-peas.jpg",
+  "./img/seri-hi.png",
+  "./img/seri-question.png",
   "./img/seri-thinking.jpg",
   "./img/tow-canyon-river-cat.jpg",
   "./img/tow-pacific-stream-dog.jpg",
@@ -31,6 +39,7 @@ const FILES = [
   "./img/tow-prey-trout-dog.jpg",
   "./img/tow-prey-turkey-cat.jpg",
   "./img/tow-prey-turkey-dog.jpg",
+  "./img/vet.jpg",
 ];
 
 self.addEventListener("install", e => {
