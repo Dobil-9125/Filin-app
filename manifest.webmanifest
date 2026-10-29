@@ -1,0 +1,16 @@
+{
+  "name": "FILIN 필린",
+  "short_name": "필린",
+  "description": "우리 아이 맞춤 사료 추천, 급여량 계산, 샘플 신청",
+  "lang": "ko",
+  "start_url": "./index.html#home",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f4f1",
+  "theme_color": "#2c4a52",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
