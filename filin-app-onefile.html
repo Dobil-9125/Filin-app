@@ -1064,7 +1064,20 @@ async function onSignedIn(u){
   const {data,error} = await sb.from("user_data").select("data").eq("user_id",u.id).maybeSingle();
   loadingAccount=false;
   if(error){ toast("계정 정보를 불러오지 못했어요. 잠시 뒤 다시 열어 주세요."); syncMsg="불러오기 실패"; render(false); return; }
-  if(data && data.data && Object.keys(data.data).length){ applyState(data.data); syncMsg="계정 정보를 불러왔어요"; toast("계정에 저장된 정보를 불러왔어요."); }
+  if(data && data.data && Object.keys(data.data).length){
+    // 로그인 전에 이 기기에서 새로 등록한 아이·정기배송은 계정 정보에 더해서 잃어버리지 않게 해요.
+    const local=collectState(), extra=(a,b)=>(a||[]).filter(x=>!x.example && !(b||[]).some(y=>y.id===x.id));
+    const addPets=extra(local.pets,data.data.pets), addShip=extra(local.autoship,data.data.autoship);
+    applyState(data.data);
+    if(addPets.length || addShip.length){
+      if(addPets.length && pets.every(p=>p.example)) pets=[];
+      pets=pets.concat(addPets); autoship=autoship.concat(addShip);
+      if(!pets.length) pets=local.pets;
+      rawSet("pets",pets); rawSet("autoship",autoship); await pushState();
+      toast(`계정 정보를 불러오고, 이 기기에서 등록한 ${addPets.map(p=>p.name).join(", ")||"정기배송"}도 계정에 더했어요.`);
+    } else toast("계정에 저장된 정보를 불러왔어요.");
+    syncMsg="계정 정보를 불러왔어요";
+  }
   else { await pushState(); toast("이 휴대폰에 있던 정보를 계정에 저장했어요."); }
   if(current()==="account") go("pet"); else render(false);
 }
