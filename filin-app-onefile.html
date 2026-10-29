@@ -131,7 +131,7 @@ p{margin:0}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:12px}
 label.f{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted)}
 input,select{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
 .q{display:flex;flex-direction:column;gap:8px}
 .q>b{font-weight:500;font-size:14px}
 
@@ -168,6 +168,52 @@ dl.spec dd{margin:0}
 .seri{display:grid;grid-template-columns:72px 1fr;gap:12px;align-items:center}
 .seri img{border-radius:50%;aspect-ratio:1;object-fit:cover}
 @media (prefers-reduced-motion:no-preference){.view{animation:in .18s ease-out}@keyframes in{from{transform:translateY(4px)}to{transform:none}}}
+.petbar{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px}
+.mini{display:flex;align-items:center;gap:10px;min-width:0}
+.mini img{width:40px;height:40px;object-fit:contain;background:var(--sky);border-radius:50%;padding:3px}
+.mini b{display:block;font-size:14px}
+.mini span{font-size:12px;color:var(--muted)}
+.chat{display:flex;flex-direction:column;gap:10px}
+.msg{display:flex;gap:8px;align-items:flex-end;max-width:92%}
+.msg .av{width:42px;height:42px;object-fit:contain;border-radius:50%;background:var(--lilac);padding:2px;flex:none}
+.msg.oli .av{background:var(--amber-soft)}
+.msg .bub{background:var(--surface);border:1px solid var(--line);border-radius:16px 16px 16px 4px;padding:10px 13px;font-size:14.5px;line-height:1.5}
+.msg.me{align-self:flex-end}
+.msg.me .bub{background:var(--slate);color:var(--slate-ink);border-color:var(--slate);border-radius:16px 16px 4px 16px}
+.edit-a{background:none;border:0;color:inherit;opacity:.75;text-decoration:underline;font:inherit;font-size:12px;cursor:pointer;margin-left:4px;padding:0}
+.answer{display:flex;flex-wrap:wrap;gap:6px;padding-left:50px}
+.row.end{justify-content:flex-end}
+.petlist{display:flex;flex-direction:column;gap:8px}
+.petcard{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:12px;align-items:center;background:var(--surface);border:1.5px solid var(--line);border-radius:var(--r);padding:10px 12px;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.petcard[aria-pressed="true"]{border-color:var(--slate);background:var(--sky)}
+.petcard img{width:52px;height:52px;object-fit:contain;border-radius:50%;background:var(--amber-soft)}
+.petcard b{font-size:15px}
+.petcard .sub{font-size:12.5px;color:var(--muted)}
+.petcard .on{font-size:11px;color:var(--slate);font-weight:700}
+.bday{display:grid;grid-template-columns:56px 1fr;gap:10px;align-items:center;background:var(--peach);border-radius:var(--r);padding:12px 14px;font-size:14px}
+.bday img{width:56px;height:56px;object-fit:contain}
+textarea{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%;min-height:64px;resize:vertical}
+.check{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink)}
+.check input{width:20px;height:20px}
+.buy{display:flex;flex-direction:column;gap:10px;background:var(--bg);border-radius:var(--r);padding:12px}
+.opt{display:flex;align-items:center;gap:10px;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:11px 12px;cursor:pointer;font-size:15px}
+.opt input{width:18px;height:18px;margin:0;accent-color:var(--slate)}
+.opt:has(input:checked){border-color:var(--slate)}
+.save{margin-left:auto;font-size:12px;font-weight:700;color:var(--coral);background:var(--peach);border-radius:6px;padding:2px 7px}
+.hint{font-size:13px;color:var(--ink);background:var(--amber-soft);border-radius:10px;padding:9px 11px}
+.ship{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px;display:flex;flex-direction:column;gap:10px}
+.ship .top{display:grid;grid-template-columns:64px minmax(0,1fr);gap:12px;align-items:center}
+.ship .top img{width:64px;height:64px;object-fit:contain;background:#fff;border-radius:10px}
+.ship .next{display:flex;justify-content:space-between;align-items:baseline;background:var(--mint);border-radius:10px;padding:9px 12px}
+.ship .next b{font-size:15px}
+.ship .next span{font-size:12.5px;color:var(--good);font-weight:700}
+.acts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.acts .btn{padding:9px 6px;font-size:13px}
+.btn.warn{background:transparent;color:var(--warn);border:1px solid var(--line)}
+.shipbanner{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--mint);border:0;border-radius:var(--r);padding:12px 14px;font:inherit;color:var(--ink);cursor:pointer;text-align:left}
+.shipbanner b{display:block}
+.shipbanner span{font-size:12.5px;color:var(--muted)}
+.btn:disabled{opacity:.5;cursor:default}
 </style>
 </head>
 <body>
@@ -234,37 +280,85 @@ const store = {
   get(k,d){try{const v=localStorage.getItem("filin:"+k);return v?JSON.parse(v):d}catch(e){return d}},
   set(k,v){try{localStorage.setItem("filin:"+k,JSON.stringify(v))}catch(e){}}
 };
-const EXAMPLE_PET = {name:"올리",sp:"dog",age:3,weight:8,active:"normal",neutered:true,concerns:["fish"],example:true};
-let pet = store.get("pet", EXAMPLE_PET);
+
+/* ---------- 반려동물 프로필 ---------- */
+const ALLERGENS = [["chicken","닭고기"],["beef","소고기"],["fish","생선"],["turkey","칠면조"],["pork","돼지고기"],["grain","곡물 (밀·보리 등)"]];
+const PREFS = {
+  dog:[["simple","원재료가 단순했으면"],["picky","입이 짧아요"],["novel","새로운 단백질을 찾아요"],["fish","생선을 좋아해요"],["gf","곡물 없는 사료가 좋아요"]],
+  cat:[["simple","원재료가 단순했으면"],["picky","입이 짧아요"],["fish","생선을 좋아해요"],["gf","곡물 없는 사료가 좋아요"]]
+};
+const ACTIVE = [["low","조용히 쉬는 편"],["normal","보통이에요"],["high","정말 많이 뛰어놀아요"]];
+const BREEDS = {
+  dog:["말티즈","푸들","포메라니안","비숑 프리제","시츄","치와와","웰시코기","프렌치불독","진돗개","골든 리트리버","래브라도 리트리버","믹스"],
+  cat:["코리안 숏헤어","러시안 블루","브리티시 숏헤어","페르시안","스코티시 폴드","먼치킨","랙돌","샴","믹스"]
+};
+const LARGE_BREEDS = ["골든 리트리버","래브라도 리트리버","진돗개"];
+const spName = sp=> sp==="dog"?"강아지":"고양이";
+const avatar = sp=> sp==="dog"?"img/oli-hi.png":"img/seri-hi.png";
+
+function monthsAgo(n){ const d=new Date(); d.setDate(1); d.setMonth(d.getMonth()-n); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`; }
+const EXAMPLE_PETS = [
+  {id:"p1",name:"올리",sp:"dog",birth:monthsAgo(38),breed:"말티즈",weight:8,active:"normal",neutered:true,allergies:["chicken"],prefs:["fish"],note:"",example:true},
+  {id:"p2",name:"세리",sp:"cat",birth:monthsAgo(26),breed:"코리안 숏헤어",weight:4.2,active:"normal",neutered:true,allergies:[],prefs:["picky"],note:"",example:true}
+];
+function loadPets(){
+  const saved = store.get("pets", null);
+  if(saved && saved.length) return saved;
+  const old = store.get("pet", null); // 이전 버전(한 마리) 정보 옮기기
+  if(old && !old.example){
+    const c = old.concerns||[];
+    return [{id:"p1",name:old.name,sp:old.sp,birth:monthsAgo(Math.round((old.age||1)*12)),breed:"",weight:old.weight,active:old.active||"normal",neutered:old.neutered!==false,
+      allergies:c.includes("chicken")?["chicken"]:[],prefs:c.filter(x=>!["chicken","grain"].includes(x)).concat(c.includes("grain")?["gf"]:[]),note:""}];
+  }
+  return JSON.parse(JSON.stringify(EXAMPLE_PETS));
+}
+let pets = loadPets();
+let curId = store.get("cur", pets[0].id);
+if(!pets.some(p=>p.id===curId)) curId = pets[0].id;
+const cur = ()=> pets.find(p=>p.id===curId);
+function savePets(){ store.set("pets",pets); store.set("cur",curId); }
+
 let samples = store.get("samples", []);
+let autoship = store.get("autoship", []); // {id, petId, prodId, size, weeks, next:"YYYY-MM-DD"}
+const saveShip = ()=> store.set("autoship", autoship);
 let shopFilter = {sp:"all",b:"all"};
 
+/* ---------- 날짜 ---------- */
+const ymd = d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+const parseYmd = s=>{ const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d); };
+const addDays = (d,n)=>{ const x=new Date(d); x.setDate(x.getDate()+n); return x; };
+const fmt = d=>`${d.getMonth()+1}월 ${d.getDate()}일`;
+const today = ()=>{ const d=new Date(); d.setHours(0,0,0,0); return d; };
+const dday = s=> Math.round((parseYmd(s)-today())/86400000);
+
 /* ---------- 계산 ---------- */
-function stageOf(p){ if(p.sp==="dog") return p.age<1?"puppy":p.age>=7?"senior":"adult"; return p.age<1?"kitten":p.age>=10?"senior":"adult"; }
-function sizeOf(p){ return p.weight<10?"small":p.weight>=25?"large":"medium"; }
+function ageMonths(p){ if(!p.birth) return 24; const [y,m]=p.birth.split("-").map(Number); const n=new Date(); return Math.max(0,(n.getFullYear()-y)*12+(n.getMonth()+1-m)); }
+function ageText(p){ const m=ageMonths(p); return m<12?`${m}개월`:`${Math.floor(m/12)}살`; }
+function stageOf(p){ const a=ageMonths(p)/12; if(p.sp==="dog") return a<1?"puppy":a>=7?"senior":"adult"; return a<1?"kitten":a>=10?"senior":"adult"; }
+function sizeOf(p){ return (LARGE_BREEDS.includes(p.breed)||p.weight>=25)?"large":p.weight<10?"small":"medium"; }
 
 function recommend(pt){
-  const st = stageOf(pt), sz = sizeOf(pt), c = pt.concerns||[];
+  const st=stageOf(pt), sz=sizeOf(pt), al=pt.allergies||[], pr=pt.prefs||[];
   return P.filter(p=>p.sp===pt.sp).map(p=>{
+    if(al.includes(p.prot) || (al.includes("grain") && !p.gf)) return null;
     let s=0; const why=[]; let caution=null;
     if(p.st.includes(st)){s+=4; why.push(`${stageName(st,pt.sp)} 단계에 맞는 레시피`);}
-    else if(!(st==="adult")){s-=6;}
-    if(c.includes("chicken")){
-      if(p.prot==="chicken"){s-=10;}
-      else if(p.chicken){s-=1; caution="동물성 단백질은 송어 하나지만 닭 지방이 들어가요. 닭을 엄격히 피해야 하면 확인이 필요해요.";}
-      else {s+=3; why.push(`닭고기 없이 ${p.pl} 단백질`);} }
-    if(c.includes("grain") && p.gf){s+=2; why.push("곡물을 뺀 그레인프리");}
-    if(c.includes("grain") && !p.gf){s-=3;}
-    if(c.includes("simple") && p.ltd){s+=3; why.push("동물성 단백질이 하나라 원재료표가 짧아요");}
-    if(c.includes("picky") && p.tags.includes("picky")){s+=2; why.push("향이 뚜렷해 입 짧은 아이들이 많이 찾는 레시피");}
-    if(c.includes("novel") && (p.tags.includes("novel"))){s+=3; why.push(`닭·소와 다른 새로운 단백질 (${p.pl})`);}
-    if(c.includes("fish") && p.prot==="fish"){s+=2; why.push("생선 단백질");}
+    else if(st!=="adult"){s-=6;}
+    if(al.includes("chicken")){
+      if(p.chicken){s-=1; caution=`동물성 단백질은 ${p.pl}이지만 닭 지방이 들어가요. 닭을 엄격히 피해야 하면 확인이 필요해요.`;}
+      else {s+=3; why.push(`닭고기 없이 ${p.pl} 단백질`);}
+    }
+    if((pr.includes("gf")||al.includes("grain")) && p.gf){s+=2; why.push("곡물을 뺀 그레인프리");}
+    if(pr.includes("simple") && p.ltd){s+=3; why.push("동물성 단백질이 하나라 원재료표가 짧아요");}
+    if(pr.includes("picky") && p.tags.includes("picky")){s+=2; why.push("향이 뚜렷해 입 짧은 아이들이 많이 찾는 레시피");}
+    if(pr.includes("novel") && p.tags.includes("novel")){s+=3; why.push(`닭·소와 다른 새로운 단백질 (${p.pl})`);}
+    if(pr.includes("fish") && p.prot==="fish"){s+=2; why.push("생선 단백질");}
     if(pt.active==="high" && p.tags.includes("active")){s+=3; why.push("활동량 많은 아이용");}
     if(sz==="large" && p.large){s+=3; why.push("대형견용 레시피");}
     if(sz==="small" && p.small){s+=2; why.push("소형견용 작은 알갱이");}
     if(p.hot){s+=1.5; why.push("필린에서 많이 찾는 제품");}
     return {p,s,why,caution};
-  }).filter(r=>r.s>0).sort((a,b)=>b.s-a.s).slice(0,3);
+  }).filter(r=>r && r.s>0).sort((a,b)=>b.s-a.s).slice(0,3);
 }
 
 function feeding(pt, kcalPerKg){
@@ -276,6 +370,10 @@ function feeding(pt, kcalPerKg){
   const kcal = rer*f; const grams = kcal/(kcalPerKg/1000);
   return {kcal:Math.round(kcal), grams:Math.round(grams)};
 }
+const DEFAULT_KCAL = 3600;
+const sizesOf = p=> p.sizes || [2,5,10];
+function bagDays(pt,p,size){ return Math.floor(size*1000/feeding(pt,p.kcal||DEFAULT_KCAL).grams); }
+function suggestWeeks(pt,p,size){ return Math.max(1,Math.min(12,Math.floor(bagDays(pt,p,size)/7))); }
 
 /* ---------- 화면 공통 ---------- */
 const $ = s=>document.querySelector(s);
@@ -288,48 +386,63 @@ const ICONS = {
   home:'<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/>',
   find:'<circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/><path d="M9 11h4M11 9v4"/>',
   shop:'<path d="M5 8h14l-1 12H6z"/><path d="M9 8a3 3 0 016 0"/>',
+  ship:'<path d="M3 7h11v9H3z"/><path d="M14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.6"/><circle cx="17" cy="17.5" r="1.6"/>',
   feed:'<path d="M4 13h16a8 8 0 01-16 0z"/><path d="M9 9c0-2 2-2 2-4M14 9c0-2 2-2 2-4"/>',
   pet:'<circle cx="7" cy="9" r="2"/><circle cx="12" cy="6" r="2"/><circle cx="17" cy="9" r="2"/><path d="M8 17c0-3 2-5 4-5s4 2 4 5-2 3-4 3-4 0-4-3z"/>'
 };
-const TABS=[["home","홈"],["find","맞춤 추천"],["shop","제품"],["feed","급여량"],["pet","샘플·내 아이"]];
+const TABS=[["home","홈"],["find","맞춤 추천"],["shop","제품"],["ship","정기배송"],["pet","내 아이"]];
 $("#tabs").innerHTML = TABS.map(([k,l])=>`<button class="tab" type="button" data-go="${k}"><svg viewBox="0 0 24 24">${ICONS[k]}</svg>${l}</button>`).join("");
 
-function petLabel(){ return `${pet.sp==="dog"?"강아지":"고양이"} ${esc(pet.name)} · ${pet.weight}kg`; }
-function renderChip(){ $("#petChip").textContent = (pet.example?"예시 · ":"")+`${pet.name} (${pet.sp==="dog"?"강아지":"고양이"})`; }
+function petLabel(pt){ return `${spName(pt.sp)} · ${ageText(pt)} · ${pt.weight}kg`; }
+function renderChip(){ const pt=cur(); $("#petChip").textContent = (pt.example?"예시 · ":"")+`${pt.name} (${spName(pt.sp)})`; }
+function petMini(pt){ return `<div class="mini"><img src="${avatar(pt.sp)}" alt=""><div><b>${esc(pt.name)}</b><span>${petLabel(pt)}${pt.breed?" · "+esc(pt.breed):""}</span></div></div>`; }
 
 function pcard(p){
   return `<button class="pcard" type="button" data-open="${p.id}">
     <div class="ph"><img src="${img(p.id)}" alt="${esc(BRANDS[p.b].name+" "+p.n)}" loading="lazy"></div>
     <div class="brand">${BRANDS[p.b].name}</div>
     <div class="name">${esc(p.n)}</div>
-    <div class="badges">${p.hot?'<span class="badge hot">인기</span>':""}<span class="badge">${p.sp==="dog"?"강아지":"고양이"}</span><span class="badge">${esc(p.pl.split(" ")[0])}</span>${p.gf?'<span class="badge">그레인프리</span>':""}</div>
+    <div class="badges">${p.hot?'<span class="badge hot">인기</span>':""}<span class="badge">${spName(p.sp)}</span><span class="badge">${esc(p.pl.split(" ")[0])}</span>${p.gf?'<span class="badge">그레인프리</span>':""}</div>
   </button>`;
+}
+function recCard(r,i){
+  const p=r.p;
+  return `<button class="rec" type="button" data-open="${p.id}">
+    <div class="ph"><img src="${img(p.id)}" alt="${esc(BRANDS[p.b].name+" "+p.n)}"></div>
+    <div class="stack" style="gap:4px;min-width:0">
+      <span class="rank">${i===0?"가장 잘 맞아요":`추천 ${i+1}`}</span>
+      <div><span class="small muted">${BRANDS[p.b].name}</span><h3>${esc(p.n)}</h3></div>
+      <ul>${r.why.slice(0,3).map(w=>`<li>${esc(w)}</li>`).join("")}</ul>
+      ${r.caution?`<p class="caution">${esc(r.caution)}</p>`:""}
+    </div></button>`;
 }
 
 /* ---------- 홈 ---------- */
 const BRAND_IMG = {tow:"img/brand-tow.jpg", pv:"img/brand-pv-ns.jpg", ns:"img/brand-pv-ns.jpg", bf:"img/brand-bellfor.jpg"};
 const ic = k=>`<span class="ic"><svg viewBox="0 0 24 24">${ICONS[k]}</svg></span>`;
 function vHome(){
-  const top = recommend(pet)[0];
+  const pt=cur(), top=recommend(pt)[0];
+  const soon=[...autoship].sort((a,b)=>a.next.localeCompare(b.next))[0];
   return `<section class="hello">
       <span class="eyebrow">반가워요, 보호자님</span>
       <h1>올리와 세리가<br>우리 아이 밥을<br><em>같이 골라 드려요</em></h1>
       <p>토우·퓨어비타·뉴트리소스·벨포아를 직접 들여오는 필린 공식 스토어예요.</p>
-      <button class="btn primary" type="button" data-go="find">1분 맞춤 추천 시작하기</button>
+      <button class="btn primary" type="button" data-go="find">세리에게 추천받기</button>
       <div class="duo"><img src="img/oli-hi.png" alt="손을 흔드는 강아지 올리"><img src="img/seri-hi.png" alt="손을 흔드는 고양이 세리"></div>
     </section>
+    ${soon?`<button class="shipbanner" type="button" data-go="ship"><div><b>다음 정기배송 ${fmt(parseYmd(soon.next))}</b><span>${BRANDS[byId[soon.prodId].b].name} ${esc(byId[soon.prodId].n)} ${soon.size}kg · ${soon.weeks}주마다</span></div><span>관리하기</span></button>`:""}
     <div class="tiles">
-      <button class="tile t-sky" type="button" data-go="find">${ic("find")}<b>맞춤 추천</b><span>나이·체중·고민으로</span></button>
-      <button class="tile t-peach" type="button" data-go="feed">${ic("feed")}<b>급여량 계산</b><span>하루 몇 g, 며칠 가요?</span></button>
-      <button class="tile t-mint" type="button" data-go="pet">${ic("pet")}<b>샘플 먼저</b><span>맛보고 정하기</span></button>
+      <button class="tile t-sky" type="button" data-go="find">${ic("find")}<b>맞춤 추천</b><span>세리가 묻고 올리가 골라요</span></button>
+      <button class="tile t-mint" type="button" data-go="ship">${ic("ship")}<b>정기배송</b><span>7% 할인, 주기 자동 계산</span></button>
+      <button class="tile t-peach" type="button" data-go="pet">${ic("pet")}<b>내 아이</b><span>프로필·알러지 관리</span></button>
       <button class="tile t-amber" type="button" data-go="shop">${ic("shop")}<b>브랜드관</b><span>${P.length}가지 제품</span></button>
     </div>
     <button class="worry" type="button" data-go="find">
       <img src="img/seri-question.png" alt="사료를 보며 고민하는 세리">
-      <div><b>어떤 사료가 맞을지 고민돼요?</b><span>세리도 한 알을 오래 고민해요. 고민 몇 가지만 골라 주면 맞는 사료를 찾아 드려요.</span><u>고민 고르러 가기</u></div>
+      <div><b>어떤 사료가 맞을지 고민돼요?</b><span>세리가 질문 세 개만 할게요. 답하면 올리가 맞는 사료를 골라 줘요.</span><u>세리와 이야기하기</u></div>
     </button>
     ${top?`<section class="stack">
-      <div class="section-head"><h2>${esc(josa(pet.name,"이에게","에게"))} 먼저 권하는 사료</h2><button class="link" type="button" data-go="find">다시 고르기</button></div>
+      <div class="section-head"><h2>${esc(josa(pt.name,"이에게","에게"))} 먼저 권하는 사료</h2><button class="link" type="button" data-go="pet">다른 아이</button></div>
       ${recCard(top,0)}
     </section>`:""}
     <section class="stack">
@@ -355,53 +468,57 @@ function vHome(){
       <div><b>공식 수입원이 직접 들여와요</b>
       <ul><li>미국·독일 제조사에서 직접 수입</li><li>정식 통관을 거친 정품</li><li>유통기한까지 관리해서 배송</li></ul></div>
     </section>
-    <div class="foot"><img src="img/filin-badge.png" alt="FILIN 올리와 세리"><p class="proto">작은 감정까지, 소중하게.<br>시제품이에요. 구매·샘플 신청은 실제로 처리되지 않아요.</p></div>`;
+    <div class="foot"><img src="img/filin-badge.png" alt="FILIN 올리와 세리"><p class="proto">작은 감정까지, 소중하게.<br>시제품이에요. 구매·샘플 신청·정기배송은 실제로 처리되지 않아요.</p></div>`;
 }
 
-/* ---------- 맞춤 추천 ---------- */
-const CONCERNS = {
-  dog:[["chicken","닭고기를 피하고 싶어요"],["grain","곡물을 빼고 싶어요"],["simple","원재료가 단순했으면"],["picky","입이 짧아요"],["novel","새로운 단백질을 찾아요"],["fish","생선을 좋아해요"]],
-  cat:[["chicken","닭고기를 피하고 싶어요"],["grain","곡물을 빼고 싶어요"],["simple","원재료가 단순했으면"],["picky","입이 짧아요"],["fish","생선을 좋아해요"]]
-};
-function petForm(){
-  const c = pet.concerns||[];
-  return `<div class="card">
-    <div class="q"><b>어떤 아이인가요?</b>
-      <div class="chips">${[["dog","강아지"],["cat","고양이"]].map(([v,l])=>`<button class="chip" type="button" data-set="sp" data-val="${v}" aria-pressed="${pet.sp===v}">${l}</button>`).join("")}</div></div>
-    <div class="two">
-      <label class="f">이름<input id="f-name" value="${esc(pet.name)}" maxlength="12"></label>
-      <label class="f">나이 (살)<input id="f-age" type="number" min="0" max="25" step="0.5" inputmode="decimal" value="${pet.age}"></label>
-    </div>
-    <div class="two">
-      <label class="f">체중 (kg)<input id="f-weight" type="number" min="0.5" max="90" step="0.1" inputmode="decimal" value="${pet.weight}"></label>
-      <label class="f">활동량<select id="f-active">${[["low","적은 편"],["normal","보통"],["high","많은 편"]].map(([v,l])=>`<option value="${v}" ${pet.active===v?"selected":""}>${l}</option>`).join("")}</select></label>
-    </div>
-    <div class="q"><b>고민이 있다면 골라 주세요</b>
-      <div class="chips">${CONCERNS[pet.sp].map(([v,l])=>`<button class="chip" type="button" data-concern="${v}" aria-pressed="${c.includes(v)}">${l}</button>`).join("")}</div></div>
-  </div>`;
+/* ---------- 맞춤 추천 (세리가 묻고 올리가 추천) ---------- */
+const QUESTIONS = [
+  {key:"prefs", multi:true, none:"딱히 없어요", q:pt=>`${josa(pt.name,"이","")}에게 어떤 밥을 찾고 있어요? 해당하는 걸 모두 골라 주세요.`, opts:pt=>PREFS[pt.sp]},
+  {key:"allergies", multi:true, none:"없어요", q:pt=>`먹으면 안 되거나 피하고 싶은 재료가 있나요?`, opts:()=>ALLERGENS},
+  {key:"active", multi:false, q:pt=>`${josa(pt.name,"이는","는")} 하루에 얼마나 움직여요?`, opts:()=>ACTIVE}
+];
+let chat = null;
+function startChat(){ const pt=cur(); chat={pet:pt.id, step:0, prefs:[...(pt.prefs||[])], allergies:[...(pt.allergies||[])], active:pt.active||"normal"}; }
+function bubble(who, html){
+  const av = who==="me" ? "" : `<img class="av" src="${who==="seri"?"img/seri-hi.png":"img/oli-hi.png"}" alt="${who==="seri"?"세리":"올리"}">`;
+  return `<div class="msg ${who}">${av}<div class="bub">${html}</div></div>`;
 }
-function recCard(r,i){
-  const p=r.p;
-  return `<button class="rec" type="button" data-open="${p.id}">
-    <div class="ph"><img src="${img(p.id)}" alt="${esc(BRANDS[p.b].name+" "+p.n)}"></div>
-    <div class="stack" style="gap:4px;min-width:0">
-      <span class="rank">${i===0?"가장 잘 맞아요":`추천 ${i+1}`}</span>
-      <div><span class="small muted">${BRANDS[p.b].name}</span><h3>${esc(p.n)}</h3></div>
-      <ul>${r.why.slice(0,3).map(w=>`<li>${esc(w)}</li>`).join("")}</ul>
-      ${r.caution?`<p class="caution">${esc(r.caution)}</p>`:""}
-    </div></button>`;
+function answerText(q,val,pt){
+  const opts=q.opts(pt), name=v=>(opts.find(o=>o[0]===v)||[v,v])[1];
+  return q.multi ? (val.length?val.map(name).join(", "):q.none) : name(val);
 }
 function vFind(){
-  const recs = recommend(pet);
-  return `<div class="stack"><span class="eyebrow">1분 맞춤 추천</span><h1>${esc(josa(pet.name,"이","")) } 정보를 알려 주세요</h1>
-    <p class="muted small">고르는 즉시 아래 추천이 바뀌어요.</p></div>
-    ${petForm()}
-    <section class="stack" id="recs">${recsHtml(recs)}</section>`;
+  const pt=cur();
+  if(!chat || chat.pet!==pt.id) startChat();
+  let h = `<div class="stack"><span class="eyebrow">세리가 묻고 올리가 추천해요</span><h1>${esc(josa(pt.name,"이",""))} 밥, 같이 골라 볼까요?</h1></div>
+    <div class="petbar">${petMini(pt)}<button class="link" type="button" data-go="pet">다른 아이</button></div>
+    <div class="chat">${bubble("seri",`안녕하세요, 세리예요! ${esc(josa(pt.name,"이",""))} 프로필로 시작할게요. 질문은 세 개뿐이에요.`)}`;
+  for(let i=0;i<QUESTIONS.length && i<=chat.step;i++){
+    const q=QUESTIONS[i];
+    h += bubble("seri", esc(q.q(pt)));
+    if(i<chat.step){
+      h += bubble("me", `${esc(answerText(q,chat[q.key],pt))}<button class="edit-a" type="button" data-redo="${i}">바꾸기</button>`);
+    } else {
+      h += `<div class="answer">${q.opts(pt).map(([v,l])=>`<button class="chip" type="button" data-ans="${v}" aria-pressed="${q.multi?chat[q.key].includes(v):chat[q.key]===v}">${l}</button>`).join("")}</div>`;
+      if(q.multi) h += `<div class="row end"><button class="btn ghost" type="button" data-none>${q.none}</button><button class="btn primary" type="button" data-next>다음</button></div>`;
+    }
+  }
+  if(chat.step<QUESTIONS.length) return h+`</div>`;
+  const recs = recommend({...pt, prefs:chat.prefs, allergies:chat.allergies, active:chat.active});
+  h += bubble("oli", recs.length ? `올리예요! ${esc(josa(pt.name,"이에게","에게"))} 맞는 사료 ${recs.length}가지를 골랐어요. 눌러서 자세히 보세요.` : `조건에 딱 맞는 사료를 못 찾았어요. 답을 하나 바꿔 볼까요?`) + `</div>`;
+  h += `<section class="stack" id="recEnd">${recs.map(recCard).join("")}</section>`;
+  if(recs.length) h += `<button class="btn dark block" type="button" data-autoship="${recs[0].p.id}">1순위 사료 정기배송으로 받기 (7% 할인)</button>`;
+  h += `<p class="note">답한 내용은 ${esc(josa(pt.name,"이",""))} 프로필에 저장했어요. 사료 전환은 7~10일에 걸쳐 천천히, 알러지나 건강 고민은 수의사 선생님과 먼저 상담해 주세요.</p>
+    <button class="btn ghost block" type="button" data-restart>처음부터 다시</button>`;
+  return h;
 }
-function recsHtml(recs){
-  if(!recs.length) return `<div class="seri"><img src="img/seri-thinking.jpg" alt="고민하는 세리"><p>조건에 딱 맞는 제품을 찾지 못했어요. 고민을 하나 줄여 보시겠어요?</p></div>`;
-  return `<h2>${esc(josa(pet.name,"이에게","에게"))} 맞는 사료 ${recs.length}가지</h2>${recs.map(recCard).join("")}
-    <p class="note">사료 전환은 7~10일에 걸쳐 천천히 해 주세요. 알러지나 건강 고민이 있다면 수의사 선생님과 먼저 상담해 주세요.</p>`;
+function chatAdvance(){
+  chat.step++;
+  if(chat.step>=QUESTIONS.length){
+    const pt=cur(); pt.prefs=[...chat.prefs]; pt.allergies=[...chat.allergies]; pt.active=chat.active; savePets();
+  }
+  render(false);
+  requestAnimationFrame(()=>{ const t=document.querySelector("#recEnd, .chat .answer"); if(t) t.scrollIntoView({block:"center",behavior:"smooth"}); });
 }
 
 /* ---------- 제품 ---------- */
@@ -415,118 +532,244 @@ function vShop(){
     <div class="pgrid">${list.map(pcard).join("")||'<p class="muted">이 조건의 제품이 아직 없어요.</p>'}</div>`;
 }
 
-/* ---------- 급여량 ---------- */
-let feedSel = {id:null,kcal:3600,size:null};
-function vFeed(){
-  const opts = P.filter(p=>p.sp===pet.sp);
-  if(!feedSel.id || byId[feedSel.id].sp!==pet.sp){ const r=recommend(pet)[0]; feedSel.id=(r?r.p:opts[0]).id; feedSel.size=null; }
-  const p=byId[feedSel.id];
-  const kcal = p.kcal || feedSel.kcal;
-  const sizes = p.sizes || [2,5,10];
-  if(!sizes.includes(feedSel.size)) feedSel.size = sizes[Math.min(1,sizes.length-1)];
-  const f = feeding(pet,kcal);
-  const days = Math.floor(feedSel.size*1000/f.grams);
-  const end = new Date(); end.setDate(end.getDate()+days);
-  const remind = new Date(end); remind.setDate(remind.getDate()-5);
-  const fmt = d=>`${d.getMonth()+1}월 ${d.getDate()}일`;
-  return `<div class="stack"><span class="eyebrow">급여량 계산</span><h1>하루 얼마나, 한 봉지 며칠?</h1>
-    <p class="small muted">${petLabel()} · ${stageName(stageOf(pet),pet.sp)} · 활동량 ${({low:"적은 편",normal:"보통",high:"많은 편"})[pet.active]} <button class="link" type="button" data-go="find">바꾸기</button></p></div>
-    <div class="card">
-      <label class="f">사료<select id="fd-prod">${opts.map(o=>`<option value="${o.id}" ${o.id===p.id?"selected":""}>${BRANDS[o.b].name} ${esc(o.n)}</option>`).join("")}</select></label>
-      <div class="two">
-        <label class="f">봉지 용량<select id="fd-size">${sizes.map(s=>`<option value="${s}" ${s===feedSel.size?"selected":""}>${s}kg</option>`).join("")}</select></label>
-        <label class="f">열량 (kcal/kg)<input id="fd-kcal" type="number" min="2500" max="5000" step="10" value="${kcal}" ${p.kcal?"disabled":""}></label>
-      </div>
-      ${p.kcal?"":'<p class="note">이 제품의 열량은 아직 앱에 없어서 기본값을 넣었어요. 포장지의 kcal/kg로 바꿔 주세요.</p>'}
-      ${p.sizes?"":'<p class="note">봉지 용량은 예시예요. 실제 판매 용량으로 바꿔야 해요.</p>'}
-      <div class="result">
-        <div class="stat"><b>${f.grams}g</b><span>하루 급여량</span></div>
-        <div class="stat"><b>${days}일</b><span>${feedSel.size}kg 한 봉지</span></div>
-        <div class="stat"><b>${f.kcal}</b><span>하루 kcal</span></div>
-      </div>
-      <p class="small">하루 두 번 준다면 한 번에 <b>${Math.round(f.grams/2)}g</b> 정도예요. 이 봉지는 <b>${fmt(end)}</b>쯤 떨어져요.</p>
-      <button class="btn dark block" type="button" data-remind="${fmt(remind)}">${fmt(remind)}에 주문 알림 받기</button>
+/* ---------- 정기배송 ---------- */
+let feedSel = {id:null,kcal:DEFAULT_KCAL,size:null};
+let cancelArm = null;
+function shipCard(a){
+  const p=byId[a.prodId], owner=pets.find(x=>x.id===a.petId), d=dday(a.next);
+  const weeks=[1,2,3,4,5,6,7,8,10,12];
+  return `<div class="ship">
+    <div class="top"><img src="${img(p.id)}" alt="${esc(BRANDS[p.b].name+" "+p.n)}"><div><span class="small muted">${BRANDS[p.b].name}${owner?" · "+esc(owner.name)+" 밥":""}</span><h3>${esc(p.n)} ${a.size}kg</h3><span class="save" style="margin:0">정기배송 7% 할인</span></div></div>
+    <div class="next"><b>다음 배송 ${fmt(parseYmd(a.next))}</b><span>${d<=0?"오늘 출발":`${d}일 남음`}</span></div>
+    <label class="f">배송 주기<select data-weeks="${a.id}">${weeks.map(w=>`<option value="${w}" ${w===a.weeks?"selected":""}>${w}주마다</option>`).join("")}</select></label>
+    <div class="acts">
+      <button class="btn ghost" type="button" data-skip="${a.id}">이번 건너뛰기</button>
+      <button class="btn ghost" type="button" data-now="${a.id}">지금 받기</button>
+      <button class="btn warn" type="button" data-cancel="${a.id}">${cancelArm===a.id?"한 번 더 눌러 해지":"해지"}</button>
     </div>
-    <p class="note">권장 열량(RER × 생애 단계 계수)으로 계산한 참고값이에요. 체형과 변 상태를 보며 조절하고, 포장지 급여표를 함께 확인해 주세요.</p>`;
+  </div>`;
+}
+function vShip(){
+  const pt=cur(), opts=P.filter(p=>p.sp===pt.sp);
+  if(!feedSel.id || byId[feedSel.id].sp!==pt.sp){ const r=recommend(pt)[0]; feedSel.id=(r?r.p:opts[0]).id; feedSel.size=null; }
+  const p=byId[feedSel.id], kcal=p.kcal||feedSel.kcal, sizes=sizesOf(p);
+  if(!sizes.includes(feedSel.size)) feedSel.size=sizes[Math.min(1,sizes.length-1)];
+  const f=feeding(pt,kcal), days=Math.floor(feedSel.size*1000/f.grams), weeks=Math.max(1,Math.min(12,Math.floor(days/7)));
+  return `<div class="stack"><span class="eyebrow">정기배송</span><h1>떨어지기 전에 알아서 도착해요</h1>
+    <p class="small muted">매번 7% 할인돼요. 주기 변경, 건너뛰기, 해지는 언제든 할 수 있어요.</p></div>
+    ${autoship.length ? `<section class="stack">${[...autoship].sort((a,b)=>a.next.localeCompare(b.next)).map(shipCard).join("")}</section>`
+      : `<div class="bday"><img src="img/oli-hi.png" alt=""><div><b>아직 정기배송이 없어요</b><br><span class="small muted">아래에서 우리 아이 급여량을 보고 주기를 정해 보세요.</span></div></div>`}
+    <section class="stack">
+      <h2>급여량으로 주기 정하기</h2>
+      <div class="petbar">${petMini(pt)}<button class="link" type="button" data-go="pet">다른 아이</button></div>
+      <div class="card">
+        <label class="f">사료<select id="fd-prod">${opts.map(o=>`<option value="${o.id}" ${o.id===p.id?"selected":""}>${BRANDS[o.b].name} ${esc(o.n)}</option>`).join("")}</select></label>
+        <div class="two">
+          <label class="f">봉지 용량<select id="fd-size">${sizes.map(s=>`<option value="${s}" ${s===feedSel.size?"selected":""}>${s}kg</option>`).join("")}</select></label>
+          <label class="f">열량 (kcal/kg)<input id="fd-kcal" type="number" min="2500" max="5000" step="10" value="${kcal}" ${p.kcal?"disabled":""}></label>
+        </div>
+        ${p.kcal?"":'<p class="note">이 제품의 열량은 아직 앱에 없어서 기본값을 넣었어요. 포장지의 kcal/kg로 바꿔 주세요.</p>'}
+        ${p.sizes?"":'<p class="note">봉지 용량은 예시예요. 실제 판매 용량으로 바꿔야 해요.</p>'}
+        <div class="result">
+          <div class="stat"><b>${f.grams}g</b><span>하루 급여량</span></div>
+          <div class="stat"><b>${days}일</b><span>${feedSel.size}kg 한 봉지</span></div>
+          <div class="stat"><b>${weeks}주</b><span>추천 배송 주기</span></div>
+        </div>
+        <p class="small">하루 두 번 준다면 한 번에 <b>${Math.round(f.grams/2)}g</b>이에요. ${weeks}주마다 받으면 떨어지기 전에 새 봉지가 도착해요.</p>
+        <button class="btn dark block" type="button" data-autoship="${p.id}" data-size="${feedSel.size}">${weeks}주마다 정기배송 시작하기</button>
+      </div>
+      <p class="note">권장 열량(RER × 생애 단계 계수)으로 계산한 참고값이에요. 체형과 변 상태를 보며 조절하고, 포장지 급여표를 함께 확인해 주세요.</p>
+    </section>`;
 }
 
-/* ---------- 샘플·내 아이 ---------- */
+/* ---------- 내 아이 ---------- */
+function birthdayInfo(pt){
+  if(!pt.birth) return "";
+  const m=+pt.birth.split("-")[1], now=new Date().getMonth()+1, left=(m-now+12)%12;
+  return `<div class="bday"><img src="${avatar(pt.sp)}" alt=""><div>${left===0
+    ? `<b>이번 달은 ${esc(pt.name)} 생일이에요!</b><br><span class="small muted">생일 달에는 간식 사은품을 함께 보내 드려요. (예시 혜택)</span>`
+    : `<b>${esc(pt.name)} 생일은 ${m}월이에요</b><br><span class="small muted">${left}달 남았어요. 생일 달에 깜짝 선물을 준비할게요. (예시 혜택)</span>`}</div></div>`;
+}
 function vPet(){
-  const recs = recommend(pet);
-  return `<div class="stack"><span class="eyebrow">첫 구매 샘플 키트</span><h1>맞는지 먼저 맛보세요</h1>
-    <p class="small muted">최대 3가지까지 고를 수 있어요. ${esc(josa(pet.name,"이에게","에게"))} 맞는 제품을 먼저 보여 드려요.</p></div>
+  const pt=cur(), recs=recommend(pt), al=pt.allergies||[];
+  return `<div class="stack"><span class="eyebrow">내 아이</span><h1>우리 아이 프로필</h1>
+    <p class="small muted">아이를 고르면 추천, 급여량, 정기배송이 모두 그 아이 기준으로 바뀌어요.</p></div>
+    <div class="petlist">${pets.map(x=>`<button class="petcard" type="button" data-pick="${x.id}" aria-pressed="${x.id===curId}">
+      <img src="${avatar(x.sp)}" alt=""><div style="min-width:0"><b>${esc(x.name)}</b> ${x.example?'<span class="badge">예시</span>':""}
+      <div class="sub">${petLabel(x)}${x.breed?" · "+esc(x.breed):""}</div>
+      ${(x.allergies||[]).length?`<div class="badges" style="margin-top:4px">${x.allergies.map(a=>`<span class="badge hot">${(ALLERGENS.find(z=>z[0]===a)||[a,a])[1]} 피하기</span>`).join("")}</div>`:""}</div>
+      ${x.id===curId?'<span class="on">선택됨</span>':""}</button>`).join("")}
+      <button class="btn ghost block" type="button" data-addpet>+ 아이 추가하기</button>
+    </div>
+    ${birthdayInfo(pt)}
     <div class="card">
-      <div class="chips">${P.filter(p=>p.sp===pet.sp).sort((a,b)=>(recs.findIndex(r=>r.p===b)>-1)-(recs.findIndex(r=>r.p===a)>-1)).map(p=>`<button class="chip" type="button" data-sample="${p.id}" aria-pressed="${samples.includes(p.id)}">${recs.some(r=>r.p===p)?"★ ":""}${BRANDS[p.b].name} ${esc(p.n)}</button>`).join("")}</div>
-      <p class="small muted">${samples.length}/3 선택</p>
-      <button class="btn primary block" type="button" id="sendSample" ${samples.length?"":"disabled"}>샘플 키트 신청하기</button>
+      <div class="section-head"><h2>${esc(pt.name)} 정보</h2><button class="link" type="button" data-edit="${pt.id}">수정</button></div>
+      <dl class="spec">
+        <dt>종류</dt><dd>${spName(pt.sp)}${pt.breed?" · "+esc(pt.breed):""}</dd>
+        <dt>나이</dt><dd>${ageText(pt)} (${stageName(stageOf(pt),pt.sp)})</dd>
+        <dt>체중</dt><dd>${pt.weight}kg · 활동량 ${(ACTIVE.find(a=>a[0]===pt.active)||["",""])[1]}</dd>
+        <dt>중성화</dt><dd>${pt.neutered?"했어요":"안 했어요"}</dd>
+        <dt>알러지</dt><dd>${al.length?al.map(a=>(ALLERGENS.find(z=>z[0]===a)||[a,a])[1]).join(", "):"없음"}</dd>
+        ${pt.note?`<dt>약·지병</dt><dd>${esc(pt.note)}</dd>`:""}
+      </dl>
     </div>
     <section class="stack">
-      <h2>우리 아이</h2>
-      <div class="seri"><img src="img/oli-seri-walk.jpg" alt="산책하는 올리와 세리"><div>
-        <p><b>${esc(pet.name)}</b> ${pet.example?'<span class="badge">예시</span>':""}</p>
-        <p class="small muted">${petLabel()} · ${pet.age}살 · ${stageName(stageOf(pet),pet.sp)}</p></div></div>
-      <button class="btn ghost block" type="button" data-go="find">정보 바꾸기</button>
+      <h2>첫 구매 샘플 키트</h2>
+      <div class="card">
+        <p class="small muted">최대 3가지까지 골라요. ★는 ${esc(josa(pt.name,"이에게","에게"))} 추천하는 제품이에요.</p>
+        <div class="chips">${P.filter(p=>p.sp===pt.sp).sort((a,b)=>recs.some(r=>r.p===b)-recs.some(r=>r.p===a)).map(p=>`<button class="chip" type="button" data-sample="${p.id}" aria-pressed="${samples.includes(p.id)}">${recs.some(r=>r.p===p)?"★ ":""}${BRANDS[p.b].name} ${esc(p.n)}</button>`).join("")}</div>
+        <p class="small muted">${samples.length}/3 선택</p>
+        <button class="btn primary block" type="button" id="sendSample" ${samples.length?"":"disabled"}>샘플 키트 신청하기</button>
+      </div>
     </section>
-    <p class="proto">아이 정보와 샘플 선택은 이 브라우저에만 저장돼요.</p>`;
+    <p class="proto">아이 정보, 샘플, 정기배송은 이 휴대폰에만 저장돼요.</p>`;
 }
 
-/* ---------- 상세 시트 ---------- */
-function openProduct(id){
-  const p=byId[id], br=BRANDS[p.b];
+/* ---------- 프로필 수정 ---------- */
+let draft = null, delArm = false;
+function startEdit(id){
+  delArm=false;
+  if(id){ draft = JSON.parse(JSON.stringify(pets.find(p=>p.id===id))); }
+  else { draft = {id:"p"+Date.now(), name:"", sp:"dog", birth:monthsAgo(12), breed:"", weight:5, active:"normal", neutered:true, allergies:[], prefs:[], note:"", isNew:true}; }
+  go("edit");
+}
+function vEdit(){
+  if(!draft) startEdit(curId);
+  const d=draft, maxMonth=ymd(new Date()).slice(0,7);
+  return `<div class="stack"><span class="eyebrow">${d.isNew?"아이 추가":"프로필 수정"}</span><h1>${d.isNew?"새 아이를 알려 주세요":esc(d.name)+" 정보 수정"}</h1></div>
+    <div class="card">
+      <div class="q"><b>종류</b><div class="chips">${[["dog","강아지"],["cat","고양이"]].map(([v,l])=>`<button class="chip" type="button" data-esp="${v}" aria-pressed="${d.sp===v}">${l}</button>`).join("")}</div></div>
+      <div class="two">
+        <label class="f">이름<input id="e-name" value="${esc(d.name)}" maxlength="12" placeholder="예: 콩이"></label>
+        <label class="f">생일 (연·월)<input id="e-birth" type="month" max="${maxMonth}" value="${d.birth||""}"></label>
+      </div>
+      <div class="two">
+        <label class="f">품종<input id="e-breed" list="breeds" value="${esc(d.breed||"")}" placeholder="골라도, 적어도 돼요"></label>
+        <label class="f">체중 (kg)<input id="e-weight" type="number" min="0.5" max="90" step="0.1" inputmode="decimal" value="${d.weight}"></label>
+      </div>
+      <datalist id="breeds">${BREEDS[d.sp].map(b=>`<option value="${b}">`).join("")}</datalist>
+      <label class="f">활동량<select id="e-active">${ACTIVE.map(([v,l])=>`<option value="${v}" ${d.active===v?"selected":""}>${l}</option>`).join("")}</select></label>
+      <label class="check"><input id="e-neutered" type="checkbox" ${d.neutered?"checked":""}> 중성화 수술을 했어요</label>
+      <div class="q"><b>알러지 · 피해야 하는 재료</b><div class="chips">${ALLERGENS.map(([v,l])=>`<button class="chip" type="button" data-eal="${v}" aria-pressed="${d.allergies.includes(v)}">${l}</button>`).join("")}</div></div>
+      <label class="f">먹는 약이나 지병 (선택)<textarea id="e-note" maxlength="200" placeholder="예: 피부 약 복용 중, 슬개골 수술 이력">${esc(d.note||"")}</textarea></label>
+    </div>
+    <div class="two">
+      <button class="btn ghost" type="button" data-go="pet">취소</button>
+      <button class="btn primary" type="button" data-save>저장하기</button>
+    </div>
+    ${!d.isNew && pets.length>1?`<button class="btn warn block" type="button" data-delpet>${delArm?"한 번 더 누르면 삭제돼요":esc(d.name)+" 프로필 삭제"}</button>`:""}`;
+}
+function saveDraft(){
+  const d=draft;
+  if(!d.name.trim()){ toast("이름을 적어 주세요."); $("#e-name").focus(); return; }
+  if(!(d.weight>0)){ toast("체중을 적어 주세요."); return; }
+  d.name=d.name.trim(); d.example=false;
+  const isNew=d.isNew; delete d.isNew;
+  if(isNew) pets.push(d); else pets[pets.findIndex(p=>p.id===d.id)]=d;
+  curId=d.id; chat=null; savePets(); draft=null;
+  toast(isNew?`${d.name} 프로필을 만들었어요.`:`${d.name} 정보를 저장했어요.`);
+  go("pet");
+}
+
+/* ---------- 상세 시트 (한 번 구매 / 정기배송) ---------- */
+let buy = {id:null};
+function openProduct(id, opt={}){
+  const p=byId[id], br=BRANDS[p.b], pt=cur(), sizes=sizesOf(p), fits=p.sp===pt.sp;
+  if(buy.id!==id || opt.reset){ buy={id, mode:"once", size:sizes[Math.min(1,sizes.length-1)], weeks:null}; }
+  if(opt.mode) buy.mode=opt.mode;
+  if(opt.size && sizes.includes(+opt.size)) buy.size=+opt.size;
+  const sug = fits ? suggestWeeks(pt,p,buy.size) : 4;
+  if(!buy.weeks) buy.weeks=sug;
+  const first=addDays(today(),2), second=addDays(first,buy.weeks*7);
+  const scroll = $(".sheet") ? $(".sheet").scrollTop : 0;
   $("#sheetRoot").innerHTML = `<div class="sheet-bg" id="sheetBg"><div class="sheet wrap" role="dialog" aria-modal="true" aria-label="${esc(br.name+" "+p.n)}">
     <div class="ph"><img src="${img(p.id)}" alt="${esc(br.name+" "+p.n)}"></div>
     <div><span class="small muted">${br.name} · ${br.en}</span><h2>${esc(p.n)}</h2></div>
     <p>${esc(p.pt)}</p>
     <dl class="spec">
-      <dt>대상</dt><dd>${p.sp==="dog"?"강아지":"고양이"} · ${p.st.map(s=>STAGE[s]).join(", ")}</dd>
+      <dt>대상</dt><dd>${spName(p.sp)} · ${p.st.map(s=>stageName(s,p.sp)).join(", ")}</dd>
       <dt>주 단백질</dt><dd>${esc(p.pl)}${p.ltd?" (단일 동물성 단백질)":""}</dd>
       <dt>곡물</dt><dd>${p.gf?"그레인프리":"곡물 포함"}</dd>
       ${p.kcal?`<dt>열량</dt><dd>${p.kcal.toLocaleString()} kcal/kg</dd>`:""}
-      ${p.sizes?`<dt>용량</dt><dd>${p.sizes.map(s=>s+"kg").join(" · ")}</dd>`:""}
     </dl>
-    <p class="note">미국·독일에서 직접 들여와 정식 통관을 거친 정품만, 유통기한을 관리해서 보내 드려요.</p>
+    <div class="buy">
+      <label class="opt"><input type="radio" name="buy" value="once" ${buy.mode==="once"?"checked":""}> 한 번 구매</label>
+      <label class="opt"><input type="radio" name="buy" value="auto" ${buy.mode==="auto"?"checked":""}> 정기배송 <span class="save">매번 7% 할인</span></label>
+      <label class="f">용량<select id="b-size">${sizes.map(s=>`<option value="${s}" ${s===buy.size?"selected":""}>${s}kg${p.sizes?"":" (예시)"}</option>`).join("")}</select></label>
+      ${buy.mode==="auto"?`
+        <label class="f">배송 주기<select id="b-weeks">${[1,2,3,4,5,6,7,8,10,12].map(w=>`<option value="${w}" ${w===buy.weeks?"selected":""}>${w}주마다${w===sug&&fits?" (추천)":""}</option>`).join("")}</select></label>
+        <p class="hint">${fits?`${esc(pt.name)} 기준 하루 ${feeding(pt,p.kcal||DEFAULT_KCAL).grams}g이라 ${buy.size}kg은 약 ${bagDays(pt,p,buy.size)}일 가요. <b>${sug}주마다</b> 받으면 떨어지기 전에 도착해요.`:`${spName(p.sp)}용 제품이라 ${esc(pt.name)} 급여량으로는 계산하지 않았어요. 주기를 직접 골라 주세요.`}</p>
+        <p class="small muted">첫 배송 ${fmt(first)}, 다음 배송 ${fmt(second)}. 주기 변경·건너뛰기·해지는 정기배송 메뉴에서 언제든 할 수 있어요.</p>`:""}
+    </div>
     <div class="two">
       <button class="btn ghost" type="button" data-sample-add="${p.id}">샘플 담기</button>
-      <button class="btn primary" type="button" data-store="${p.id}">스토어에서 구매</button>
+      ${buy.mode==="auto"?`<button class="btn primary" type="button" data-subscribe="${p.id}">정기배송 신청</button>`:`<button class="btn primary" type="button" data-store="${p.id}">스토어에서 구매</button>`}
     </div>
+    <p class="note">미국·독일에서 직접 들여와 정식 통관을 거친 정품만, 유통기한을 관리해서 보내 드려요.</p>
     <button class="btn ghost block" type="button" data-close>닫기</button>
   </div></div>`;
+  if(scroll) $(".sheet").scrollTop=scroll;
 }
 function closeSheet(){ $("#sheetRoot").innerHTML=""; }
+function subscribe(id){
+  const pt=cur(), p=byId[id];
+  autoship.push({id:"a"+Date.now(), petId:p.sp===pt.sp?pt.id:null, prodId:id, size:buy.size, weeks:buy.weeks, next:ymd(addDays(today(),2))});
+  saveShip(); closeSheet();
+  toast(`정기배송을 시작했어요. 첫 배송은 ${fmt(addDays(today(),2))}이에요. (시제품 화면이에요)`);
+  go("ship");
+}
 
 /* ---------- 라우팅 ---------- */
-const VIEWS={home:vHome,find:vFind,shop:vShop,feed:vFeed,pet:vPet};
-function current(){ const h=location.hash.slice(1); return VIEWS[h]?h:"home"; }
-function render(){
+const VIEWS={home:vHome,find:vFind,shop:vShop,ship:vShip,pet:vPet,edit:vEdit};
+const TAB_OF={edit:"pet"};
+function current(){ const h=location.hash.slice(1); if(h==="feed") return "ship"; return VIEWS[h]?h:"home"; }
+function render(top=true){
   const v=current();
   $("#main").innerHTML = `<div class="view stack" style="gap:22px">${VIEWS[v]()}</div>`;
-  document.querySelectorAll(".tab").forEach(t=>{ if(t.dataset.go===v) t.setAttribute("aria-current","page"); else t.removeAttribute("aria-current"); });
+  const tab=TAB_OF[v]||v;
+  document.querySelectorAll(".tab").forEach(t=>{ if(t.dataset.go===tab) t.setAttribute("aria-current","page"); else t.removeAttribute("aria-current"); });
   renderChip();
 }
-function go(v){ if(location.hash.slice(1)===v){render();} else location.hash=v; window.scrollTo(0,0); }
+function go(v){ if(location.hash.slice(1)===v){render(); window.scrollTo(0,0);} else location.hash=v; }
 window.addEventListener("hashchange",()=>{closeSheet();render();window.scrollTo(0,0);});
 
-function savePet(){ pet.example=false; store.set("pet",pet); }
-
 document.addEventListener("click",e=>{
-  const t=e.target.closest("button,[data-close]");
   if(e.target.id==="sheetBg"){closeSheet();return;}
-  if(!t) return;
+  const t=e.target.closest("button"); if(!t) return;
   const d=t.dataset;
   if(d.go){ closeSheet(); go(d.go); }
-  else if(d.open){ openProduct(d.open); }
+  else if(d.open){ openProduct(d.open,{reset:true}); }
   else if("close" in d){ closeSheet(); }
-  else if(d.set==="sp"){ if(pet.sp!==d.val){pet.sp=d.val;pet.concerns=[];samples=[];store.set("samples",samples);} savePet(); render(); }
-  else if(d.concern){ const c=new Set(pet.concerns||[]); c.has(d.concern)?c.delete(d.concern):c.add(d.concern); pet.concerns=[...c]; savePet(); t.setAttribute("aria-pressed",c.has(d.concern)); $("#recs").innerHTML=recsHtml(recommend(pet)); }
+  else if(d.autoship){ openProduct(d.autoship,{reset:true,mode:"auto",size:d.size}); }
+  else if(d.subscribe){ subscribe(d.subscribe); }
+  // 추천 대화
+  else if(d.ans!==undefined){ const q=QUESTIONS[chat.step]; if(q.multi){ const s=new Set(chat[q.key]); s.has(d.ans)?s.delete(d.ans):s.add(d.ans); chat[q.key]=[...s]; t.setAttribute("aria-pressed",s.has(d.ans)); } else { chat[q.key]=d.ans; chatAdvance(); } }
+  else if("next" in d){ chatAdvance(); }
+  else if("none" in d){ chat[QUESTIONS[chat.step].key]=[]; chatAdvance(); }
+  else if(d.redo!==undefined){ chat.step=+d.redo; render(false); }
+  else if("restart" in d){ startChat(); chat.step=0; render(); }
+  // 제품
   else if(d.fsp){ shopFilter.sp=d.fsp; render(); }
   else if(d.fb){ shopFilter.b=d.fb; render(); }
   else if(d.brand){ shopFilter={sp:"all",b:d.brand}; go("shop"); }
-  else if(d.sample){ toggleSample(d.sample); render(); }
-  else if(d.sampleAdd){ const p=byId[d.sampleAdd]; if(p.sp!==pet.sp){toast(`${pet.sp==="dog"?"강아지":"고양이"}용 샘플만 담을 수 있어요.`);return;} if(!samples.includes(p.id)) toggleSample(p.id); closeSheet(); if(current()==="pet")render(); }
+  // 정기배송 관리
+  else if(d.skip){ const a=autoship.find(x=>x.id===d.skip); a.next=ymd(addDays(parseYmd(a.next),a.weeks*7)); saveShip(); toast(`이번 배송을 건너뛰었어요. 다음 배송은 ${fmt(parseYmd(a.next))}이에요.`); render(false); }
+  else if(d.now){ const a=autoship.find(x=>x.id===d.now); a.next=ymd(addDays(today(),2)); saveShip(); toast(`${fmt(parseYmd(a.next))}에 도착하도록 바로 보낼게요.`); render(false); }
+  else if(d.cancel){ if(cancelArm===d.cancel){ autoship=autoship.filter(x=>x.id!==d.cancel); cancelArm=null; saveShip(); toast("정기배송을 해지했어요."); } else { cancelArm=d.cancel; } render(false); }
+  // 내 아이
+  else if(d.pick){ curId=d.pick; chat=null; savePets(); render(false); toast(`${cur().name} 기준으로 바꿨어요.`); }
+  else if("addpet" in d){ startEdit(null); }
+  else if(d.edit){ startEdit(d.edit); }
+  else if(d.esp){ if(draft.sp!==d.esp){ draft.sp=d.esp; draft.breed=""; } render(false); }
+  else if(d.eal){ const s=new Set(draft.allergies); s.has(d.eal)?s.delete(d.eal):s.add(d.eal); draft.allergies=[...s]; t.setAttribute("aria-pressed",s.has(d.eal)); }
+  else if("save" in d){ saveDraft(); }
+  else if("delpet" in d){ if(delArm){ pets=pets.filter(p=>p.id!==draft.id); autoship.forEach(a=>{ if(a.petId===draft.id) a.petId=null; }); saveShip(); curId=pets[0].id; savePets(); toast(`${draft.name} 프로필을 삭제했어요.`); draft=null; chat=null; go("pet"); } else { delArm=true; render(false); } }
+  // 샘플
+  else if(d.sample){ toggleSample(d.sample); render(false); }
+  else if(d.sampleAdd){ const p=byId[d.sampleAdd]; if(p.sp!==cur().sp){toast(`${spName(cur().sp)}용 샘플만 담을 수 있어요.`);return;} if(!samples.includes(p.id)) toggleSample(p.id); closeSheet(); if(current()==="pet")render(false); }
   else if(d.store){ toast("시제품이라 여기서 네이버 브랜드스토어 상품 페이지로 이동해요."); }
-  else if(d.remind){ toast(`${d.remind}에 알림을 보내 드릴게요. (시제품 화면이에요)`); }
   else if(t.id==="sendSample"){ toast(`${samples.length}가지 샘플 신청을 받았어요. (시제품이라 실제로 접수되진 않아요)`); }
-  else if(t.id==="petChip"){ go("find"); }
+  else if(t.id==="petChip"){ go("pet"); }
 });
 function toggleSample(id){
   const i=samples.indexOf(id);
@@ -536,17 +779,24 @@ function toggleSample(id){
   store.set("samples",samples);
 }
 document.addEventListener("input",e=>{
-  const id=e.target.id;
-  if(id==="f-name"){ pet.name=e.target.value.trim()||"우리 아이"; savePet(); renderChip(); $("#recs").innerHTML=recsHtml(recommend(pet)); }
-  if(id==="f-age"){ const v=parseFloat(e.target.value); if(!isNaN(v)){pet.age=v; savePet(); $("#recs").innerHTML=recsHtml(recommend(pet));} }
-  if(id==="f-weight"){ const v=parseFloat(e.target.value); if(v>0){pet.weight=v; savePet(); renderChip(); $("#recs").innerHTML=recsHtml(recommend(pet));} }
-  if(id==="fd-kcal"){ const v=parseFloat(e.target.value); if(v>=2500&&v<=5000){feedSel.kcal=v; const pos=e.target.selectionStart; render(); const n=$("#fd-kcal"); n.focus(); try{n.setSelectionRange(pos,pos)}catch(_){} } }
+  const id=e.target.id, v=e.target.value;
+  if(id==="e-name") draft.name=v;
+  if(id==="e-breed") draft.breed=v.trim();
+  if(id==="e-weight"){ const n=parseFloat(v); if(n>0) draft.weight=n; }
+  if(id==="e-note") draft.note=v;
+  if(id==="fd-kcal"){ const n=parseFloat(v); if(n>=2500&&n<=5000){feedSel.kcal=n; const pos=e.target.selectionStart; render(false); const el=$("#fd-kcal"); el.focus(); try{el.setSelectionRange(pos,pos)}catch(_){} } }
 });
 document.addEventListener("change",e=>{
-  const id=e.target.id;
-  if(id==="f-active"){ pet.active=e.target.value; savePet(); $("#recs").innerHTML=recsHtml(recommend(pet)); }
-  if(id==="fd-prod"){ feedSel.id=e.target.value; feedSel.size=null; render(); }
-  if(id==="fd-size"){ feedSel.size=parseFloat(e.target.value); render(); }
+  const id=e.target.id, v=e.target.value;
+  if(id==="e-birth") draft.birth=v;
+  if(id==="e-active") draft.active=v;
+  if(id==="e-neutered") draft.neutered=e.target.checked;
+  if(id==="fd-prod"){ feedSel.id=v; feedSel.size=null; render(false); }
+  if(id==="fd-size"){ feedSel.size=parseFloat(v); render(false); }
+  if(e.target.name==="buy"){ buy.mode=v; openProduct(buy.id); }
+  if(id==="b-size"){ buy.size=parseFloat(v); buy.weeks=null; openProduct(buy.id); }
+  if(id==="b-weeks"){ buy.weeks=parseInt(v,10); openProduct(buy.id); }
+  if(e.target.dataset.weeks){ const a=autoship.find(x=>x.id===e.target.dataset.weeks); a.weeks=parseInt(v,10); saveShip(); toast(`${a.weeks}주마다 배송으로 바꿨어요.`); }
 });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeSheet(); });
 render();
