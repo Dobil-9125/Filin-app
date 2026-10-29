@@ -175,6 +175,10 @@ dl.spec dd{margin:0}
 .petbar{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px}
 .mini{display:flex;align-items:center;gap:10px;min-width:0}
 .mini img{width:40px;height:40px;object-fit:contain;background:var(--sky);border-radius:50%;padding:3px}
+.ptr{position:fixed;left:50%;top:0;z-index:30;width:40px;height:40px;margin-left:-20px;border-radius:50%;background:var(--surface);box-shadow:0 2px 10px rgba(23,51,107,.18);display:grid;place-items:center;color:var(--slate);font-size:20px;transform:translateY(-60px);opacity:0;pointer-events:none}
+.ptr.ready{background:var(--amber)}
+.ptr.spin span{animation:ptrspin .8s linear infinite}
+@keyframes ptrspin{to{transform:rotate(360deg)}}
 img.photo{object-fit:cover!important;padding:0!important;border-radius:50%}
 .photo-pick{display:grid;grid-template-columns:84px minmax(0,1fr);gap:14px;align-items:center;padding-bottom:14px;margin-bottom:6px;border-bottom:1px solid var(--line)}
 .photo-pick img{width:84px;height:84px;border-radius:50%;object-fit:contain;background:var(--amber-soft)}
@@ -276,6 +280,7 @@ form.card .link{align-self:center}
     <div class="logo">FILIN<i>♥</i><small>작은 감정까지, 소중하게.</small></div>
     <div class="hdr-r"><button class="pet-chip" id="petChip" type="button"></button><button class="acct-btn" id="acctBtn" type="button" data-go="account" aria-label="내 계정"></button></div>
   </header>
+  <div class="ptr" id="ptr" aria-hidden="true"><span>↻</span></div>
   <main class="wrap" id="main"></main>
 </div>
 
@@ -689,7 +694,7 @@ function vPet(){
         <button class="btn primary block" type="button" id="sendSample" ${samples.length?"":"disabled"}>샘플 키트 신청하기</button>
       </div>
     </section>
-    <p class="proto">아이 정보, 샘플, 정기배송은 이 휴대폰에만 저장돼요.</p>`;
+    <p class="proto">${user?"아이 정보는 계정에 저장돼요. 다른 기기에서 바꾼 내용은 앱을 다시 열면 불러와요.":"로그인하지 않으면 아이 정보, 샘플, 정기배송은 이 휴대폰에만 저장돼요."}</p>`;
 }
 
 /* ---------- 프로필 수정 ---------- */
@@ -1013,6 +1018,43 @@ async function pushState(){
   showSync();
   return !error;
 }
+// 다른 기기(웹/앱)에서 바꾼 내용을 가져와요. 앱으로 다시 돌아올 때마다 확인해요.
+let syncing=false;
+async function pullState(manual){
+  if(!sb || !user || loadingAccount || syncing) return;
+  if(syncMsg==="저장 중…" || (!manual && ["edit","find"].includes(current()))) return;
+  syncing=true;
+  const {data,error} = await sb.from("user_data").select("data").eq("user_id",user.id).maybeSingle();
+  syncing=false;
+  if(error){ if(manual) toast("불러오지 못했어요. 인터넷 연결을 확인해 주세요."); return; }
+  if(data && data.data && JSON.stringify(data.data)!==JSON.stringify(collectState())){
+    applyState(data.data); render(false); toast("다른 기기에서 바꾼 내용을 불러왔어요.");
+  } else if(manual) toast("이미 최신 정보예요.");
+}
+// 맨 위에서 화면을 아래로 당겼다 놓으면 새로고침해요 (새 버전·계정 정보도 같이 받아요).
+(()=>{
+  const el=document.getElementById("ptr"), arrow=el.firstElementChild, NEED=80;
+  let y0=null, dist=0;
+  const reset=()=>{ el.style.transition="transform .2s, opacity .2s"; el.style.transform="translateY(-60px)"; el.style.opacity=0; el.classList.remove("ready"); y0=null; dist=0; };
+  addEventListener("touchstart",e=>{
+    y0 = (scrollY<=0 && e.touches.length===1 && !$("#sheetRoot").children.length && current()!=="edit") ? e.touches[0].clientY : null; dist=0;
+  },{passive:true});
+  addEventListener("touchmove",e=>{
+    if(y0===null) return;
+    dist=Math.max(0,e.touches[0].clientY-y0);
+    if(scrollY>0){ y0=null; return reset(); }
+    const d=Math.min(dist*0.5,90);
+    el.style.transition="none"; el.style.opacity=Math.min(1,d/40); el.style.transform=`translateY(${d+20}px)`;
+    arrow.style.transform=`rotate(${dist*2}deg)`;
+    el.classList.toggle("ready",dist*0.5>=NEED*0.5 && dist>=NEED);
+  },{passive:true});
+  addEventListener("touchend",()=>{
+    if(y0===null) return;
+    if(dist>=NEED){ el.classList.add("spin"); el.style.transition="transform .2s"; el.style.transform="translateY(60px)"; (syncMsg==="저장 중…" ? (clearTimeout(syncTimer), pushState()) : Promise.resolve()).finally(()=>setTimeout(()=>location.reload(),250)); }
+    else reset();
+  });
+})();
+document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") pullState(false); });
 function showSync(){ const el=document.getElementById("syncMsg"); if(el) el.textContent=syncMsg; }
 async function onSignedIn(u){
   user=u; loadingAccount=true; renderChip();
@@ -1056,7 +1098,7 @@ function vAccount(){
         <dl class="spec"><dt>이메일</dt><dd>${esc(user.email||"")}</dd><dt>등록한 아이</dt><dd>${pets.map(p=>esc(p.name)).join(", ")}</dd></dl>
         <p class="hint" id="syncMsg">${syncMsg||"계정에 저장돼요"}</p>
         <p class="small muted">아이 프로필, 정기배송, 주문, 건강 기록, 샘플, 후기·질문이 계정에 저장돼요. 다른 휴대폰에서 같은 이메일로 로그인하면 이어서 볼 수 있어요.</p>
-        <button class="btn ghost" type="button" data-syncnow>지금 저장하기</button>
+        <div class="two"><button class="btn ghost" type="button" data-pullnow>다시 불러오기</button><button class="btn ghost" type="button" data-syncnow>지금 저장하기</button></div>
       </div>
       <button class="btn dark block" type="button" data-logout>로그아웃</button>
       <button class="btn warn block" type="button" data-wipe>${acct.delArm?"한 번 더 누르면 계정의 앱 정보가 모두 지워져요":"내 정보 지우기"}</button>
@@ -1193,6 +1235,7 @@ document.addEventListener("click",e=>{
   else if(t.id==="petChip"){ go("pet"); }
   else if(d.amode){ acct.mode=d.amode; acct.msg=""; acct.ok=""; const el=document.getElementById("a-email"); if(el) acct.email=el.value.trim(); render(false); }
   else if("logout" in d){ logout(); }
+  else if("pullnow" in d){ pullState(true); }
   else if("syncnow" in d){ pushState().then(ok=>toast(ok?"계정에 저장했어요.":"저장하지 못했어요.")); }
   else if("wipe" in d){ if(acct.delArm) wipeAccount(); else { acct.delArm=true; render(false); } }
 });
