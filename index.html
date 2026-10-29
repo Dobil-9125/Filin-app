@@ -253,6 +253,15 @@ ul.plain{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;f
 .navbtn:disabled{color:var(--line);cursor:default}
 .prog{font-size:12.5px;color:var(--muted);font-weight:500}
 .edit-a{background:rgba(255,255,255,.18)!important;opacity:1!important;text-decoration:none!important;border-radius:999px!important;padding:2px 8px!important;margin-left:8px!important}
+.hdr-r{display:flex;align-items:center;gap:6px}
+.acct-btn{border:1px solid var(--line);background:var(--surface);color:var(--slate);border-radius:999px;font:inherit;font-size:12.5px;font-weight:700;padding:5px 10px;cursor:pointer;min-width:34px}
+.acct-btn.in{background:var(--slate);color:var(--slate-ink);border-color:var(--slate)}
+.seg.seg2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.consent{display:flex;flex-direction:column;gap:8px;background:var(--bg);border-radius:12px;padding:12px}
+.consent .pi{padding-left:28px;font-size:12px}
+form.card .link{align-self:center}
+.pet-chip,.acct-btn{white-space:nowrap}
+@media (max-width:440px){.logo small{display:none}}
 </style>
 </head>
 <body>
@@ -260,7 +269,7 @@ ul.plain{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;f
 <div class="app">
   <header class="top wrap">
     <div class="logo">FILIN<i>♥</i><small>작은 감정까지, 소중하게.</small></div>
-    <button class="pet-chip" id="petChip" type="button"></button>
+    <div class="hdr-r"><button class="pet-chip" id="petChip" type="button"></button><button class="acct-btn" id="acctBtn" type="button" data-go="account" aria-label="내 계정"></button></div>
   </header>
   <main class="wrap" id="main"></main>
 </div>
@@ -269,6 +278,7 @@ ul.plain{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;f
 <div id="sheetRoot"></div>
 <div class="toast" id="toast" hidden></div>
 
+<script src="vendor/supabase-js-2.117.3.js"></script>
 <script>
 /* ---------- 제품 데이터 (블로그 원고·수불부 기준) ---------- */
 const BRANDS = {
@@ -308,9 +318,10 @@ const STAGE = {puppy:"퍼피",kitten:"키튼",adult:"성견·성묘",senior:"시
 const stageName = (st,sp)=> st==="adult" ? (sp==="cat"?"성묘":"성견") : STAGE[st];
 
 /* ---------- 저장 (이 브라우저에만) ---------- */
+function rawSet(k,v){try{localStorage.setItem("filin:"+k,JSON.stringify(v))}catch(e){}}
 const store = {
   get(k,d){try{const v=localStorage.getItem("filin:"+k);return v?JSON.parse(v):d}catch(e){return d}},
-  set(k,v){try{localStorage.setItem("filin:"+k,JSON.stringify(v))}catch(e){}}
+  set(k,v){ rawSet(k,v); queueSync(); } // 로그인했다면 계정에도 저장해요
 };
 
 /* ---------- 반려동물 프로필 ---------- */
@@ -428,7 +439,7 @@ const TABS=[["home","홈"],["find","맞춤 추천"],["shop","제품"],["ship","�
 $("#tabs").innerHTML = TABS.map(([k,l])=>`<button class="tab" type="button" data-go="${k}"><svg viewBox="0 0 24 24">${ICONS[k]}</svg>${l}</button>`).join("");
 
 function petLabel(pt){ return `${spName(pt.sp)} · ${ageText(pt)} · ${pt.weight}kg`; }
-function renderChip(){ const pt=cur(); $("#petChip").textContent = (pt.example?"예시 · ":"")+`${pt.name} (${spName(pt.sp)})`; }
+function renderChip(){ const pt=cur(); $("#petChip").textContent = (pt.example?"예시 · ":"")+`${pt.name} (${spName(pt.sp)})`; const a=$("#acctBtn"); a.textContent=acctIcon(); a.classList.toggle("in",!!user); }
 function petMini(pt){ return `<div class="mini"><img src="${avatar(pt.sp)}" alt=""><div><b>${esc(pt.name)}</b><span>${petLabel(pt)}${pt.breed?" · "+esc(pt.breed):""}</span></div></div>`; }
 
 function pcard(p){
@@ -641,6 +652,8 @@ function vPet(){
   const pt=cur(), recs=recommend(pt), al=pt.allergies||[];
   return `<div class="stack"><span class="eyebrow">내 아이</span><h1>우리 아이 프로필</h1>
     <p class="small muted">아이를 고르면 추천, 급여량, 정기배송이 모두 그 아이 기준으로 바뀌어요.</p></div>
+    ${sb && !user ? `<button class="shipbanner" type="button" data-go="account"><div><b>로그인하고 어디서나 이어 보기</b><span>지금은 이 휴대폰에만 저장돼요. 가입하면 다른 휴대폰에서도 볼 수 있어요.</span></div><span>로그인</span></button>` : ""}
+    ${user ? `<button class="shipbanner" type="button" data-go="account"><div><b>${esc(user.email||"")}</b><span>계정에 저장되고 있어요</span></div><span>내 계정</span></button>` : ""}
     <div class="petlist">${pets.map(x=>`<button class="petcard" type="button" data-pick="${x.id}" aria-pressed="${x.id===curId}">
       <img src="${avatar(x.sp)}" alt=""><div style="min-width:0"><b>${esc(x.name)}</b> ${x.example?'<span class="badge">예시</span>':""}
       <div class="sub">${petLabel(x)}${x.breed?" · "+esc(x.breed):""}</div>
@@ -945,9 +958,150 @@ function qnaTab(p){
     ${faqs(p).map(f=>`<div class="review"><b>Q. ${f.q}</b><p><span class="ans">필린</span> ${esc(f.a)}</p></div>`).join("")}`;
 }
 
+/* ---------- 회원가입 · 로그인 (Supabase) ---------- */
+// 공개 키(publishable)는 앱에 넣어도 되는 키예요. 데이터는 데이터베이스의 잠금장치(RLS)로 회원 본인만 볼 수 있어요.
+const SUPABASE_URL = "https://jafmexguhgvlokbnidof.supabase.co";
+const SUPABASE_KEY = "sb_publishable_N90l5kBICxa5yO0RQrQu3Q_PNhq6d_j";
+const sb = (window.supabase && location.protocol.startsWith("http")) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+let user = null, syncMsg = "", syncTimer = null, loadingAccount = false;
+let acct = {mode:"login", email:"", msg:"", ok:"", busy:false, delArm:false};
+
+function collectState(){ return {pets, cur:curId, samples, autoship, orders, logs, consults, reviews, questions}; }
+function applyState(d){
+  if(Array.isArray(d.pets) && d.pets.length) pets=d.pets;
+  curId = d.cur && pets.some(p=>p.id===d.cur) ? d.cur : pets[0].id;
+  samples=d.samples||[]; autoship=d.autoship||[]; orders=d.orders||[]; logs=d.logs||{};
+  consults=d.consults||[]; reviews=d.reviews||{}; questions=d.questions||{};
+  chat=null; todayLog=null; draft=null;
+  Object.entries(collectState()).forEach(([k,v])=>rawSet(k,v));
+}
+function queueSync(){
+  if(!sb || !user || loadingAccount) return;
+  syncMsg="저장 중…"; showSync();
+  clearTimeout(syncTimer); syncTimer=setTimeout(pushState, 800);
+}
+async function pushState(){
+  if(!sb || !user) return false;
+  const {error} = await sb.from("user_data").upsert({user_id:user.id, data:collectState(), updated_at:new Date().toISOString()});
+  const t=new Date();
+  syncMsg = error ? "저장하지 못했어요. 인터넷 연결을 확인해 주세요." : `계정에 저장됨 · ${t.getHours()}:${String(t.getMinutes()).padStart(2,"0")}`;
+  showSync();
+  return !error;
+}
+function showSync(){ const el=document.getElementById("syncMsg"); if(el) el.textContent=syncMsg; }
+async function onSignedIn(u){
+  user=u; loadingAccount=true; renderChip();
+  const {data,error} = await sb.from("user_data").select("data").eq("user_id",u.id).maybeSingle();
+  loadingAccount=false;
+  if(error){ toast("계정 정보를 불러오지 못했어요. 잠시 뒤 다시 열어 주세요."); syncMsg="불러오기 실패"; render(false); return; }
+  if(data && data.data && Object.keys(data.data).length){ applyState(data.data); syncMsg="계정 정보를 불러왔어요"; toast("계정에 저장된 정보를 불러왔어요."); }
+  else { await pushState(); toast("이 휴대폰에 있던 정보를 계정에 저장했어요."); }
+  if(current()==="account") go("pet"); else render(false);
+}
+if(sb){
+  sb.auth.onAuthStateChange((event, session)=>{
+    const u = session ? session.user : null;
+    // 공식 문서 권장대로, 이 안에서는 바로 기다리지 않고 다음 순서로 넘겨요.
+    setTimeout(()=>{
+      if(event==="PASSWORD_RECOVERY"){ acct={...acct, mode:"recovery", msg:"", ok:""}; go("account"); }
+      if(u && (!user || user.id!==u.id)) onSignedIn(u);
+      else if(!u && user){ user=null; render(false); }
+    },0);
+  });
+}
+const AUTH_ERR = [
+  [/invalid login credentials/i,"이메일이나 비밀번호가 맞지 않아요."],
+  [/email not confirmed/i,"메일 인증이 아직 안 됐어요. 가입할 때 받은 메일의 링크를 눌러 주세요."],
+  [/already registered|already been registered/i,"이미 가입된 이메일이에요. 로그인해 주세요."],
+  [/password should be at least|weak password/i,"비밀번호는 6자 이상으로 정해 주세요."],
+  [/rate limit|too many/i,"잠시 뒤에 다시 시도해 주세요. 짧은 시간에 요청이 많았어요."],
+  [/invalid.*email|unable to validate email/i,"이메일 주소를 다시 확인해 주세요."]
+];
+const authMsg = e=> (AUTH_ERR.find(([r])=>r.test(e.message||""))||[0,`문제가 생겼어요: ${e.message}`])[1];
+const appUrl = ()=> location.origin + location.pathname;
+function acctIcon(){ return user ? (user.user_metadata && user.user_metadata.nickname ? user.user_metadata.nickname.slice(0,1) : "나") : "로그인"; }
+
+function vAccount(){
+  if(!sb) return `<div class="stack"><span class="eyebrow">내 계정</span><h1>로그인</h1></div>
+    <div class="card"><p>로그인은 설치한 앱이나 인터넷 주소(dobil-9125.github.io)에서 열었을 때만 쓸 수 있어요. 파일로 연 화면에서는 이 휴대폰에만 저장돼요.</p></div>`;
+  if(user && acct.mode!=="recovery"){
+    const nick = user.user_metadata && user.user_metadata.nickname;
+    return `<div class="stack"><span class="eyebrow">내 계정</span><h1>${nick?esc(nick)+"님, ":""}반가워요</h1></div>
+      <div class="card">
+        <dl class="spec"><dt>이메일</dt><dd>${esc(user.email||"")}</dd><dt>등록한 아이</dt><dd>${pets.map(p=>esc(p.name)).join(", ")}</dd></dl>
+        <p class="hint" id="syncMsg">${syncMsg||"계정에 저장돼요"}</p>
+        <p class="small muted">아이 프로필, 정기배송, 주문, 건강 기록, 샘플, 후기·질문이 계정에 저장돼요. 다른 휴대폰에서 같은 이메일로 로그인하면 이어서 볼 수 있어요.</p>
+        <button class="btn ghost" type="button" data-syncnow>지금 저장하기</button>
+      </div>
+      <button class="btn dark block" type="button" data-logout>로그아웃</button>
+      <button class="btn warn block" type="button" data-wipe>${acct.delArm?"한 번 더 누르면 계정의 앱 정보가 모두 지워져요":"내 정보 지우기"}</button>
+      <p class="proto">회원 탈퇴(계정 자체 삭제)는 실제 서비스에서 고객센터나 서버 기능으로 처리해요.</p>`;
+  }
+  const m=acct.mode;
+  const title = {login:"로그인", signup:"회원가입", reset:"비밀번호 찾기", recovery:"새 비밀번호 정하기"}[m];
+  return `<div class="stack"><span class="eyebrow">내 계정</span><h1>${title}</h1>
+      <p class="small muted">로그인하면 우리 아이 정보와 정기배송을 다른 휴대폰에서도 이어서 볼 수 있어요.</p></div>
+    ${m==="login"||m==="signup"?`<div class="seg seg2">${[["login","로그인"],["signup","회원가입"]].map(([v,l])=>`<button type="button" data-amode="${v}" aria-pressed="${m===v}">${l}</button>`).join("")}</div>`:""}
+    <form class="card" id="authForm" novalidate>
+      ${m!=="recovery"?`<label class="f">이메일<input id="a-email" type="email" autocomplete="email" inputmode="email" value="${esc(acct.email)}" placeholder="filin@example.com" required></label>`:""}
+      ${m==="signup"?`<label class="f">닉네임 (선택)<input id="a-nick" maxlength="12" autocomplete="nickname" placeholder="예: 올리 보호자"></label>`:""}
+      ${m!=="reset"?`<label class="f">${m==="recovery"?"새 비밀번호":"비밀번호"}<input id="a-pw" type="password" minlength="6" autocomplete="${m==="login"?"current-password":"new-password"}" placeholder="6자 이상" required></label>`:""}
+      ${m==="signup"||m==="recovery"?`<label class="f">비밀번호 확인<input id="a-pw2" type="password" autocomplete="new-password" required></label>`:""}
+      ${m==="signup"?`<div class="consent">
+          <label class="check"><input id="c-all" type="checkbox"> <b>모두 동의해요</b></label>
+          <label class="check"><input id="c-age" type="checkbox" class="c-one"> [필수] 만 14세 이상이에요</label>
+          <label class="check"><input id="c-pi" type="checkbox" class="c-one"> [필수] 개인정보 수집·이용에 동의해요</label>
+          <p class="small muted pi">수집 항목: 이메일, 닉네임, 반려동물 정보(이름·생일·체중·알러지 등), 건강 기록, 주문·정기배송 내역<br>이용 목적: 회원 관리, 맞춤 추천, 정기배송, 상담<br>보유 기간: 탈퇴할 때까지 (시제품 문구예요. 출시 전에 법무 검토가 필요해요)</p>
+          <label class="check"><input id="c-ad" type="checkbox" class="c-one"> [선택] 혜택·이벤트 알림을 받을게요</label>
+        </div>`:""}
+      ${acct.msg?`<p class="caution" role="alert">${esc(acct.msg)}</p>`:""}
+      ${acct.ok?`<p class="hint" role="status">${esc(acct.ok)}</p>`:""}
+      <button class="btn primary block" type="submit" ${acct.busy?"disabled":""}>${acct.busy?"잠시만요…":{login:"로그인",signup:"가입하기",reset:"재설정 메일 받기",recovery:"비밀번호 바꾸기"}[m]}</button>
+      ${m==="login"?`<button class="link" type="button" data-amode="reset">비밀번호를 잊었어요</button>`:""}
+      ${m==="reset"?`<button class="link" type="button" data-amode="login">로그인으로 돌아가기</button>`:""}
+    </form>
+    <button class="btn ghost block" type="button" data-go="home">로그인 없이 둘러보기</button>
+    <p class="proto">로그인하지 않으면 정보는 이 휴대폰에만 저장돼요.</p>`;
+}
+async function submitAuth(){
+  const m=acct.mode, val=id=>{ const el=document.getElementById(id); return el?el.value:""; };
+  const email=val("a-email").trim(), pw=val("a-pw"), pw2=val("a-pw2");
+  acct.email=email; acct.msg=""; acct.ok="";
+  if(m!=="recovery" && !/^\S+@\S+\.\S+$/.test(email)){ acct.msg="이메일 주소를 다시 확인해 주세요."; return render(false); }
+  if((m==="login"||m==="signup"||m==="recovery") && pw.length<6){ acct.msg="비밀번호는 6자 이상으로 정해 주세요."; return render(false); }
+  if((m==="signup"||m==="recovery") && pw!==pw2){ acct.msg="비밀번호 확인이 달라요. 한 번 더 확인해 주세요."; return render(false); }
+  if(m==="signup" && !(document.getElementById("c-age").checked && document.getElementById("c-pi").checked)){ acct.msg="필수 항목에 동의해 주세요."; return render(false); }
+  const marketing = m==="signup" && document.getElementById("c-ad").checked, nick = val("a-nick").trim();
+  acct.busy=true; render(false);
+  let res;
+  if(m==="login") res = await sb.auth.signInWithPassword({email, password:pw});
+  else if(m==="signup") res = await sb.auth.signUp({email, password:pw, options:{data:{nickname:nick, marketing}, emailRedirectTo:appUrl()}});
+  else if(m==="reset") res = await sb.auth.resetPasswordForEmail(email, {redirectTo:appUrl()});
+  else res = await sb.auth.updateUser({password:pw});
+  acct.busy=false;
+  if(res.error){ acct.msg=authMsg(res.error); return render(false); }
+  if(m==="signup" && !res.data.session){ acct.mode="login"; acct.ok=`${email}로 인증 메일을 보냈어요. 메일의 링크를 누른 뒤 로그인해 주세요.`; return render(false); }
+  if(m==="reset"){ acct.ok="비밀번호 재설정 메일을 보냈어요. 메일의 링크를 눌러 주세요."; return render(false); }
+  if(m==="recovery"){ acct.mode="login"; toast("비밀번호를 바꿨어요."); return go("pet"); }
+  toast(m==="signup"?"가입을 환영해요!":"로그인했어요.");
+}
+async function logout(){
+  await pushState();
+  await sb.auth.signOut();
+  ["pets","cur","samples","autoship","orders","logs","consults","reviews","questions","pet"].forEach(k=>{ try{localStorage.removeItem("filin:"+k)}catch(e){} });
+  location.hash="home"; location.reload();
+}
+async function wipeAccount(){
+  const {error} = await sb.from("user_data").delete().eq("user_id", user.id);
+  if(error){ toast("지우지 못했어요. 인터넷 연결을 확인해 주세요."); return; }
+  await sb.auth.signOut();
+  ["pets","cur","samples","autoship","orders","logs","consults","reviews","questions","pet"].forEach(k=>{ try{localStorage.removeItem("filin:"+k)}catch(e){} });
+  location.hash="home"; location.reload();
+}
+
 /* ---------- 라우팅 ---------- */
-const VIEWS={home:vHome,find:vFind,shop:vShop,ship:vShip,pet:vPet,edit:vEdit,health:vHealth,vet:vVet};
-const TAB_OF={edit:"pet",health:"pet",vet:"pet"};
+const VIEWS={home:vHome,find:vFind,shop:vShop,ship:vShip,pet:vPet,edit:vEdit,health:vHealth,vet:vVet,account:vAccount};
+const TAB_OF={edit:"pet",health:"pet",vet:"pet",account:"pet"};
 function current(){ const h=location.hash.slice(1); if(h==="feed") return "ship"; return VIEWS[h]?h:"home"; }
 function render(top=true){
   const v=current();
@@ -1011,6 +1165,10 @@ document.addEventListener("click",e=>{
   else if("sendvet" in d){ consults.unshift({id:"c"+Date.now(),petId:cur().id,how:vetForm.how,topic:vetForm.topic,when:vetForm.when,text:vetForm.text.trim(),attach:vetForm.attach,date:ymd(today())}); store.set("consults",consults); vetForm={how:"chat",topic:null,when:"soon",text:"",attach:true}; toast("상담을 신청했어요. 수의사 선생님이 확인하면 알려 드려요. (시제품)"); render(false); }
   else if(t.id==="sendSample"){ toast(`${samples.length}가지 샘플 신청을 받았어요. (시제품이라 실제로 접수되진 않아요)`); }
   else if(t.id==="petChip"){ go("pet"); }
+  else if(d.amode){ acct.mode=d.amode; acct.msg=""; acct.ok=""; const el=document.getElementById("a-email"); if(el) acct.email=el.value.trim(); render(false); }
+  else if("logout" in d){ logout(); }
+  else if("syncnow" in d){ pushState().then(ok=>toast(ok?"계정에 저장했어요.":"저장하지 못했어요.")); }
+  else if("wipe" in d){ if(acct.delArm) wipeAccount(); else { acct.delArm=true; render(false); } }
 });
 function toggleSample(id){
   const i=samples.indexOf(id);
@@ -1043,6 +1201,11 @@ document.addEventListener("change",e=>{
   if(id==="b-size"){ buy.size=parseFloat(v); buy.weeks=null; openProduct(buy.id); }
   if(id==="b-weeks"){ buy.weeks=parseInt(v,10); openProduct(buy.id); }
   if(e.target.dataset.weeks){ const a=autoship.find(x=>x.id===e.target.dataset.weeks); a.weeks=parseInt(v,10); saveShip(); toast(`${a.weeks}주마다 배송으로 바꿨어요.`); }
+});
+document.addEventListener("submit",e=>{ if(e.target.id==="authForm"){ e.preventDefault(); submitAuth(); } });
+document.addEventListener("change",e=>{
+  if(e.target.id==="c-all") document.querySelectorAll(".c-one").forEach(c=>c.checked=e.target.checked);
+  else if(e.target.classList.contains("c-one")){ const all=[...document.querySelectorAll(".c-one")].every(c=>c.checked); const a=document.getElementById("c-all"); if(a) a.checked=all; }
 });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeSheet(); });
 render();

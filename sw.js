@@ -1,8 +1,9 @@
 // 앱 화면과 사진을 휴대폰에 저장해 두고, 인터넷이 없어도 열리게 하는 파일이에요.
 // index.html이나 사진을 바꾸면 아래 VERSION 숫자를 하나 올려야 휴대폰에 새 화면이 받아져요.
-const VERSION = "filin-v5";
+const VERSION = "filin-v6";
 const FILES = [
   "./", "./index.html", "./manifest.webmanifest",
+  "./vendor/supabase-js-2.117.3.js",
   "./icons/icon-192.png", "./icons/icon-512.png", "./icons/apple-touch-icon.png",
   "./img/bellfor-landgut-mini.jpg",
   "./img/bellfor-landgut.jpg",
