@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2c4a52">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>FILIN 앱 시제품</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+/* Layout: a single phone-width app column with a sticky top bar and a bottom tab bar, colors from the FILIN storefront at dusk */
+:root{
+  --bg:#f6f4f1; --surface:#ffffff; --ink:#1e2a30; --muted:#5f6b70; --line:#e3ded7;
+  --slate:#2c4a52; --slate-ink:#ffffff; --amber:#e3a03a; --amber-soft:#fbefd9; --amber-ink:#5a3a07;
+  --good:#2f7a4f; --warn:#a4561b;
+  --display:"Gowun Dodum","Noto Sans KR",system-ui,sans-serif;
+  --body:"Noto Sans KR",system-ui,-apple-system,sans-serif;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141b1e; --surface:#1d2629; --ink:#eef1f1; --muted:#9aa7ab; --line:#2f3b3f;
+  --slate:#3d6870; --slate-ink:#ffffff; --amber:#f0b252; --amber-soft:#3a2d17; --amber-ink:#f6d9a6;
+  --good:#6cc28f; --warn:#e79a5d; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141b1e; --surface:#1d2629; --ink:#eef1f1; --muted:#9aa7ab; --line:#2f3b3f;
+  --slate:#3d6870; --slate-ink:#ffffff; --amber:#f0b252; --amber-soft:#3a2d17; --amber-ink:#f6d9a6;
+  --good:#6cc28f; --warn:#e79a5d; color-scheme:dark}
+
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--slate)}
+.app{max-width:460px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;background:var(--bg)}
+@media (min-width:520px){.app{border-left:1px solid var(--line);border-right:1px solid var(--line)}}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--slate);color:var(--slate-ink);padding-block:12px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-family:var(--display);font-size:22px;letter-spacing:.12em}
+.logo small{font-family:var(--body);font-size:11px;letter-spacing:.02em;opacity:.8;margin-left:8px}
+.pet-chip{background:rgba(255,255,255,.14);color:var(--slate-ink);border:0;border-radius:999px;padding:5px 12px;font:inherit;font-size:13px;cursor:pointer}
+
+main{flex:1;padding-block:18px 110px;display:flex;flex-direction:column;gap:22px}
+h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0}
+h1{font-size:26px;line-height:1.3}
+h2{font-size:20px}
+h3{font-size:16px}
+p{margin:0}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.eyebrow{font-size:12px;letter-spacing:.08em;color:var(--muted)}
+.stack{display:flex;flex-direction:column;gap:10px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+.hero{border-radius:var(--r);overflow:hidden;position:relative;background:var(--slate);color:var(--slate-ink)}
+.hero img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover}
+.hero .cap{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px}
+.hero .cap p{opacity:.9;font-size:14px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:0;border-radius:12px;padding:12px 16px;font:inherit;font-weight:500;cursor:pointer;text-decoration:none}
+.btn.primary{background:var(--amber);color:#2a1a02}
+.btn.dark{background:var(--slate);color:var(--slate-ink)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.block{width:100%}
+.btn:focus-visible,.chip:focus-visible,.tab:focus-visible,.pcard:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.qcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:4px;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.qcard b{font-weight:500}
+.qcard span{font-size:13px;color:var(--muted)}
+
+.benefit{background:var(--amber-soft);color:var(--amber-ink);border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.benefit ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:2px;font-size:14px}
+
+.section-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.link{background:none;border:0;color:var(--slate);font:inherit;font-size:13px;cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:3px}
+:root:not([data-theme="light"]) .link{color:var(--amber)}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]) .link{color:var(--slate)}}
+
+.hscroll{display:grid;grid-auto-flow:column;grid-auto-columns:150px;gap:10px;overflow-x:auto;padding-bottom:4px;scroll-snap-type:x mandatory}
+.hscroll>*{scroll-snap-align:start}
+
+.pgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.pcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px;display:flex;flex-direction:column;gap:6px;cursor:pointer;text-align:left;font:inherit;color:inherit;min-width:0}
+.pcard .ph{background:#fff;border-radius:10px;aspect-ratio:1;display:grid;place-items:center;overflow:hidden}
+.pcard .ph img{width:88%;height:88%;object-fit:contain}
+.pcard .brand{font-size:11px;letter-spacing:.06em;color:var(--muted)}
+.pcard .name{font-size:14px;font-weight:500;line-height:1.35}
+.badges{display:flex;gap:4px;flex-wrap:wrap}
+.badge{font-size:11px;border-radius:6px;padding:1px 6px;background:var(--bg);color:var(--muted);border:1px solid var(--line)}
+.badge.hot{background:var(--amber-soft);color:var(--amber-ink);border-color:transparent}
+
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 13px;font:inherit;font-size:14px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--slate);color:var(--slate-ink);border-color:var(--slate)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:12px}
+label.f{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted)}
+input,select{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.q{display:flex;flex-direction:column;gap:8px}
+.q>b{font-weight:500;font-size:14px}
+
+.rec{display:grid;grid-template-columns:84px minmax(0,1fr);gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.rec .ph{background:#fff;border-radius:10px;aspect-ratio:1;display:grid;place-items:center;overflow:hidden}
+.rec .ph img{width:90%;height:90%;object-fit:contain}
+.rec ul{margin:4px 0 0;padding-left:18px;font-size:13px;color:var(--muted)}
+.rank{font-size:12px;color:var(--amber-ink);background:var(--amber-soft);border-radius:6px;padding:1px 7px;align-self:flex-start}
+.caution{font-size:13px;color:var(--warn)}
+
+.result{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.stat{background:var(--bg);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:2px}
+.stat b{font-size:22px;font-family:var(--display);font-variant-numeric:tabular-nums;line-height:1.2}
+.stat span{font-size:12px;color:var(--muted)}
+
+.note{font-size:12.5px;color:var(--muted);border-left:3px solid var(--line);padding-left:10px}
+
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;justify-content:center;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav.tabs .in{width:100%;max-width:460px;display:grid;grid-template-columns:repeat(5,1fr);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+.tab{background:none;border:0;font:inherit;font-size:11.5px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0 10px;cursor:pointer}
+.tab svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tab[aria-current="page"]{color:var(--slate)}
+:root:not([data-theme="light"]) .tab[aria-current="page"]{color:var(--amber)}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]) .tab[aria-current="page"]{color:var(--slate)}}
+
+.sheet-bg{position:fixed;inset:0;background:rgba(10,16,18,.5);z-index:20;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--surface);width:100%;max-width:460px;max-height:88%;overflow-y:auto;border-radius:18px 18px 0 0;padding-block:18px calc(20px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:14px}
+.sheet .ph{background:#fff;border-radius:14px;display:grid;place-items:center;padding:10px}
+.sheet .ph img{max-height:220px;object-fit:contain}
+dl.spec{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:14px}
+dl.spec dt{color:var(--muted)}
+dl.spec dd{margin:0}
+
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;z-index:30;max-width:calc(100% - 32px);text-align:center}
+.proto{font-size:11.5px;text-align:center;color:var(--muted)}
+.seri{display:grid;grid-template-columns:72px 1fr;gap:12px;align-items:center}
+.seri img{border-radius:50%;aspect-ratio:1;object-fit:cover}
+@media (prefers-reduced-motion:no-preference){.view{animation:in .18s ease-out}@keyframes in{from{transform:translateY(4px)}to{transform:none}}}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="top wrap">
+    <div class="logo">FILIN<small>작은 감정까지, 소중하게.</small></div>
+    <button class="pet-chip" id="petChip" type="button"></button>
+  </header>
+  <main class="wrap" id="main"></main>
+</div>
+
+<nav class="tabs" aria-label="메뉴"><div class="in" id="tabs"></div></nav>
+<div id="sheetRoot"></div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* ---------- 제품 데이터 (블로그 원고·수불부 기준) ---------- */
+const BRANDS = {
+  tow:{name:"토우", en:"Taste of the Wild", line:"미국 · 야생에서 영감받은 동물성 단백질 중심"},
+  pv:{name:"퓨어비타", en:"PureVita", line:"미국 · 한 레시피에 동물성 단백질 하나"},
+  ns:{name:"뉴트리소스", en:"NutriSource", line:"미국 · 퍼피부터 시니어까지 데일리 균형 영양"},
+  bf:{name:"벨포아", en:"Bellfor", line:"독일 · 곤충 단백질과 저온압착"}
+};
+// sp: dog/cat · st: 대상 단계 · prot: 단백질 키 · gf: 그레인프리 · ltd: 단일 단백질 · chicken: 닭 원료(닭 지방 포함) 여부
+const P = [
+ {id:"tow-pacific-stream-dog",b:"tow",n:"퍼시픽 스트림",sp:"dog",st:["adult"],prot:"fish",pl:"훈연 향 연어",gf:1,ltd:0,chicken:0,hot:1,kcal:3600,sizes:[2,4.5,5.6,12.2,18],pt:"토우 대표 그레인프리 레시피. 동물성 단백질을 연어와 생선에서만 얻어요.",tags:["picky","fish"]},
+ {id:"tow-pacific-stream-puppy",b:"tow",n:"퍼시픽 스트림 퍼피",sp:"dog",st:["puppy"],prot:"fish",pl:"훈연 향 연어",gf:1,ltd:0,chicken:0,sizes:[2,5.6,12.2],pt:"성장기 강아지를 위한 그레인프리 레시피예요.",tags:["fish"]},
+ {id:"tow-prey-trout-dog",b:"tow",n:"PREY 송어",sp:"dog",st:["adult","senior"],prot:"fish",pl:"송어",gf:1,ltd:1,chicken:1,sizes:[3.63],pt:"동물성 단백질은 송어 하나인 제한 원료 레시피예요. 지방원으로 닭 지방이 들어가요.",tags:["fish","novel"]},
+ {id:"tow-prey-turkey-dog",b:"tow",n:"PREY 칠면조",sp:"dog",st:["adult","senior"],prot:"turkey",pl:"칠면조",gf:1,ltd:1,chicken:0,sizes:[3.63],pt:"동물성 단백질 하나만 담은 제한 원료 레시피예요.",tags:[]},
+ {id:"tow-canyon-river-cat",b:"tow",n:"캐니언 리버",sp:"cat",st:["kitten","adult","senior"],prot:"fish",pl:"송어 · 훈연 향 연어",gf:1,ltd:0,chicken:0,hot:1,sizes:[1.36,2,4.5,6.6],pt:"생선파 고양이를 위한 그레인프리 레시피예요.",tags:["picky","fish"]},
+ {id:"tow-prey-turkey-cat",b:"tow",n:"PREY 칠면조 (고양이)",sp:"cat",st:["adult","senior"],prot:"turkey",pl:"칠면조",gf:1,ltd:1,chicken:0,sizes:[2.72],pt:"고양이용 제한 원료 레시피예요.",tags:[]},
+ {id:"pv-dog-salmon-peas",b:"pv",n:"연어 & 완두",sp:"dog",st:["puppy","adult","senior"],prot:"fish",pl:"연어",gf:1,ltd:1,chicken:0,pt:"생선 단일 단백질 그레인프리. 대형견 퍼피를 포함한 전 연령용이에요.",tags:["fish"]},
+ {id:"pv-dog-pork-blueberry",b:"pv",n:"돼지고기 & 블루베리",sp:"dog",st:["adult","senior"],prot:"pork",pl:"돼지고기",gf:1,ltd:1,chicken:0,pt:"닭·소 말고 다른 단백질을 찾을 때 고르는 레시피예요.",tags:["novel"]},
+ {id:"pv-dog-chicken-brownrice",b:"pv",n:"치킨 & 현미",sp:"dog",st:["adult","senior"],prot:"chicken",pl:"닭고기",gf:0,ltd:1,chicken:1,pt:"통곡물을 담은 그레인 프렌들리 레시피예요.",tags:[]},
+ {id:"pv-cat-salmon-peas",b:"pv",n:"캣 연어 & 완두",sp:"cat",st:["adult","senior"],prot:"fish",pl:"연어",gf:1,ltd:1,chicken:0,sizes:[5.44],pt:"예민한 고양이를 위한 그레인프리 단일 단백질이에요.",tags:["fish"]},
+ {id:"pv-cat-chicken-peas",b:"pv",n:"캣 치킨 & 완두",sp:"cat",st:["kitten","adult","senior"],prot:"chicken",pl:"닭고기",gf:1,ltd:1,chicken:1,hot:1,sizes:[1.81,5.44],pt:"고양이용 그레인프리. 필린에서 많이 찾는 고양이 사료예요.",tags:["picky"]},
+ {id:"ns-choice-chicken-barley",b:"ns",n:"초이스 치킨밀 & 보리",sp:"dog",st:["adult"],prot:"chicken",pl:"닭고기",gf:0,ltd:0,chicken:1,pt:"매일 먹는 기본 데일리 사료예요.",tags:[]},
+ {id:"ns-choice-turkey-barley",b:"ns",n:"초이스 칠면조밀 & 보리",sp:"dog",st:["adult"],prot:"turkey",pl:"칠면조",gf:0,ltd:0,chicken:0,pt:"닭 대신 칠면조로 바꿔볼 때 좋아요.",tags:[]},
+ {id:"ns-choice-whitefish-rice",b:"ns",n:"초이스 화이트피쉬밀 & 라이스",sp:"dog",st:["adult"],prot:"fish",pl:"흰살 생선",gf:0,ltd:0,chicken:0,pt:"생선 단백질 데일리 사료예요.",tags:["fish"]},
+ {id:"ns-choice-large-breed",b:"ns",n:"초이스 라지브리드",sp:"dog",st:["adult"],prot:"chicken",pl:"닭고기",gf:0,ltd:0,chicken:1,large:1,pt:"큰 아이들을 위한 레시피예요.",tags:["large"]},
+ {id:"ns-choice-performance",b:"ns",n:"초이스 퍼포먼스",sp:"dog",st:["adult"],prot:"chicken",pl:"닭고기",gf:0,ltd:0,chicken:1,pt:"운동량 많은 아이를 위한 레시피예요.",tags:["active"]},
+ {id:"ns-choice-puppy",b:"ns",n:"초이스 퍼피",sp:"dog",st:["puppy"],prot:"chicken",pl:"닭고기",gf:0,ltd:0,chicken:1,pt:"처음 밥을 고를 때 시작하기 좋은 퍼피 레시피예요.",tags:[]},
+ {id:"ns-gf-senior",b:"ns",n:"그레인프리 시니어",sp:"dog",st:["senior"],prot:"chicken",pl:"닭고기",gf:1,ltd:0,chicken:1,pt:"곡물 없이 시니어 단계로 옮겨갈 때 고르는 레시피예요.",tags:[]},
+ {id:"ns-gf-chicken-peas",b:"ns",n:"그레인프리 치킨 & 완두",sp:"dog",st:["adult"],prot:"chicken",pl:"닭고기",gf:1,ltd:0,chicken:1,pt:"곡물을 빼고 싶을 때 고르는 데일리 레시피예요.",tags:[]},
+ {id:"ns-cat-kitten-country",b:"ns",n:"캣 & 키튼 컨트리 셀렉트",sp:"cat",st:["kitten","adult"],prot:"chicken",pl:"닭고기",gf:0,ltd:0,chicken:1,pt:"키튼부터 성묘까지 한 브랜드로 이어 먹일 수 있어요.",tags:[]},
+ {id:"bellfor-naturgut-coldpressed",b:"bf",n:"네이처굿 슈마우스",sp:"dog",st:["adult","senior"],prot:"insect",pl:"곤충 (동애등에 유충)",gf:1,ltd:0,chicken:0,pt:"벨포아 저온압착 대표 제품. 곡물 무첨가예요.",tags:["novel"]},
+ {id:"bellfor-landgut",b:"bf",n:"란트굿 슈마우스",sp:"dog",st:["adult","senior"],prot:"insect",pl:"곤충 (동애등에 유충)",gf:1,ltd:0,chicken:0,pt:"벨포아 곤충 건사료의 기본형. 곡물 무첨가예요.",tags:["novel"]},
+ {id:"bellfor-landgut-mini",b:"bf",n:"란트굿 슈마우스 미니",sp:"dog",st:["adult","senior"],prot:"insect",pl:"곤충 (동애등에 유충)",gf:1,ltd:0,chicken:0,small:1,pt:"작은 알갱이로 만든 소형견용이에요.",tags:["novel","small"]}
+];
+const byId = Object.fromEntries(P.map(p=>[p.id,p]));
+const STAGE = {puppy:"퍼피",kitten:"키튼",adult:"성견·성묘",senior:"시니어"};
+const stageName = (st,sp)=> st==="adult" ? (sp==="cat"?"성묘":"성견") : STAGE[st];
+
+/* ---------- 저장 (이 브라우저에만) ---------- */
+const store = {
+  get(k,d){try{const v=localStorage.getItem("filin:"+k);return v?JSON.parse(v):d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem("filin:"+k,JSON.stringify(v))}catch(e){}}
+};
+const EXAMPLE_PET = {name:"올리",sp:"dog",age:3,weight:8,active:"normal",neutered:true,concerns:["fish"],example:true};
+let pet = store.get("pet", EXAMPLE_PET);
+let samples = store.get("samples", []);
+let shopFilter = {sp:"all",b:"all"};
+
+/* ---------- 계산 ---------- */
+function stageOf(p){ if(p.sp==="dog") return p.age<1?"puppy":p.age>=7?"senior":"adult"; return p.age<1?"kitten":p.age>=10?"senior":"adult"; }
+function sizeOf(p){ return p.weight<10?"small":p.weight>=25?"large":"medium"; }
+
+function recommend(pt){
+  const st = stageOf(pt), sz = sizeOf(pt), c = pt.concerns||[];
+  return P.filter(p=>p.sp===pt.sp).map(p=>{
+    let s=0; const why=[]; let caution=null;
+    if(p.st.includes(st)){s+=4; why.push(`${stageName(st,pt.sp)} 단계에 맞는 레시피`);}
+    else if(!(st==="adult")){s-=6;}
+    if(c.includes("chicken")){
+      if(p.prot==="chicken"){s-=10;}
+      else if(p.chicken){s-=1; caution="동물성 단백질은 송어 하나지만 닭 지방이 들어가요. 닭을 엄격히 피해야 하면 확인이 필요해요.";}
+      else {s+=3; why.push(`닭고기 없이 ${p.pl} 단백질`);} }
+    if(c.includes("grain") && p.gf){s+=2; why.push("곡물을 뺀 그레인프리");}
+    if(c.includes("grain") && !p.gf){s-=3;}
+    if(c.includes("simple") && p.ltd){s+=3; why.push("동물성 단백질이 하나라 원재료표가 짧아요");}
+    if(c.includes("picky") && p.tags.includes("picky")){s+=2; why.push("향이 뚜렷해 입 짧은 아이들이 많이 찾는 레시피");}
+    if(c.includes("novel") && (p.tags.includes("novel"))){s+=3; why.push(`닭·소와 다른 새로운 단백질 (${p.pl})`);}
+    if(c.includes("fish") && p.prot==="fish"){s+=2; why.push("생선 단백질");}
+    if(pt.active==="high" && p.tags.includes("active")){s+=3; why.push("활동량 많은 아이용");}
+    if(sz==="large" && p.large){s+=3; why.push("대형견용 레시피");}
+    if(sz==="small" && p.small){s+=2; why.push("소형견용 작은 알갱이");}
+    if(p.hot){s+=1.5; why.push("필린에서 많이 찾는 제품");}
+    return {p,s,why,caution};
+  }).filter(r=>r.s>0).sort((a,b)=>b.s-a.s).slice(0,3);
+}
+
+function feeding(pt, kcalPerKg){
+  const w=Math.max(0.5,+pt.weight||1); const st=stageOf(pt);
+  const rer = 70*Math.pow(w,0.75);
+  let f;
+  if(pt.sp==="dog"){ f = st==="puppy"?2.5 : st==="senior"?1.4 : pt.active==="high"?2.0 : pt.neutered?1.6:1.8; if(pt.active==="low"&&st!=="puppy") f-=0.2; }
+  else { f = st==="kitten"?2.5 : st==="senior"?1.1 : pt.neutered?1.2:1.4; if(pt.active==="high"&&st!=="kitten") f+=0.2; }
+  const kcal = rer*f; const grams = kcal/(kcalPerKg/1000);
+  return {kcal:Math.round(kcal), grams:Math.round(grams)};
+}
+
+/* ---------- 화면 공통 ---------- */
+const $ = s=>document.querySelector(s);
+const esc = s=>String(s).replace(/[&<>"]/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch]));
+const img = id=>`img/${id}.jpg`;
+function toast(msg){const t=$("#toast");t.textContent=msg;t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>t.hidden=true,2600);}
+function josa(name,a,b){const c=name.charCodeAt(name.length-1);if(c<0xAC00||c>0xD7A3)return name+b;return name+((c-0xAC00)%28?a:b);}
+
+const ICONS = {
+  home:'<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/>',
+  find:'<circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/><path d="M9 11h4M11 9v4"/>',
+  shop:'<path d="M5 8h14l-1 12H6z"/><path d="M9 8a3 3 0 016 0"/>',
+  feed:'<path d="M4 13h16a8 8 0 01-16 0z"/><path d="M9 9c0-2 2-2 2-4M14 9c0-2 2-2 2-4"/>',
+  pet:'<circle cx="7" cy="9" r="2"/><circle cx="12" cy="6" r="2"/><circle cx="17" cy="9" r="2"/><path d="M8 17c0-3 2-5 4-5s4 2 4 5-2 3-4 3-4 0-4-3z"/>'
+};
+const TABS=[["home","홈"],["find","맞춤 추천"],["shop","제품"],["feed","급여량"],["pet","샘플·내 아이"]];
+$("#tabs").innerHTML = TABS.map(([k,l])=>`<button class="tab" type="button" data-go="${k}"><svg viewBox="0 0 24 24">${ICONS[k]}</svg>${l}</button>`).join("");
+
+function petLabel(){ return `${pet.sp==="dog"?"강아지":"고양이"} ${esc(pet.name)} · ${pet.weight}kg`; }
+function renderChip(){ $("#petChip").textContent = (pet.example?"예시 · ":"")+`${pet.name} (${pet.sp==="dog"?"강아지":"고양이"})`; }
+
+function pcard(p){
+  return `<button class="pcard" type="button" data-open="${p.id}">
+    <div class="ph"><img src="${img(p.id)}" alt="${esc(BRANDS[p.b].name+" "+p.n)}" loading="lazy"></div>
+    <div class="brand">${BRANDS[p.b].name}</div>
+    <div class="name">${esc(p.n)}</div>
+    <div class="badges">${p.hot?'<span class="badge hot">인기</span>':""}<span class="badge">${p.sp==="dog"?"강아지":"고양이"}</span><span class="badge">${esc(p.pl.split(" ")[0])}</span>${p.gf?'<span class="badge">그레인프리</span>':""}</div>
+  </button>`;
+}
+
+/* ---------- 홈 ---------- */
+function vHome(){
+  const top = recommend(pet)[0];
+  return `<section class="hero">
+      <img src="img/filin-store.jpg" alt="올리와 세리가 필린 매장 앞에 서 있는 그림">
+      <div class="cap"><h1>우리 아이 밥,<br>필린에서 같이 골라요</h1>
+      <p>토우·퓨어비타·뉴트리소스·벨포아를 직접 들여오는 공식 수입 스토어예요.</p></div>
+    </section>
+    <div class="quick">
+      <button class="qcard" type="button" data-go="find"><b>1분 맞춤 추천</b><span>나이·체중·고민으로 골라 드려요</span></button>
+      <button class="qcard" type="button" data-go="feed"><b>급여량 계산</b><span>하루 몇 g, 한 봉지 며칠?</span></button>
+      <button class="qcard" type="button" data-go="pet"><b>샘플 먼저</b><span>맞는지 맛보고 정하기</span></button>
+      <button class="qcard" type="button" data-go="shop"><b>브랜드관</b><span>4개 브랜드 ${P.length}가지 제품</span></button>
+    </div>
+    ${top?`<section class="stack">
+      <div class="section-head"><h2>${esc(josa(pet.name,"이에게","에게"))} 먼저 권하는 사료</h2><button class="link" type="button" data-go="find">다시 고르기</button></div>
+      ${recCard(top,0)}
+    </section>`:""}
+    <section class="benefit">
+      <b>처음이라면 이렇게 시작해요</b>
+      <ol><li>첫 구매 샘플 키트로 맛부터 보여 주기</li><li>잘 먹으면 7~10일에 걸쳐 천천히 바꾸기</li><li>맞는 사료는 정기배송 7% 할인으로 받기</li></ol>
+    </section>
+    <section class="stack">
+      <div class="section-head"><h2>필린에서 많이 찾는 제품</h2><button class="link" type="button" data-go="shop">전체 보기</button></div>
+      <div class="hscroll">${P.filter(p=>p.hot).map(pcard).join("")}</div>
+    </section>
+    <p class="proto">시제품이에요. 구매·샘플 신청은 실제로 처리되지 않아요.</p>`;
+}
+
+/* ---------- 맞춤 추천 ---------- */
+const CONCERNS = {
+  dog:[["chicken","닭고기를 피하고 싶어요"],["grain","곡물을 빼고 싶어요"],["simple","원재료가 단순했으면"],["picky","입이 짧아요"],["novel","새로운 단백질을 찾아요"],["fish","생선을 좋아해요"]],
+  cat:[["chicken","닭고기를 피하고 싶어요"],["grain","곡물을 빼고 싶어요"],["simple","원재료가 단순했으면"],["picky","입이 짧아요"],["fish","생선을 좋아해요"]]
+};
+function petForm(){
+  const c = pet.concerns||[];
+  return `<div class="card">
+    <div class="q"><b>어떤 아이인가요?</b>
+      <div class="chips">${[["dog","강아지"],["cat","고양이"]].map(([v,l])=>`<button class="chip" type="button" data-set="sp" data-val="${v}" aria-pressed="${pet.sp===v}">${l}</button>`).join("")}</div></div>
+    <div class="two">
+      <label class="f">이름<input id="f-name" value="${esc(pet.name)}" maxlength="12"></label>
+      <label class="f">나이 (살)<input id="f-age" type="number" min="0" max="25" step="0.5" inputmode="decimal" value="${pet.age}"></label>
+    </div>
+    <div class="two">
+      <label class="f">체중 (kg)<input id="f-weight" type="number" min="0.5" max="90" step="0.1" inputmode="decimal" value="${pet.weight}"></label>
+      <label class="f">활동량<select id="f-active">${[["low","적은 편"],["normal","보통"],["high","많은 편"]].map(([v,l])=>`<option value="${v}" ${pet.active===v?"selected":""}>${l}</option>`).join("")}</select></label>
+    </div>
+    <div class="q"><b>고민이 있다면 골라 주세요</b>
+      <div class="chips">${CONCERNS[pet.sp].map(([v,l])=>`<button class="chip" type="button" data-concern="${v}" aria-pressed="${c.includes(v)}">${l}</button>`).join("")}</div></div>
+  </div>`;
+}
+function recCard(r,i){
+  const p=r.p;
+  return `<button class="rec" type="button" data-open="${p.id}">
+    <div class="ph"><img src="${img(p.id)}" alt="${esc(BRANDS[p.b].name+" "+p.n)}"></div>
+    <div class="stack" style="gap:4px;min-width:0">
+      <span class="rank">${i===0?"가장 잘 맞아요":`추천 ${i+1}`}</span>
+      <div><span class="small muted">${BRANDS[p.b].name}</span><h3>${esc(p.n)}</h3></div>
+      <ul>${r.why.slice(0,3).map(w=>`<li>${esc(w)}</li>`).join("")}</ul>
+      ${r.caution?`<p class="caution">${esc(r.caution)}</p>`:""}
+    </div></button>`;
+}
+function vFind(){
+  const recs = recommend(pet);
+  return `<div class="stack"><span class="eyebrow">1분 맞춤 추천</span><h1>${esc(josa(pet.name,"이","")) } 정보를 알려 주세요</h1>
+    <p class="muted small">고르는 즉시 아래 추천이 바뀌어요.</p></div>
+    ${petForm()}
+    <section class="stack" id="recs">${recsHtml(recs)}</section>`;
+}
+function recsHtml(recs){
+  if(!recs.length) return `<div class="seri"><img src="img/seri-thinking.jpg" alt="고민하는 세리"><p>조건에 딱 맞는 제품을 찾지 못했어요. 고민을 하나 줄여 보시겠어요?</p></div>`;
+  return `<h2>${esc(josa(pet.name,"이에게","에게"))} 맞는 사료 ${recs.length}가지</h2>${recs.map(recCard).join("")}
+    <p class="note">사료 전환은 7~10일에 걸쳐 천천히 해 주세요. 알러지나 건강 고민이 있다면 수의사 선생님과 먼저 상담해 주세요.</p>`;
+}
+
+/* ---------- 제품 ---------- */
+function vShop(){
+  const list = P.filter(p=>(shopFilter.sp==="all"||p.sp===shopFilter.sp)&&(shopFilter.b==="all"||p.b===shopFilter.b));
+  const brand = shopFilter.b!=="all"?BRANDS[shopFilter.b]:null;
+  return `<div class="stack"><span class="eyebrow">공식 브랜드관</span><h1>브랜드별 제품</h1></div>
+    <div class="chips">${[["all","전체"],["dog","강아지"],["cat","고양이"]].map(([v,l])=>`<button class="chip" type="button" data-fsp="${v}" aria-pressed="${shopFilter.sp===v}">${l}</button>`).join("")}</div>
+    <div class="chips">${[["all","모든 브랜드"],...Object.entries(BRANDS).map(([k,v])=>[k,v.name])].map(([v,l])=>`<button class="chip" type="button" data-fb="${v}" aria-pressed="${shopFilter.b===v}">${l}</button>`).join("")}</div>
+    ${brand?`<p class="small muted"><b style="color:var(--ink)">${brand.name} (${brand.en})</b> · ${brand.line}</p>`:""}
+    <div class="pgrid">${list.map(pcard).join("")||'<p class="muted">이 조건의 제품이 아직 없어요.</p>'}</div>`;
+}
+
+/* ---------- 급여량 ---------- */
+let feedSel = {id:null,kcal:3600,size:null};
+function vFeed(){
+  const opts = P.filter(p=>p.sp===pet.sp);
+  if(!feedSel.id || byId[feedSel.id].sp!==pet.sp){ const r=recommend(pet)[0]; feedSel.id=(r?r.p:opts[0]).id; feedSel.size=null; }
+  const p=byId[feedSel.id];
+  const kcal = p.kcal || feedSel.kcal;
+  const sizes = p.sizes || [2,5,10];
+  if(!sizes.includes(feedSel.size)) feedSel.size = sizes[Math.min(1,sizes.length-1)];
+  const f = feeding(pet,kcal);
+  const days = Math.floor(feedSel.size*1000/f.grams);
+  const end = new Date(); end.setDate(end.getDate()+days);
+  const remind = new Date(end); remind.setDate(remind.getDate()-5);
+  const fmt = d=>`${d.getMonth()+1}월 ${d.getDate()}일`;
+  return `<div class="stack"><span class="eyebrow">급여량 계산</span><h1>하루 얼마나, 한 봉지 며칠?</h1>
+    <p class="small muted">${petLabel()} · ${stageName(stageOf(pet),pet.sp)} · 활동량 ${({low:"적은 편",normal:"보통",high:"많은 편"})[pet.active]} <button class="link" type="button" data-go="find">바꾸기</button></p></div>
+    <div class="card">
+      <label class="f">사료<select id="fd-prod">${opts.map(o=>`<option value="${o.id}" ${o.id===p.id?"selected":""}>${BRANDS[o.b].name} ${esc(o.n)}</option>`).join("")}</select></label>
+      <div class="two">
+        <label class="f">봉지 용량<select id="fd-size">${sizes.map(s=>`<option value="${s}" ${s===feedSel.size?"selected":""}>${s}kg</option>`).join("")}</select></label>
+        <label class="f">열량 (kcal/kg)<input id="fd-kcal" type="number" min="2500" max="5000" step="10" value="${kcal}" ${p.kcal?"disabled":""}></label>
+      </div>
+      ${p.kcal?"":'<p class="note">이 제품의 열량은 아직 앱에 없어서 기본값을 넣었어요. 포장지의 kcal/kg로 바꿔 주세요.</p>'}
+      ${p.sizes?"":'<p class="note">봉지 용량은 예시예요. 실제 판매 용량으로 바꿔야 해요.</p>'}
+      <div class="result">
+        <div class="stat"><b>${f.grams}g</b><span>하루 급여량</span></div>
+        <div class="stat"><b>${days}일</b><span>${feedSel.size}kg 한 봉지</span></div>
+        <div class="stat"><b>${f.kcal}</b><span>하루 kcal</span></div>
+      </div>
+      <p class="small">하루 두 번 준다면 한 번에 <b>${Math.round(f.grams/2)}g</b> 정도예요. 이 봉지는 <b>${fmt(end)}</b>쯤 떨어져요.</p>
+      <button class="btn dark block" type="button" data-remind="${fmt(remind)}">${fmt(remind)}에 주문 알림 받기</button>
+    </div>
+    <p class="note">권장 열량(RER × 생애 단계 계수)으로 계산한 참고값이에요. 체형과 변 상태를 보며 조절하고, 포장지 급여표를 함께 확인해 주세요.</p>`;
+}
+
+/* ---------- 샘플·내 아이 ---------- */
+function vPet(){
+  const recs = recommend(pet);
+  return `<div class="stack"><span class="eyebrow">첫 구매 샘플 키트</span><h1>맞는지 먼저 맛보세요</h1>
+    <p class="small muted">최대 3가지까지 고를 수 있어요. ${esc(josa(pet.name,"이에게","에게"))} 맞는 제품을 먼저 보여 드려요.</p></div>
+    <div class="card">
+      <div class="chips">${P.filter(p=>p.sp===pet.sp).sort((a,b)=>(recs.findIndex(r=>r.p===b)>-1)-(recs.findIndex(r=>r.p===a)>-1)).map(p=>`<button class="chip" type="button" data-sample="${p.id}" aria-pressed="${samples.includes(p.id)}">${recs.some(r=>r.p===p)?"★ ":""}${BRANDS[p.b].name} ${esc(p.n)}</button>`).join("")}</div>
+      <p class="small muted">${samples.length}/3 선택</p>
+      <button class="btn primary block" type="button" id="sendSample" ${samples.length?"":"disabled"}>샘플 키트 신청하기</button>
+    </div>
+    <section class="stack">
+      <h2>우리 아이</h2>
+      <div class="seri"><img src="img/oli-seri-walk.jpg" alt="산책하는 올리와 세리"><div>
+        <p><b>${esc(pet.name)}</b> ${pet.example?'<span class="badge">예시</span>':""}</p>
+        <p class="small muted">${petLabel()} · ${pet.age}살 · ${stageName(stageOf(pet),pet.sp)}</p></div></div>
+      <button class="btn ghost block" type="button" data-go="find">정보 바꾸기</button>
+    </section>
+    <p class="proto">아이 정보와 샘플 선택은 이 브라우저에만 저장돼요.</p>`;
+}
+
+/* ---------- 상세 시트 ---------- */
+function openProduct(id){
+  const p=byId[id], br=BRANDS[p.b];
+  $("#sheetRoot").innerHTML = `<div class="sheet-bg" id="sheetBg"><div class="sheet wrap" role="dialog" aria-modal="true" aria-label="${esc(br.name+" "+p.n)}">
+    <div class="ph"><img src="${img(p.id)}" alt="${esc(br.name+" "+p.n)}"></div>
+    <div><span class="small muted">${br.name} · ${br.en}</span><h2>${esc(p.n)}</h2></div>
+    <p>${esc(p.pt)}</p>
+    <dl class="spec">
+      <dt>대상</dt><dd>${p.sp==="dog"?"강아지":"고양이"} · ${p.st.map(s=>STAGE[s]).join(", ")}</dd>
+      <dt>주 단백질</dt><dd>${esc(p.pl)}${p.ltd?" (단일 동물성 단백질)":""}</dd>
+      <dt>곡물</dt><dd>${p.gf?"그레인프리":"곡물 포함"}</dd>
+      ${p.kcal?`<dt>열량</dt><dd>${p.kcal.toLocaleString()} kcal/kg</dd>`:""}
+      ${p.sizes?`<dt>용량</dt><dd>${p.sizes.map(s=>s+"kg").join(" · ")}</dd>`:""}
+    </dl>
+    <p class="note">미국·독일에서 직접 들여와 정식 통관을 거친 정품만, 유통기한을 관리해서 보내 드려요.</p>
+    <div class="two">
+      <button class="btn ghost" type="button" data-sample-add="${p.id}">샘플 담기</button>
+      <button class="btn primary" type="button" data-store="${p.id}">스토어에서 구매</button>
+    </div>
+    <button class="btn ghost block" type="button" data-close>닫기</button>
+  </div></div>`;
+}
+function closeSheet(){ $("#sheetRoot").innerHTML=""; }
+
+/* ---------- 라우팅 ---------- */
+const VIEWS={home:vHome,find:vFind,shop:vShop,feed:vFeed,pet:vPet};
+function current(){ const h=location.hash.slice(1); return VIEWS[h]?h:"home"; }
+function render(){
+  const v=current();
+  $("#main").innerHTML = `<div class="view stack" style="gap:22px">${VIEWS[v]()}</div>`;
+  document.querySelectorAll(".tab").forEach(t=>{ if(t.dataset.go===v) t.setAttribute("aria-current","page"); else t.removeAttribute("aria-current"); });
+  renderChip();
+}
+function go(v){ if(location.hash.slice(1)===v){render();} else location.hash=v; window.scrollTo(0,0); }
+window.addEventListener("hashchange",()=>{closeSheet();render();window.scrollTo(0,0);});
+
+function savePet(){ pet.example=false; store.set("pet",pet); }
+
+document.addEventListener("click",e=>{
+  const t=e.target.closest("button,[data-close]");
+  if(e.target.id==="sheetBg"){closeSheet();return;}
+  if(!t) return;
+  const d=t.dataset;
+  if(d.go){ closeSheet(); go(d.go); }
+  else if(d.open){ openProduct(d.open); }
+  else if("close" in d){ closeSheet(); }
+  else if(d.set==="sp"){ if(pet.sp!==d.val){pet.sp=d.val;pet.concerns=[];samples=[];store.set("samples",samples);} savePet(); render(); }
+  else if(d.concern){ const c=new Set(pet.concerns||[]); c.has(d.concern)?c.delete(d.concern):c.add(d.concern); pet.concerns=[...c]; savePet(); t.setAttribute("aria-pressed",c.has(d.concern)); $("#recs").innerHTML=recsHtml(recommend(pet)); }
+  else if(d.fsp){ shopFilter.sp=d.fsp; render(); }
+  else if(d.fb){ shopFilter.b=d.fb; render(); }
+  else if(d.sample){ toggleSample(d.sample); render(); }
+  else if(d.sampleAdd){ const p=byId[d.sampleAdd]; if(p.sp!==pet.sp){toast(`${pet.sp==="dog"?"강아지":"고양이"}용 샘플만 담을 수 있어요.`);return;} if(!samples.includes(p.id)) toggleSample(p.id); closeSheet(); if(current()==="pet")render(); }
+  else if(d.store){ toast("시제품이라 여기서 네이버 브랜드스토어 상품 페이지로 이동해요."); }
+  else if(d.remind){ toast(`${d.remind}에 알림을 보내 드릴게요. (시제품 화면이에요)`); }
+  else if(t.id==="sendSample"){ toast(`${samples.length}가지 샘플 신청을 받았어요. (시제품이라 실제로 접수되진 않아요)`); }
+  else if(t.id==="petChip"){ go("find"); }
+});
+function toggleSample(id){
+  const i=samples.indexOf(id);
+  if(i>-1) samples.splice(i,1);
+  else if(samples.length>=3){ toast("샘플은 3가지까지 고를 수 있어요."); return; }
+  else { samples.push(id); toast(`${BRANDS[byId[id].b].name} ${byId[id].n} 샘플을 담았어요.`); }
+  store.set("samples",samples);
+}
+document.addEventListener("input",e=>{
+  const id=e.target.id;
+  if(id==="f-name"){ pet.name=e.target.value.trim()||"우리 아이"; savePet(); renderChip(); $("#recs").innerHTML=recsHtml(recommend(pet)); }
+  if(id==="f-age"){ const v=parseFloat(e.target.value); if(!isNaN(v)){pet.age=v; savePet(); $("#recs").innerHTML=recsHtml(recommend(pet));} }
+  if(id==="f-weight"){ const v=parseFloat(e.target.value); if(v>0){pet.weight=v; savePet(); renderChip(); $("#recs").innerHTML=recsHtml(recommend(pet));} }
+  if(id==="fd-kcal"){ const v=parseFloat(e.target.value); if(v>=2500&&v<=5000){feedSel.kcal=v; const pos=e.target.selectionStart; render(); const n=$("#fd-kcal"); n.focus(); try{n.setSelectionRange(pos,pos)}catch(_){} } }
+});
+document.addEventListener("change",e=>{
+  const id=e.target.id;
+  if(id==="f-active"){ pet.active=e.target.value; savePet(); $("#recs").innerHTML=recsHtml(recommend(pet)); }
+  if(id==="fd-prod"){ feedSel.id=e.target.value; feedSel.size=null; render(); }
+  if(id==="fd-size"){ feedSel.size=parseFloat(e.target.value); render(); }
+});
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeSheet(); });
+render();
+</script>
+</body>
+</html>
