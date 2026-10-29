@@ -176,6 +176,9 @@ dl.spec dd{margin:0}
 .ptr.ready{background:var(--amber)}
 .ptr.spin span{animation:ptrspin .8s linear infinite}
 @keyframes ptrspin{to{transform:rotate(360deg)}}
+.swipe{position:relative;border-radius:var(--r);overflow:hidden}
+.swipe .petcard{position:relative;z-index:1;width:100%;touch-action:pan-y}
+.swdel{position:absolute;right:0;top:0;bottom:0;width:96px;border:0;background:var(--coral);color:#fff;font:inherit;font-weight:700;font-size:14px;white-space:pre-line;line-height:1.3;cursor:pointer}
 .petcard .go{font-size:22px;line-height:1;color:var(--muted);vertical-align:-2px;margin-left:2px}
 img.photo{object-fit:cover!important;padding:0!important;border-radius:50%}
 .photo-pick{display:grid;grid-template-columns:84px minmax(0,1fr);gap:14px;align-items:center;padding-bottom:14px;margin-bottom:6px;border-bottom:1px solid var(--line)}
@@ -666,14 +669,14 @@ function birthdayInfo(pt){
 function vPet(){
   const pt=cur(), recs=recommend(pt), al=pt.allergies||[];
   return `<div class="stack"><span class="eyebrow">내 아이</span><h1>우리 아이 프로필</h1>
-    <p class="small muted">아이를 누르면 그 아이 정보 화면으로 넘어가요. 고른 아이 기준으로 추천, 급여량, 정기배송이 바뀌어요.</p></div>
+    <p class="small muted">아이를 누르면 그 아이 정보 화면으로 넘어가요. 왼쪽으로 밀면 지울 수 있어요.</p></div>
     ${sb && !user ? `<button class="shipbanner" type="button" data-go="account"><div><b>로그인하고 어디서나 이어 보기</b><span>지금은 이 휴대폰에만 저장돼요. 가입하면 다른 휴대폰에서도 볼 수 있어요.</span></div><span>로그인</span></button>` : ""}
     ${user ? `<button class="shipbanner" type="button" data-go="account"><div><b>${esc(user.email||"")}</b><span>계정에 저장되고 있어요</span></div><span>내 계정</span></button>` : ""}
-    <div class="petlist">${pets.map(x=>`<button class="petcard" type="button" data-pick="${x.id}" aria-pressed="${x.id===curId}">
+    <div class="petlist">${pets.map(x=>`<div class="swipe">${pets.length>1?`<button class="swdel" type="button" data-swdel="${x.id}">삭제</button>`:""}<button class="petcard" type="button" data-pick="${x.id}" aria-pressed="${x.id===curId}">
       <img class="${x.photo?"photo":""}" src="${petImg(x)}" alt=""><div style="min-width:0"><b>${esc(x.name)}</b> ${x.example?'<span class="badge">예시</span>':""}
       <div class="sub">${petLabel(x)}${x.breed?" · "+esc(x.breed):""}</div>
       ${(x.allergies||[]).length?`<div class="badges" style="margin-top:4px">${x.allergies.map(a=>`<span class="badge hot">${(ALLERGENS.find(z=>z[0]===a)||[a,a])[1]} 피하기</span>`).join("")}</div>`:""}</div>
-      <span class="on">${x.id===curId?"선택됨 ":""}<span class="go" aria-hidden="true">›</span></span></button>`).join("")}
+      <span class="on">${x.id===curId?"선택됨 ":""}<span class="go" aria-hidden="true">›</span></span></button></div>`).join("")}
       <button class="btn ghost block" type="button" data-addpet>+ 아이 추가하기</button>
     </div>
     ${birthdayInfo(pt)}
@@ -754,6 +757,43 @@ function loadPhoto(file){
   im.onerror=()=>{ URL.revokeObjectURL(url); toast("이 사진은 열 수 없어요. 다른 사진을 골라 주세요."); };
   im.src=url;
 }
+function deletePet(id){
+  const pt=pets.find(p=>p.id===id); if(!pt) return;
+  if(pets.length<2){ toast("아이가 한 마리일 때는 지울 수 없어요. 먼저 다른 아이를 추가해 주세요."); return; }
+  pets=pets.filter(p=>p.id!==id); autoship.forEach(a=>{ if(a.petId===id) a.petId=null; }); saveShip();
+  if(curId===id) curId=pets[0].id;
+  savePets(); draft=null; chat=null; todayLog=null;
+  toast(`${pt.name} 프로필을 삭제했어요.`);
+}
+// 아이 카드를 왼쪽으로 밀면 뒤에 있는 삭제 버튼이 보여요.
+let swipeArm=null;
+(()=>{
+  const OPEN=96; let card=null, x0=0, y0=0, dx=0, base=0, horiz=null;
+  const setX=(c,x,anim)=>{ c.style.transition=anim?"transform .2s":"none"; c.style.transform=x?`translateX(${x}px)`:""; c.dataset.open=x?"1":""; };
+  const closeAll=except=>document.querySelectorAll('.petcard[data-open="1"]').forEach(c=>{ if(c!==except) setX(c,0,true); });
+  addEventListener("touchstart",e=>{
+    card=e.target.closest(".petcard"); if(!card || e.target.closest("[data-swdel]")){ card=null; return; }
+    x0=e.touches[0].clientX; y0=e.touches[0].clientY; dx=0; horiz=null; base=card.dataset.open?-OPEN:0;
+  },{passive:true});
+  addEventListener("touchmove",e=>{
+    if(!card) return;
+    const mx=e.touches[0].clientX-x0, my=e.touches[0].clientY-y0;
+    if(horiz===null && (Math.abs(mx)>8||Math.abs(my)>8)) horiz=Math.abs(mx)>Math.abs(my);
+    if(!horiz) return;
+    dx=mx; setX(card,Math.max(-OPEN-20,Math.min(0,base+dx)),false); card.dataset.open="1";
+  },{passive:true});
+  addEventListener("touchend",()=>{
+    if(!card) return;
+    if(horiz){ const open=base+dx < -OPEN/2; closeAll(card); setX(card,open?-OPEN:0,true); swipeArm=null; card.dataset.swiped="1"; setTimeout(()=>{ if(card) delete card.dataset.swiped; },350); }
+    card=null;
+  });
+  // 밀어 둔 카드는 한 번 누르면 닫히기만 해요.
+  document.addEventListener("click",e=>{
+    const c=e.target.closest(".petcard");
+    if(c && (c.dataset.swiped || c.dataset.open)){ e.stopImmediatePropagation(); e.preventDefault(); if(!c.dataset.swiped) setX(c,0,true); return; }
+    if(!e.target.closest("[data-swdel]")) closeAll();
+  },true);
+})();
 function saveDraft(){
   const d=draft;
   if(!d.name.trim()){ toast("이름을 적어 주세요."); $("#e-name").focus(); return; }
@@ -1229,7 +1269,8 @@ document.addEventListener("click",e=>{
   else if(d.eal){ const s=new Set(draft.allergies); s.has(d.eal)?s.delete(d.eal):s.add(d.eal); draft.allergies=[...s]; t.setAttribute("aria-pressed",s.has(d.eal)); }
   else if("save" in d){ saveDraft(); }
   else if("delphoto" in d){ delete draft.photo; render(false); }
-  else if("delpet" in d){ if(delArm){ pets=pets.filter(p=>p.id!==draft.id); autoship.forEach(a=>{ if(a.petId===draft.id) a.petId=null; }); saveShip(); curId=pets[0].id; savePets(); toast(`${draft.name} 프로필을 삭제했어요.`); draft=null; chat=null; go("pet"); } else { delArm=true; render(false); } }
+  else if("delpet" in d){ if(delArm){ deletePet(draft.id); go("pet"); } else { delArm=true; render(false); } }
+  else if(d.swdel){ if(swipeArm===d.swdel){ swipeArm=null; deletePet(d.swdel); render(false); } else { swipeArm=d.swdel; t.textContent="한 번 더\n누르면 삭제"; } }
   // 샘플
   else if(d.sample){ toggleSample(d.sample); render(false); }
   else if(d.sampleAdd){ const p=byId[d.sampleAdd]; if(p.sp!==cur().sp){toast(`${spName(cur().sp)}용 샘플만 담을 수 있어요.`);return;} if(!samples.includes(p.id)) toggleSample(p.id); closeSheet(); if(current()==="pet")render(false); }
