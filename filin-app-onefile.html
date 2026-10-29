@@ -245,6 +245,11 @@ ul.plain{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;f
 .review{border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:4px;font-size:14px}
 .review.ex{opacity:.85}
 .ans{font-size:11px;font-weight:700;color:var(--slate-ink);background:var(--slate);border-radius:6px;padding:1px 6px;margin-right:4px}
+.chatnav{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:6px}
+.navbtn{border:0;background:var(--bg);color:var(--slate);font:inherit;font-size:13px;font-weight:500;border-radius:9px;padding:8px 10px;cursor:pointer}
+.navbtn:disabled{color:var(--line);cursor:default}
+.prog{font-size:12.5px;color:var(--muted);font-weight:500}
+.edit-a{background:rgba(255,255,255,.18)!important;opacity:1!important;text-decoration:none!important;border-radius:999px!important;padding:2px 8px!important;margin-left:8px!important}
 </style>
 </head>
 <body>
@@ -532,8 +537,9 @@ function vFind(){
     const q=QUESTIONS[i];
     h += bubble("seri", esc(q.q(pt)));
     if(i<chat.step){
-      h += bubble("me", `${esc(answerText(q,chat[q.key],pt))}<button class="edit-a" type="button" data-redo="${i}">바꾸기</button>`);
+      h += bubble("me", `${esc(answerText(q,chat[q.key],pt))}<button class="edit-a" type="button" data-redo="${i}">✎ 바꾸기</button>`);
     } else {
+      h += chatNav();
       h += `<div class="answer">${q.opts(pt).map(([v,l])=>`<button class="chip" type="button" data-ans="${v}" aria-pressed="${q.multi?chat[q.key].includes(v):chat[q.key]===v}">${l}</button>`).join("")}</div>`;
       if(q.multi) h += `<div class="row end"><button class="btn ghost" type="button" data-none>${q.none}</button><button class="btn primary" type="button" data-next>다음</button></div>`;
     }
@@ -541,11 +547,20 @@ function vFind(){
   if(chat.step<QUESTIONS.length) return h+`</div>`;
   const recs = recommend({...pt, prefs:chat.prefs, allergies:chat.allergies, active:chat.active});
   h += bubble("oli", recs.length ? `올리예요! ${esc(josa(pt.name,"이에게","에게"))} 맞는 사료 ${recs.length}가지를 골랐어요. 눌러서 자세히 보세요.` : `조건에 딱 맞는 사료를 못 찾았어요. 답을 하나 바꿔 볼까요?`) + `</div>`;
+  h += chatNav();
   h += `<section class="stack" id="recEnd">${recs.map(recCard).join("")}</section>`;
   if(recs.length) h += `<button class="btn dark block" type="button" data-autoship="${recs[0].p.id}">1순위 사료 정기배송으로 받기 (7% 할인)</button>`;
   h += `<p class="note">답한 내용은 ${esc(josa(pt.name,"이",""))} 프로필에 저장했어요. 사료 전환은 7~10일에 걸쳐 천천히, 알러지나 건강 고민은 수의사 선생님과 먼저 상담해 주세요.</p>
     <button class="btn ghost block" type="button" data-restart>처음부터 다시</button>`;
   return h;
+}
+function chatNav(){
+  const n=QUESTIONS.length, done=chat.step>=n;
+  return `<div class="chatnav">
+    <button class="navbtn" type="button" data-back ${chat.step===0?"disabled":""}>← ${done?"마지막 질문으로":"이전 질문"}</button>
+    <span class="prog">${done?"추천 완료":`질문 ${chat.step+1} / ${n}`}</span>
+    <button class="navbtn" type="button" data-restart ${chat.step===0?"disabled":""}>처음부터 ↺</button>
+  </div>`;
 }
 function chatAdvance(){
   chat.step++;
@@ -962,7 +977,8 @@ document.addEventListener("click",e=>{
   else if("next" in d){ chatAdvance(); }
   else if("none" in d){ chat[QUESTIONS[chat.step].key]=[]; chatAdvance(); }
   else if(d.redo!==undefined){ chat.step=+d.redo; render(false); }
-  else if("restart" in d){ startChat(); chat.step=0; render(); }
+  else if("restart" in d){ startChat(); chat.step=0; render(false); toast("처음 질문부터 다시 시작해요."); }
+  else if("back" in d){ chat.step=Math.max(0,chat.step-1); render(false); requestAnimationFrame(()=>{ const t=document.querySelector(".chat .answer"); if(t) t.scrollIntoView({block:"center",behavior:"smooth"}); }); }
   // 제품
   else if(d.fsp){ shopFilter.sp=d.fsp; render(); }
   else if(d.fb){ shopFilter.b=d.fb; render(); }
