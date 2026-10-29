@@ -28,6 +28,7 @@
   --r:16px;
   color-scheme:light;
 }
+*,*::before,*::after{box-sizing:border-box}
 html,body{height:100%}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
@@ -217,6 +218,36 @@ textarea{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);borde
 .shipbanner b{display:block}
 .shipbanner span{font-size:12.5px;color:var(--muted)}
 .btn:disabled{opacity:.5;cursor:default}
+.t-lilac{background:var(--lilac)}.t-rose{background:#ffe4ea}
+.pill{display:inline-block;font-size:11.5px;font-weight:700;border-radius:999px;padding:2px 9px;background:var(--bg);color:var(--muted)}
+.pill.s0{background:var(--sky);color:var(--slate)}.pill.s1{background:var(--amber-soft);color:var(--amber-ink)}.pill.s2{background:var(--peach);color:var(--warn)}.pill.s3{background:var(--mint);color:var(--good)}
+.track{list-style:none;margin:0;padding:0 0 0 6px;display:flex;flex-direction:column}
+.track li{position:relative;display:flex;justify-content:space-between;gap:10px;padding:0 0 12px 22px;font-size:13.5px;color:var(--muted)}
+.track li::before{content:"";position:absolute;left:0;top:4px;width:12px;height:12px;border-radius:50%;background:var(--line)}
+.track li:not(:last-child)::after{content:"";position:absolute;left:5px;top:16px;bottom:0;width:2px;background:var(--line)}
+.track li.done{color:var(--ink)}.track li.done::before{background:var(--good)}
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.day{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 0;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;color:var(--muted)}
+.day i,.dot{display:inline-block;width:14px;height:14px;border-radius:50%;background:var(--line)}
+.dot{width:10px;height:10px;vertical-align:middle;margin-left:6px}
+.day.ok i,.dot.ok{background:#4fbf7f}.day.mid i,.dot.mid{background:var(--amber)}.day.bad i,.dot.bad{background:var(--coral)}
+.alert{background:#ffe4e0;border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:8px;color:var(--ink)}
+.alert b{color:#b3261e}
+.article{display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:8px;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.article img{width:96px;aspect-ratio:4/3;object-fit:cover;border-radius:10px}
+.article b{display:block;font-size:14.5px;line-height:1.4}
+ul.plain{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:14px}
+.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));background:var(--bg);border-radius:12px;padding:4px;gap:4px}
+.seg button{border:0;background:transparent;border-radius:9px;padding:8px 4px;font:inherit;font-size:13.5px;color:var(--muted);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--slate);font-weight:700;box-shadow:0 1px 3px rgba(20,30,60,.12)}
+.rating{display:flex;align-items:center;gap:10px}
+.rating b{font-size:28px;font-family:var(--display);color:var(--slate)}
+.stars{color:#f0a500;letter-spacing:1px}
+.chip.star{font-size:18px;padding:4px 10px;color:var(--line)}
+.chip.star[aria-pressed="true"]{background:var(--surface);border-color:var(--amber);color:#f0a500}
+.review{border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:4px;font-size:14px}
+.review.ex{opacity:.85}
+.ans{font-size:11px;font-weight:700;color:var(--slate-ink);background:var(--slate);border-radius:6px;padding:1px 6px;margin-right:4px}
 </style>
 </head>
 <body>
@@ -384,9 +415,11 @@ const ICONS = {
   shop:'<path d="M5 8h14l-1 12H6z"/><path d="M9 8a3 3 0 016 0"/>',
   ship:'<path d="M3 7h11v9H3z"/><path d="M14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.6"/><circle cx="17" cy="17.5" r="1.6"/>',
   feed:'<path d="M4 13h16a8 8 0 01-16 0z"/><path d="M9 9c0-2 2-2 2-4M14 9c0-2 2-2 2-4"/>',
+  health:'<path d="M12 20s-7-4.3-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.7-7 10-7 10z"/><path d="M8 12h2l1-2 2 4 1-2h2"/>',
+  vet:'<path d="M6 3v6a4 4 0 008 0V3"/><path d="M10 13v2a4 4 0 008 0v-1"/><circle cx="18" cy="12" r="2"/>',
   pet:'<circle cx="7" cy="9" r="2"/><circle cx="12" cy="6" r="2"/><circle cx="17" cy="9" r="2"/><path d="M8 17c0-3 2-5 4-5s4 2 4 5-2 3-4 3-4 0-4-3z"/>'
 };
-const TABS=[["home","홈"],["find","맞춤 추천"],["shop","제품"],["ship","정기배송"],["pet","내 아이"]];
+const TABS=[["home","홈"],["find","맞춤 추천"],["shop","제품"],["ship","주문·배송"],["pet","내 아이"]];
 $("#tabs").innerHTML = TABS.map(([k,l])=>`<button class="tab" type="button" data-go="${k}"><svg viewBox="0 0 24 24">${ICONS[k]}</svg>${l}</button>`).join("");
 
 function petLabel(pt){ return `${spName(pt.sp)} · ${ageText(pt)} · ${pt.weight}kg`; }
@@ -432,6 +465,8 @@ function vHome(){
       <button class="tile t-mint" type="button" data-go="ship">${ic("ship")}<b>정기배송</b><span>7% 할인, 주기 자동 계산</span></button>
       <button class="tile t-peach" type="button" data-go="pet">${ic("pet")}<b>내 아이</b><span>프로필·알러지 관리</span></button>
       <button class="tile t-amber" type="button" data-go="shop">${ic("shop")}<b>브랜드관</b><span>${P.length}가지 제품</span></button>
+      <button class="tile t-lilac" type="button" data-go="health">${ic("health")}<b>건강 체크</b><span>매일 30초 컨디션 기록</span></button>
+      <button class="tile t-rose" type="button" data-go="vet">${ic("vet")}<b>수의사 상담</b><span>채팅·영상으로 물어보기</span></button>
     </div>
     <button class="worry" type="button" data-go="find">
       <img src="img/seri-question.png" alt="사료를 보며 고민하는 세리">
@@ -551,10 +586,11 @@ function vShip(){
   const p=byId[feedSel.id], kcal=p.kcal||feedSel.kcal, sizes=sizesOf(p);
   if(!sizes.includes(feedSel.size)) feedSel.size=sizes[Math.min(1,sizes.length-1)];
   const f=feeding(pt,kcal), days=Math.floor(feedSel.size*1000/f.grams), weeks=Math.max(1,Math.min(12,Math.floor(days/7)));
-  return `<div class="stack"><span class="eyebrow">정기배송</span><h1>떨어지기 전에 알아서 도착해요</h1>
+  return `<div class="stack"><span class="eyebrow">주문 · 배송</span><h1>떨어지기 전에 알아서 도착해요</h1>
     <p class="small muted">매번 7% 할인돼요. 주기 변경, 건너뛰기, 해지는 언제든 할 수 있어요.</p></div>
     ${autoship.length ? `<section class="stack">${[...autoship].sort((a,b)=>a.next.localeCompare(b.next)).map(shipCard).join("")}</section>`
       : `<div class="bday"><img src="img/oli-hi.png" alt=""><div><b>아직 정기배송이 없어요</b><br><span class="small muted">아래에서 우리 아이 급여량을 보고 주기를 정해 보세요.</span></div></div>`}
+    <section class="stack"><h2>내 주문</h2>${orders.length?orders.map(orderCard).join(""):'<p class="small muted">아직 주문이 없어요.</p>'}</section>
     <section class="stack">
       <h2>급여량으로 주기 정하기</h2>
       <div class="petbar">${petMini(pt)}<button class="link" type="button" data-go="pet">다른 아이</button></div>
@@ -598,6 +634,7 @@ function vPet(){
       <button class="btn ghost block" type="button" data-addpet>+ 아이 추가하기</button>
     </div>
     ${birthdayInfo(pt)}
+    <div class="two"><button class="btn ghost" type="button" data-go="health">건강 기록 보기</button><button class="btn ghost" type="button" data-go="vet">수의사 상담</button></div>
     <div class="card">
       <div class="section-head"><h2>${esc(pt.name)} 정보</h2><button class="link" type="button" data-edit="${pt.id}">수정</button></div>
       <dl class="spec">
@@ -671,7 +708,8 @@ function saveDraft(){
 let buy = {id:null};
 function openProduct(id, opt={}){
   const p=byId[id], br=BRANDS[p.b], pt=cur(), sizes=sizesOf(p), fits=p.sp===pt.sp;
-  if(buy.id!==id || opt.reset){ buy={id, mode:"once", size:sizes[Math.min(1,sizes.length-1)], weeks:null}; }
+  if(buy.id!==id || opt.reset){ buy={id, mode:"once", size:sizes[Math.min(1,sizes.length-1)], weeks:null, tab:"info"}; draftReview={stars:5,text:""}; draftQ=""; }
+  if(opt.tab) buy.tab=opt.tab;
   if(opt.mode) buy.mode=opt.mode;
   if(opt.size && sizes.includes(+opt.size)) buy.size=+opt.size;
   const sug = fits ? suggestWeeks(pt,p,buy.size) : 4;
@@ -682,6 +720,8 @@ function openProduct(id, opt={}){
     <div class="ph"><img src="${img(p.id)}" alt="${esc(br.name+" "+p.n)}"></div>
     <div><span class="small muted">${br.name} · ${br.en}</span><h2>${esc(p.n)}</h2></div>
     <p>${esc(p.pt)}</p>
+    <div class="seg">${[["info","정보·구매"],["review",`후기 ${(reviews[p.id]||[]).length+3}`],["qna","Q&A"]].map(([v,l])=>`<button type="button" data-tab="${v}" aria-pressed="${buy.tab===v}">${l}</button>`).join("")}</div>
+    ${buy.tab==="review"?reviewTab(p):buy.tab==="qna"?qnaTab(p):`
     <dl class="spec">
       <dt>대상</dt><dd>${spName(p.sp)} · ${p.st.map(s=>stageName(s,p.sp)).join(", ")}</dd>
       <dt>주 단백질</dt><dd>${esc(p.pl)}${p.ltd?" (단일 동물성 단백질)":""}</dd>
@@ -699,9 +739,9 @@ function openProduct(id, opt={}){
     </div>
     <div class="two">
       <button class="btn ghost" type="button" data-sample-add="${p.id}">샘플 담기</button>
-      ${buy.mode==="auto"?`<button class="btn primary" type="button" data-subscribe="${p.id}">정기배송 신청</button>`:`<button class="btn primary" type="button" data-store="${p.id}">스토어에서 구매</button>`}
+      ${buy.mode==="auto"?`<button class="btn primary" type="button" data-subscribe="${p.id}">정기배송 신청</button>`:`<button class="btn primary" type="button" data-order="${p.id}">주문하기</button>`}
     </div>
-    <p class="note">미국·독일에서 직접 들여와 정식 통관을 거친 정품만, 유통기한을 관리해서 보내 드려요.</p>
+    <p class="note">미국·독일에서 직접 들여와 정식 통관을 거친 정품만, 유통기한을 관리해서 보내 드려요.</p>`}
     <button class="btn ghost block" type="button" data-close>닫기</button>
   </div></div>`;
   if(scroll) $(".sheet").scrollTop=scroll;
@@ -715,9 +755,184 @@ function subscribe(id){
   go("ship");
 }
 
+/* ---------- 주문 · 배송 조회 ---------- */
+const ORDER_STEPS = ["결제 완료","상품 준비 중","배송 중","배송 완료"];
+function exampleOrders(){
+  return [
+    {id:"o1", date:ymd(addDays(today(),-1)), prodId:"pv-cat-chicken-peas", size:1.81, qty:1, petId:"p2", example:true},
+    {id:"o2", date:ymd(addDays(today(),-25)), prodId:"tow-pacific-stream-dog", size:5.6, qty:1, petId:"p1", example:true}
+  ];
+}
+let orders = store.get("orders", null) || exampleOrders();
+const saveOrders = ()=> store.set("orders", orders);
+let trackOpen = null;
+function orderStep(o){ const n=-dday(o.date); return n<=0?0:n===1?1:n<=3?2:3; }
+function orderCard(o){
+  const p=byId[o.prodId], st=orderStep(o), start=parseYmd(o.date);
+  const stepDate=[0,1,2,4].map(n=>addDays(start,n));
+  return `<div class="ship">
+    <div class="top"><img src="${img(p.id)}" alt="${esc(BRANDS[p.b].name+" "+p.n)}"><div>
+      <span class="small muted">${fmt(start)} 주문${o.example?' · <span class="badge">예시 주문</span>':""}</span>
+      <h3>${BRANDS[p.b].name} ${esc(p.n)} ${o.size}kg × ${o.qty}</h3>
+      <span class="pill s${st}">${ORDER_STEPS[st]}</span></div></div>
+    ${trackOpen===o.id?`<ol class="track">${ORDER_STEPS.map((s,i)=>`<li class="${i<=st?"done":""}"><b>${s}</b><span>${i<=st?fmt(stepDate[i]):"예정"}</span></li>`).join("")}</ol>
+      ${st===2?'<p class="small muted">택배사 송장 번호는 실제 서비스에서 연결돼요. (시제품)</p>':""}`:""}
+    <div class="acts">
+      <button class="btn ghost" type="button" data-track="${o.id}">${trackOpen===o.id?"조회 닫기":"배송 조회"}</button>
+      <button class="btn ghost" type="button" data-reorder="${o.id}">다시 주문</button>
+      <button class="btn ghost" type="button" data-review="${p.id}" ${st<3?"disabled":""}>후기 쓰기</button>
+    </div>
+  </div>`;
+}
+function placeOrder(id){
+  const pt=cur(), p=byId[id];
+  orders.unshift({id:"o"+Date.now(), date:ymd(today()), prodId:id, size:buy.size, qty:1, petId:p.sp===pt.sp?pt.id:null});
+  saveOrders(); closeSheet();
+  toast("주문을 넣었어요. 실제 결제는 네이버 브랜드스토어에서 하게 돼요. (시제품)");
+  go("ship");
+}
+
+/* ---------- 건강 체크 ---------- */
+const CHECKS = [
+  {key:"eat", label:"식욕", opts:[["ok","잘 먹어요"],["mid","조금 덜 먹어요"],["bad","거의 안 먹어요"]]},
+  {key:"energy", label:"기운", opts:[["ok","평소처럼"],["mid","조금 처져요"],["bad","기운이 없어요"]]},
+  {key:"poop", label:"변 상태", opts:[["ok","좋아요"],["mid","묽어요"],["bad","설사·피가 보여요"]]},
+  {key:"vomit", label:"구토", opts:[["ok","없어요"],["mid","1번"],["bad","2번 이상"]]},
+  {key:"water", label:"물 마시기", opts:[["ok","평소만큼"],["mid","평소보다 많이"],["mid2","평소보다 적게"]]}
+];
+let logs = store.get("logs", null);
+if(!logs){
+  logs = {};
+  const seed = {p1:["ok","ok","ok","mid","ok","ok"], p2:["ok","ok","mid","ok","ok","ok"]};
+  Object.entries(seed).forEach(([pid,arr])=>{ logs[pid]={}; arr.forEach((v,i)=>{ logs[pid][ymd(addDays(today(),-(i+1)))] = {eat:"ok",energy:"ok",poop:v==="mid"&&pid==="p1"?"mid":"ok",vomit:v==="mid"&&pid==="p2"?"mid":"ok",water:"ok",example:true}; }); });
+}
+const saveLogs = ()=> store.set("logs", logs);
+let todayLog = null;
+function level(entry){ if(!entry) return "none"; const v=CHECKS.map(c=>entry[c.key]); return v.includes("bad")?"bad":v.some(x=>x&&x.startsWith("mid"))?"mid":"ok"; }
+const ARTICLES = [
+  {id:"grass", sp:"dog", img:"img/info-grass-cover.jpg", title:"강아지가 풀을 뜯어 먹는 이유",
+   lead:"UC 데이비스 수의과대학 설문(보호자 1,571명)에서 68%가 우리 강아지가 매일 또는 매주 풀을 먹는다고 답했어요. 건강한 강아지에게서도 흔한 행동이고, 대부분은 병과 관련이 없다고 봤어요.",
+   points:["조상에게 물려받은 습관일 가능성이 가장 커요. 어린 강아지일수록 더 자주 먹어요.","맛과 식감이 좋아서, 또는 심심해서 먹기도 해요.","제초제·비료를 뿌린 잔디, 철쭉·백합 같은 해로운 식물, 배설물이 많은 곳은 막아 주세요."],
+   signs:["평소와 달리 갑자기 풀을 급하게, 많이 먹을 때","풀을 먹고 나서 여러 번 계속 토할 때","밥을 안 먹거나, 기운이 없거나, 설사·혈변이 함께 보일 때"]},
+  {id:"vomit", sp:"cat", img:"img/info-vomit-cover.jpg", title:"고양이가 토할 때: 헤어볼과 병원 가야 할 때",
+   lead:"코넬대 고양이 건강센터는 헤어볼을 1~2주에 한 번 토하는 정도는 드문 일이 아니라고 설명해요. 털이 길거나 털갈이 철에는 더 자주 볼 수 있고, 빗질로 삼키는 털을 줄일 수 있어요.",
+   points:["너무 빨리 먹거나, 사료를 갑자기 바꿨을 때도 토할 수 있어요.","끈·실·고무줄, 백합, 사람 약이나 양파·초콜릿은 고양이에게 위험해요.","기생충, 변비, 장 염증, 당뇨·신장병·갑상선 질환도 구토로 나타날 수 있어요."],
+   signs:["일주일에 한 번보다 자주 토할 때","토한 것에 피가 섞여 있을 때","기운이 없거나, 밥을 잘 안 먹거나, 설사를 함께 할 때","물을 평소보다 많이 마시거나 소변 양이 달라졌을 때","끈이나 작은 물건을 삼켰을 것 같을 때"]}
+];
+function vHealth(){
+  const pt=cur(), mine=logs[pt.id]||{}, key=ymd(today());
+  if(!todayLog || todayLog.pet!==pt.id) todayLog = {pet:pt.id, ...(mine[key]||{})};
+  const saved = mine[key], lv = level(saved);
+  const days = [...Array(7)].map((_,i)=>addDays(today(),i-6));
+  const arts = [...ARTICLES].sort((a,b)=>(b.sp===pt.sp)-(a.sp===pt.sp));
+  return `<div class="stack"><span class="eyebrow">건강 체크</span><h1>오늘 ${esc(josa(pt.name,"이",""))} 컨디션은 어때요?</h1>
+    <p class="small muted">매일 30초면 돼요. 기록은 수의사 상담 때 함께 보낼 수 있어요.</p></div>
+    <div class="petbar">${petMini(pt)}<button class="link" type="button" data-go="pet">다른 아이</button></div>
+    <section class="stack"><h2>최근 7일</h2>
+      <div class="week">${days.map(d=>{ const e=mine[ymd(d)]; const l=level(e); return `<div class="day ${l}"><span>${"일월화수목금토"[d.getDay()]}</span><i></i><small>${d.getDate()}</small></div>`; }).join("")}</div>
+      <p class="small muted"><span class="dot ok"></span> 평소처럼 <span class="dot mid"></span> 조금 달라요 <span class="dot bad"></span> 살펴봐야 해요 ${Object.values(mine).some(e=>e.example)?"· 지난 기록은 예시예요":""}</p>
+    </section>
+    ${saved && lv==="bad" ? `<div class="alert"><b>병원에 가 보는 게 좋겠어요</b><p>오늘 기록에 살펴봐야 할 신호가 있어요. 헷갈릴 땐 담당 수의사 선생님과 상담해 주세요.</p><button class="btn dark" type="button" data-go="vet">수의사 상담 신청</button></div>` : ""}
+    <div class="card">
+      <div class="section-head"><h2>오늘 기록 · ${fmt(today())}</h2>${saved?'<span class="pill s3">저장됨</span>':""}</div>
+      ${CHECKS.map(c=>`<div class="q"><b>${c.label}</b><div class="chips">${c.opts.map(([v,l])=>`<button class="chip" type="button" data-chk="${c.key}" data-val="${v}" aria-pressed="${todayLog[c.key]===v}">${l}</button>`).join("")}</div></div>`).join("")}
+      <label class="f">메모 (선택)<input id="h-memo" maxlength="80" value="${esc(todayLog.memo||"")}" placeholder="예: 산책 후 풀을 많이 먹었어요"></label>
+      <button class="btn primary block" type="button" data-savelog ${CHECKS.every(c=>todayLog[c.key])?"":"disabled"}>오늘 기록 저장</button>
+    </div>
+    <section class="stack"><h2>알아 두면 좋은 이야기</h2>
+      ${arts.map(a=>`<button class="article" type="button" data-article="${a.id}"><img src="${a.img}" alt=""><div><span class="small muted">${spName(a.sp)} · 필린 블로그</span><b>${a.title}</b></div></button>`).join("")}
+    </section>
+    <p class="note">건강 체크는 진단이 아니에요. 걱정되는 신호가 보이면 담당 수의사 선생님과 상담해 주세요.</p>`;
+}
+function openArticle(id){
+  const a=ARTICLES.find(x=>x.id===id);
+  $("#sheetRoot").innerHTML = `<div class="sheet-bg" id="sheetBg"><div class="sheet wrap" role="dialog" aria-modal="true" aria-label="${a.title}">
+    <img src="${a.img}" alt="" style="border-radius:14px;width:100%;aspect-ratio:16/9;object-fit:cover">
+    <h2>${a.title}</h2><p>${a.lead}</p>
+    <ul class="plain">${a.points.map(x=>`<li>${x}</li>`).join("")}</ul>
+    <div class="alert"><b>이런 신호면 병원에 가요</b><ul class="plain">${a.signs.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+    <p class="note">필린 블로그 정보 글을 줄인 내용이에요. 헷갈릴 땐 담당 수의사 선생님과 상담해 주세요.</p>
+    <div class="two"><button class="btn ghost" type="button" data-close>닫기</button><button class="btn dark" type="button" data-go="vet">수의사 상담</button></div>
+  </div></div>`;
+}
+
+/* ---------- 수의사 상담 ---------- */
+let consults = store.get("consults", []);
+let vetForm = {how:"chat", topic:null, when:"soon", text:"", attach:true};
+const VET_TOPICS = [["food","사료·영양"],["skin","피부·털"],["gut","소화·구토"],["behavior","행동"],["etc","기타"]];
+const VET_WHEN = [["soon","가장 빠른 시간"],["eve","오늘 저녁"],["am","내일 오전"]];
+function vVet(){
+  const pt=cur(), f=vetForm;
+  const mine=consults.filter(c=>c.petId===pt.id);
+  return `<div class="stack"><span class="eyebrow">수의사 상담</span><h1>수의사 선생님께 물어보세요</h1>
+    <p class="small muted">사료, 피부, 소화처럼 평소 궁금한 걸 채팅이나 영상으로 상담해요.</p></div>
+    <div class="trust"><img src="img/vet.jpg" alt="수의사 일러스트"><div><b>상담 전에 꼭 확인해 주세요</b>
+      <ul><li>숨쉬기 힘들어하거나, 경련, 큰 출혈 같은 응급 상황은 바로 가까운 동물병원으로 가 주세요.</li><li>온라인 상담은 진단·처방을 대신하지 않아요.</li></ul></div></div>
+    <div class="petbar">${petMini(pt)}<button class="link" type="button" data-go="pet">다른 아이</button></div>
+    <div class="card">
+      <div class="q"><b>상담 방식</b><div class="chips">${[["chat","채팅"],["video","영상 통화"]].map(([v,l])=>`<button class="chip" type="button" data-vhow="${v}" aria-pressed="${f.how===v}">${l}</button>`).join("")}</div></div>
+      <div class="q"><b>어떤 고민인가요?</b><div class="chips">${VET_TOPICS.map(([v,l])=>`<button class="chip" type="button" data-vtopic="${v}" aria-pressed="${f.topic===v}">${l}</button>`).join("")}</div></div>
+      <label class="f">자세히 알려 주세요<textarea id="v-text" maxlength="400" placeholder="예: 사료를 바꾼 뒤로 변이 묽어요. 언제부터, 얼마나 자주인지 적어 주시면 좋아요.">${esc(f.text)}</textarea></label>
+      <div class="q"><b>희망 시간</b><div class="chips">${VET_WHEN.map(([v,l])=>`<button class="chip" type="button" data-vwhen="${v}" aria-pressed="${f.when===v}">${l}</button>`).join("")}</div></div>
+      <label class="check"><input id="v-attach" type="checkbox" ${f.attach?"checked":""}> 프로필(알러지·약)과 최근 7일 건강 기록 함께 보내기</label>
+      <button class="btn primary block" type="button" data-sendvet ${f.topic&&f.text.trim()?"":"disabled"}>상담 신청하기</button>
+    </div>
+    ${mine.length?`<section class="stack"><h2>${esc(pt.name)} 상담 내역</h2>${mine.map(c=>`<div class="ship"><div class="section-head"><b>${(VET_TOPICS.find(t=>t[0]===c.topic)||["",""])[1]} · ${c.how==="chat"?"채팅":"영상"}</b><span class="pill s1">답변 대기</span></div><p class="small">${esc(c.text)}</p><span class="small muted">${fmt(parseYmd(c.date))} 신청 · ${(VET_WHEN.find(w=>w[0]===c.when)||["",""])[1]}</span></div>`).join("")}</section>`:""}
+    <p class="proto">시제품이에요. 상담 신청은 실제로 수의사에게 전달되지 않아요.</p>`;
+}
+
+/* ---------- 후기 · Q&A ---------- */
+let reviews = store.get("reviews", {});   // {prodId:[{stars,text,date,pet}]}
+let questions = store.get("questions", {}); // {prodId:[{text,date}]}
+let draftReview = {stars:5, text:""}, draftQ = "";
+function exampleReviews(p){
+  const who = p.sp==="dog" ? ["말티즈 보호자","푸들 보호자","믹스견 보호자"] : ["코숏 집사","러블 집사","먼치킨 집사"];
+  const lines = [
+    `기존 사료랑 7일 동안 섞어서 바꿨는데 잘 넘어갔어요.`,
+    p.prot==="fish" ? `생선 향이 있는 편이라 우리 아이는 반응이 좋았어요.` : `${p.pl} 단백질이라 원재료표 확인하기가 편했어요.`,
+    `샘플로 먼저 먹여 보고 정기배송으로 바꿨어요.`
+  ];
+  return lines.map((t,i)=>({stars:[5,4,5][i], text:t, who:who[i], example:true}));
+}
+function faqs(p){
+  const list = [
+    {q:"몇 살부터 먹일 수 있나요?", a:`${spName(p.sp)} ${p.st.map(s=>stageName(s,p.sp)).join(", ")} 단계에 맞춘 레시피예요. 새 사료는 7~10일에 걸쳐 천천히 바꿔 주세요.`},
+    {q:"닭고기 알러지가 있어도 먹일 수 있나요?", a: p.prot==="chicken" ? "닭고기가 주 단백질이라 닭고기 알러지가 있다면 다른 제품을 권해요." : p.chicken ? `주 단백질은 ${p.pl}이지만 닭 지방이 들어가요. 닭을 엄격히 피해야 한다면 수의사 선생님과 먼저 상담해 주세요.` : `동물성 단백질은 ${p.pl}이에요. 알러지가 의심된다면 수의사 선생님과 급여 계획을 함께 세워 주세요.`},
+    {q:"곡물이 들어 있나요?", a: p.gf ? "곡물을 넣지 않은 그레인프리 레시피예요." : "곡물이 들어간 레시피예요. 곡물을 빼고 싶다면 같은 브랜드의 그레인프리 제품을 함께 살펴보세요."}
+  ];
+  return list;
+}
+const stars = n=> "★★★★★".slice(0,n)+"☆☆☆☆☆".slice(0,5-n);
+function reviewTab(p){
+  const mine=reviews[p.id]||[], ex=exampleReviews(p), all=[...mine,...ex];
+  const avg=(all.reduce((s,r)=>s+r.stars,0)/all.length).toFixed(1);
+  return `<div class="rating"><b>${avg}</b><span class="stars">${stars(Math.round(avg))}</span><span class="small muted">후기 ${all.length}개</span></div>
+    <div class="card">
+      <b>후기 쓰기</b>
+      <div class="chips">${[1,2,3,4,5].map(n=>`<button class="chip star" type="button" data-star="${n}" aria-pressed="${draftReview.stars>=n}">★</button>`).join("")}</div>
+      <textarea id="r-text" maxlength="300" placeholder="우리 아이 반응, 알갱이 크기, 바꾸는 과정처럼 다른 보호자에게 도움이 될 이야기를 들려주세요.">${esc(draftReview.text)}</textarea>
+      <button class="btn dark" type="button" data-savereview="${p.id}">후기 남기기</button>
+      <p class="small muted">효과를 단정하는 표현(예: 며칠 만에 나았어요)은 실제 서비스에서 노출이 제한될 수 있어요.</p>
+    </div>
+    ${mine.map(r=>`<div class="review"><div class="section-head"><span class="stars">${stars(r.stars)}</span><span class="badge hot">내 후기</span></div><p>${esc(r.text)}</p><span class="small muted">${esc(r.pet)} 보호자 · ${fmt(parseYmd(r.date))}</span></div>`).join("")}
+    <p class="small muted">아래는 화면을 보여 드리려고 만든 <b>예시 후기</b>예요. 실제 고객 후기가 아니에요.</p>
+    ${ex.map(r=>`<div class="review ex"><div class="section-head"><span class="stars">${stars(r.stars)}</span><span class="badge">예시</span></div><p>${esc(r.text)}</p><span class="small muted">${r.who}</span></div>`).join("")}`;
+}
+function qnaTab(p){
+  const mine=questions[p.id]||[];
+  return `<div class="card">
+      <b>궁금한 점을 물어보세요</b>
+      <textarea id="q-text" maxlength="200" placeholder="예: 슬개골이 약한 아이도 먹여도 될까요?">${esc(draftQ)}</textarea>
+      <button class="btn dark" type="button" data-askq="${p.id}">질문 남기기</button>
+    </div>
+    ${mine.map(q=>`<div class="review"><div class="section-head"><b>Q. ${esc(q.text)}</b><span class="pill s1">답변 대기</span></div><span class="small muted">${fmt(parseYmd(q.date))}</span></div>`).join("")}
+    <h3>자주 묻는 질문</h3>
+    ${faqs(p).map(f=>`<div class="review"><b>Q. ${f.q}</b><p><span class="ans">필린</span> ${esc(f.a)}</p></div>`).join("")}`;
+}
+
 /* ---------- 라우팅 ---------- */
-const VIEWS={home:vHome,find:vFind,shop:vShop,ship:vShip,pet:vPet,edit:vEdit};
-const TAB_OF={edit:"pet"};
+const VIEWS={home:vHome,find:vFind,shop:vShop,ship:vShip,pet:vPet,edit:vEdit,health:vHealth,vet:vVet};
+const TAB_OF={edit:"pet",health:"pet",vet:"pet"};
 function current(){ const h=location.hash.slice(1); if(h==="feed") return "ship"; return VIEWS[h]?h:"home"; }
 function render(top=true){
   const v=current();
@@ -753,7 +968,7 @@ document.addEventListener("click",e=>{
   else if(d.now){ const a=autoship.find(x=>x.id===d.now); a.next=ymd(addDays(today(),2)); saveShip(); toast(`${fmt(parseYmd(a.next))}에 도착하도록 바로 보낼게요.`); render(false); }
   else if(d.cancel){ if(cancelArm===d.cancel){ autoship=autoship.filter(x=>x.id!==d.cancel); cancelArm=null; saveShip(); toast("정기배송을 해지했어요."); } else { cancelArm=d.cancel; } render(false); }
   // 내 아이
-  else if(d.pick){ curId=d.pick; chat=null; savePets(); render(false); toast(`${cur().name} 기준으로 바꿨어요.`); }
+  else if(d.pick){ curId=d.pick; chat=null; todayLog=null; savePets(); render(false); toast(`${cur().name} 기준으로 바꿨어요.`); }
   else if("addpet" in d){ startEdit(null); }
   else if(d.edit){ startEdit(d.edit); }
   else if(d.esp){ if(draft.sp!==d.esp){ draft.sp=d.esp; draft.breed=""; } render(false); }
@@ -763,7 +978,21 @@ document.addEventListener("click",e=>{
   // 샘플
   else if(d.sample){ toggleSample(d.sample); render(false); }
   else if(d.sampleAdd){ const p=byId[d.sampleAdd]; if(p.sp!==cur().sp){toast(`${spName(cur().sp)}용 샘플만 담을 수 있어요.`);return;} if(!samples.includes(p.id)) toggleSample(p.id); closeSheet(); if(current()==="pet")render(false); }
-  else if(d.store){ toast("시제품이라 여기서 네이버 브랜드스토어 상품 페이지로 이동해요."); }
+  else if(d.order){ placeOrder(d.order); }
+  else if(d.tab){ buy.tab=d.tab; openProduct(buy.id); }
+  else if(d.track){ trackOpen = trackOpen===d.track?null:d.track; render(false); }
+  else if(d.reorder){ const o=orders.find(x=>x.id===d.reorder); openProduct(o.prodId,{reset:true,size:o.size}); }
+  else if(d.review){ openProduct(d.review,{reset:true,tab:"review"}); }
+  else if(d.star){ draftReview.stars=+d.star; openProduct(buy.id); }
+  else if(d.savereview){ if(!draftReview.text.trim()){ toast("후기 내용을 적어 주세요."); return; } (reviews[d.savereview]=reviews[d.savereview]||[]).unshift({stars:draftReview.stars,text:draftReview.text.trim(),date:ymd(today()),pet:cur().name}); store.set("reviews",reviews); draftReview={stars:5,text:""}; toast("후기를 남겼어요. 고마워요!"); openProduct(buy.id); }
+  else if(d.askq){ if(!draftQ.trim()){ toast("질문을 적어 주세요."); return; } (questions[d.askq]=questions[d.askq]||[]).unshift({text:draftQ.trim(),date:ymd(today())}); store.set("questions",questions); draftQ=""; toast("질문을 남겼어요. 답변이 오면 알려 드릴게요. (시제품)"); openProduct(buy.id); }
+  else if(d.chk){ todayLog[d.chk]=d.val; render(false); }
+  else if("savelog" in d){ const pt=cur(); const e={...todayLog}; delete e.pet; (logs[pt.id]=logs[pt.id]||{})[ymd(today())]=e; saveLogs(); toast(level(e)==="bad"?"저장했어요. 살펴봐야 할 신호가 있어요.":"오늘 기록을 저장했어요."); render(false); }
+  else if(d.article){ openArticle(d.article); }
+  else if(d.vhow){ vetForm.how=d.vhow; render(false); }
+  else if(d.vtopic){ vetForm.topic=d.vtopic; render(false); }
+  else if(d.vwhen){ vetForm.when=d.vwhen; render(false); }
+  else if("sendvet" in d){ consults.unshift({id:"c"+Date.now(),petId:cur().id,how:vetForm.how,topic:vetForm.topic,when:vetForm.when,text:vetForm.text.trim(),attach:vetForm.attach,date:ymd(today())}); store.set("consults",consults); vetForm={how:"chat",topic:null,when:"soon",text:"",attach:true}; toast("상담을 신청했어요. 수의사 선생님이 확인하면 알려 드려요. (시제품)"); render(false); }
   else if(t.id==="sendSample"){ toast(`${samples.length}가지 샘플 신청을 받았어요. (시제품이라 실제로 접수되진 않아요)`); }
   else if(t.id==="petChip"){ go("pet"); }
 });
@@ -780,6 +1009,10 @@ document.addEventListener("input",e=>{
   if(id==="e-breed") draft.breed=v.trim();
   if(id==="e-weight"){ const n=parseFloat(v); if(n>0) draft.weight=n; }
   if(id==="e-note") draft.note=v;
+  if(id==="r-text") draftReview.text=v;
+  if(id==="q-text") draftQ=v;
+  if(id==="h-memo") todayLog.memo=v;
+  if(id==="v-text"){ vetForm.text=v; const b=document.querySelector("[data-sendvet]"); if(b) b.disabled=!(vetForm.topic&&v.trim()); }
   if(id==="fd-kcal"){ const n=parseFloat(v); if(n>=2500&&n<=5000){feedSel.kcal=n; const pos=e.target.selectionStart; render(false); const el=$("#fd-kcal"); el.focus(); try{el.setSelectionRange(pos,pos)}catch(_){} } }
 });
 document.addEventListener("change",e=>{
@@ -787,6 +1020,7 @@ document.addEventListener("change",e=>{
   if(id==="e-birth") draft.birth=v;
   if(id==="e-active") draft.active=v;
   if(id==="e-neutered") draft.neutered=e.target.checked;
+  if(id==="v-attach") vetForm.attach=e.target.checked;
   if(id==="fd-prod"){ feedSel.id=v; feedSel.size=null; render(false); }
   if(id==="fd-size"){ feedSel.size=parseFloat(v); render(false); }
   if(e.target.name==="buy"){ buy.mode=v; openProduct(buy.id); }
