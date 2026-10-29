@@ -179,6 +179,9 @@ dl.spec dd{margin:0}
 .swipe{position:relative;border-radius:var(--r);overflow:hidden}
 .swipe .petcard{position:relative;z-index:1;width:100%;touch-action:pan-y}
 .swdel{position:absolute;right:0;top:0;bottom:0;width:96px;border:0;background:var(--coral);color:#fff;font:inherit;font-weight:700;font-size:14px;white-space:pre-line;line-height:1.3;cursor:pointer}
+.phonebox{display:flex;flex-direction:column;gap:6px;background:var(--amber-soft);border-radius:12px;padding:12px;margin:10px 0}
+.phone-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.phone-row input{min-width:0;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
 .petcard .go{font-size:22px;line-height:1;color:var(--muted);vertical-align:-2px;margin-left:2px}
 img.photo{object-fit:cover!important;padding:0!important;border-radius:50%}
 .photo-pick{display:grid;grid-template-columns:84px minmax(0,1fr);gap:14px;align-items:center;padding-bottom:14px;margin-bottom:6px;border-bottom:1px solid var(--line)}
@@ -1149,10 +1152,12 @@ function vAccount(){
   if(!sb) return `<div class="stack"><span class="eyebrow">내 계정</span><h1>로그인</h1></div>
     <div class="card"><p>로그인은 설치한 앱이나 인터넷 주소(dobil-9125.github.io)에서 열었을 때만 쓸 수 있어요. 파일로 연 화면에서는 이 휴대폰에만 저장돼요.</p></div>`;
   if(user && acct.mode!=="recovery"){
-    const nick = user.user_metadata && user.user_metadata.nickname;
+    const nick = user.user_metadata && user.user_metadata.nickname, phone = user.user_metadata && user.user_metadata.phone;
     return `<div class="stack"><span class="eyebrow">내 계정</span><h1>${nick?esc(nick)+"님, ":""}반가워요</h1></div>
       <div class="card">
-        <dl class="spec"><dt>이메일</dt><dd>${esc(user.email||"")}</dd><dt>등록한 아이</dt><dd>${pets.map(p=>esc(p.name)).join(", ")}</dd></dl>
+        <dl class="spec"><dt>이메일</dt><dd>${esc(user.email||"")}</dd><dt>휴대폰</dt><dd>${phone && !acct.editPhone ? `${phoneText(phone)} <button class="link" type="button" data-editphone>바꾸기</button>` : "없음"}</dd><dt>등록한 아이</dt><dd>${pets.map(p=>esc(p.name)).join(", ")}</dd></dl>
+        ${!phone || acct.editPhone ? `<div class="phonebox"><b>${phone?"휴대폰 번호 바꾸기":"휴대폰 번호를 등록해 주세요"}</b><span class="small muted">네이버 스토어에서 주문하면 이 번호로 주문·배송이 앱에 연결돼요.</span>
+          <div class="phone-row"><input id="acc-phone" type="tel" inputmode="numeric" autocomplete="tel" maxlength="13" placeholder="010-1234-5678" value="${phoneText(phone||"")}"><button class="btn primary sm" type="button" data-savephone>저장</button></div></div>` : ""}
         <p class="hint" id="syncMsg">${syncMsg||"계정에 저장돼요"}</p>
         <p class="small muted">아이 프로필, 정기배송, 주문, 건강 기록, 샘플, 후기·질문이 계정에 저장돼요. 다른 휴대폰에서 같은 이메일로 로그인하면 이어서 볼 수 있어요.</p>
         <div class="two"><button class="btn ghost" type="button" data-pullnow>다시 불러오기</button><button class="btn ghost" type="button" data-syncnow>지금 저장하기</button></div>
@@ -1168,6 +1173,8 @@ function vAccount(){
     ${m==="login"||m==="signup"?`<div class="seg seg2">${[["login","로그인"],["signup","회원가입"]].map(([v,l])=>`<button type="button" data-amode="${v}" aria-pressed="${m===v}">${l}</button>`).join("")}</div>`:""}
     <form class="card" id="authForm" novalidate>
       ${m!=="recovery"?`<label class="f">이메일<input id="a-email" type="email" autocomplete="email" inputmode="email" value="${esc(acct.email)}" placeholder="filin@example.com" required></label>`:""}
+      ${m==="signup"?`<label class="f">휴대폰 번호<input id="a-phone" type="tel" inputmode="numeric" autocomplete="tel" maxlength="13" placeholder="010-1234-5678" required></label>
+        <p class="small muted" style="margin-top:-6px">네이버 스토어에서 주문하면 이 번호로 주문·배송이 앱에 연결돼요. 출시 때는 문자 인증을 거쳐요.</p>`:""}
       ${m==="signup"?`<label class="f">닉네임 (선택)<input id="a-nick" maxlength="12" autocomplete="nickname" placeholder="예: 올리 보호자"></label>`:""}
       ${m!=="reset"?`<label class="f">${m==="recovery"?"새 비밀번호":"비밀번호"}<input id="a-pw" type="password" minlength="6" autocomplete="${m==="login"?"current-password":"new-password"}" placeholder="6자 이상" required></label>`:""}
       ${m==="signup"||m==="recovery"?`<label class="f">비밀번호 확인<input id="a-pw2" type="password" autocomplete="new-password" required></label>`:""}
@@ -1175,7 +1182,7 @@ function vAccount(){
           <label class="check"><input id="c-all" type="checkbox"> <b>모두 동의해요</b></label>
           <label class="check"><input id="c-age" type="checkbox" class="c-one"> [필수] 만 14세 이상이에요</label>
           <label class="check"><input id="c-pi" type="checkbox" class="c-one"> [필수] 개인정보 수집·이용에 동의해요</label>
-          <p class="small muted pi">수집 항목: 이메일, 닉네임, 반려동물 정보(이름·생일·체중·알러지 등), 건강 기록, 주문·정기배송 내역<br>이용 목적: 회원 관리, 맞춤 추천, 정기배송, 상담<br>보유 기간: 탈퇴할 때까지 (시제품 문구예요. 출시 전에 법무 검토가 필요해요)</p>
+          <p class="small muted pi">수집 항목: 이메일, 휴대폰 번호, 닉네임, 반려동물 정보(이름·생일·체중·알러지 등), 건강 기록, 주문·정기배송 내역<br>이용 목적: 회원 관리, 네이버 스토어 주문을 앱 주문·배송에 연결, 맞춤 추천, 정기배송, 상담<br>보유 기간: 탈퇴할 때까지 (시제품 문구예요. 출시 전에 법무 검토가 필요해요)</p>
           <label class="check"><input id="c-ad" type="checkbox" class="c-one"> [선택] 혜택·이벤트 알림을 받을게요</label>
         </div>`:""}
       ${acct.msg?`<p class="caution" role="alert">${esc(acct.msg)}</p>`:""}
@@ -1187,6 +1194,17 @@ function vAccount(){
     <button class="btn ghost block" type="button" data-go="home">로그인 없이 둘러보기</button>
     <p class="proto">로그인하지 않으면 정보는 이 휴대폰에만 저장돼요.</p>`;
 }
+// 휴대폰 번호는 숫자만 저장해요 (네이버 주문의 주문자 번호와 맞춰 보기 위해).
+const phoneDigits = v=> String(v||"").replace(/\D/g,"");
+const validPhone = d=> /^01[016789]\d{7,8}$/.test(d);
+const phoneText = d=> d ? d.replace(/^(\d{3})(\d{3,4})(\d{4})$/,"$1-$2-$3") : "";
+async function savePhone(){
+  const d=phoneDigits(($("#acc-phone")||{}).value);
+  if(!validPhone(d)){ toast("휴대폰 번호를 다시 확인해 주세요."); return; }
+  const {data,error}=await sb.auth.updateUser({data:{phone:d, phone_verified:false}});
+  if(error){ toast("저장하지 못했어요. 인터넷 연결을 확인해 주세요."); return; }
+  user=data.user; acct.editPhone=false; toast("휴대폰 번호를 저장했어요."); render(false);
+}
 async function submitAuth(){
   const m=acct.mode, val=id=>{ const el=document.getElementById(id); return el?el.value:""; };
   const email=val("a-email").trim(), pw=val("a-pw"), pw2=val("a-pw2");
@@ -1195,11 +1213,13 @@ async function submitAuth(){
   if((m==="login"||m==="signup"||m==="recovery") && pw.length<6){ acct.msg="비밀번호는 6자 이상으로 정해 주세요."; return render(false); }
   if((m==="signup"||m==="recovery") && pw!==pw2){ acct.msg="비밀번호 확인이 달라요. 한 번 더 확인해 주세요."; return render(false); }
   if(m==="signup" && !(document.getElementById("c-age").checked && document.getElementById("c-pi").checked)){ acct.msg="필수 항목에 동의해 주세요."; return render(false); }
+  const phone = phoneDigits(val("a-phone"));
+  if(m==="signup" && !validPhone(phone)){ acct.msg="휴대폰 번호를 다시 확인해 주세요. (예: 010-1234-5678)"; return render(false); }
   const marketing = m==="signup" && document.getElementById("c-ad").checked, nick = val("a-nick").trim();
   acct.busy=true; render(false);
   let res;
   if(m==="login") res = await sb.auth.signInWithPassword({email, password:pw});
-  else if(m==="signup") res = await sb.auth.signUp({email, password:pw, options:{data:{nickname:nick, marketing}, emailRedirectTo:appUrl()}});
+  else if(m==="signup") res = await sb.auth.signUp({email, password:pw, options:{data:{nickname:nick, marketing, phone, phone_verified:false}, emailRedirectTo:appUrl()}});
   else if(m==="reset") res = await sb.auth.resetPasswordForEmail(email, {redirectTo:appUrl()});
   else res = await sb.auth.updateUser({password:pw});
   acct.busy=false;
@@ -1293,6 +1313,8 @@ document.addEventListener("click",e=>{
   else if(t.id==="petChip"){ go("pet"); }
   else if(d.amode){ acct.mode=d.amode; acct.msg=""; acct.ok=""; const el=document.getElementById("a-email"); if(el) acct.email=el.value.trim(); render(false); }
   else if("logout" in d){ logout(); }
+  else if("savephone" in d){ savePhone(); }
+  else if("editphone" in d){ acct.editPhone=true; render(false); }
   else if("pullnow" in d){ pullState(true); }
   else if("syncnow" in d){ pushState().then(ok=>toast(ok?"계정에 저장했어요.":"저장하지 못했어요.")); }
   else if("wipe" in d){ if(acct.delArm) wipeAccount(); else { acct.delArm=true; render(false); } }
@@ -1306,6 +1328,7 @@ function toggleSample(id){
 }
 document.addEventListener("input",e=>{
   const id=e.target.id, v=e.target.value;
+  if(id==="a-phone"||id==="acc-phone"){ const d=phoneDigits(v).slice(0,11); e.target.value=d.length>3?d.slice(0,3)+"-"+(d.length>7?d.slice(3,d.length-4)+"-"+d.slice(-4):d.slice(3)):d; }
   if(id==="e-name") draft.name=v;
   if(id==="e-breed") draft.breed=v.trim();
   if(id==="e-weight"){ const n=parseFloat(v); if(n>0) draft.weight=n; }

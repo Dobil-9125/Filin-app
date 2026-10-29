@@ -46,6 +46,7 @@ FILIN(필린) 고객용 앱의 첫 시제품이에요. 휴대폰 화면에 맞�
 - 처음 한 번: Supabase → **SQL Editor**에서 `supabase/setup.sql` 전체를 실행
 - Supabase → **Authentication → URL Configuration**에서 Site URL을 `https://dobil-9125.github.io/Filin-app/`로 저장 (인증·비밀번호 재설정 메일 링크가 앱으로 돌아오게)
 - 회원 데이터는 `user_data` 표에 회원 한 명당 한 줄(JSON)로 저장되고, 본인만 읽고 쓸 수 있어요.
+- 가입할 때 휴대폰 번호를 받아 Supabase 회원 정보(user_metadata의 `phone`, 숫자만)에 저장해요. 나중에 네이버 커머스API로 가져온 주문의 **주문자 번호**와 맞춰 앱 주문·배송에 연결하는 데 써요. 지금은 문자 인증 없이 저장만 하고 `phone_verified`는 false예요. 출시 전에 문자 인증(또는 네이버 로그인)을 붙여야 해요.
 
 ## 휴대폰에 앱으로 설치하기
 
