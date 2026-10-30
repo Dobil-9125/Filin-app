@@ -120,6 +120,10 @@ p{margin:0}
 .pcard .ph{background:#fff;border-radius:10px;aspect-ratio:1;display:grid;place-items:center;overflow:hidden}
 .pcard .ph img{width:88%;height:88%;object-fit:contain}
 .pcard .brand{font-size:11px;letter-spacing:.06em;color:var(--muted)}
+.pcard .price{font-size:15px}.pcard .price b{font-weight:800}
+.pcard .sizes{font-size:11px;color:var(--muted);line-height:1.4}
+.pricebox{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px}.pricebox s{color:var(--muted);font-size:13px}.pricebox b{font-size:22px;font-weight:800}.pricebox .small{flex-basis:100%}
+.bsec{display:flex;flex-direction:column;gap:10px;margin-top:6px}.bsec h2{font-size:18px}
 .pcard .name{font-size:14px;font-weight:500;line-height:1.35}
 .badges{display:flex;gap:4px;flex-wrap:wrap}
 .badge{font-size:11px;border-radius:6px;padding:1px 6px;background:var(--bg);color:var(--muted);border:1px solid var(--line)}
@@ -335,6 +339,41 @@ const P = [
  {id:"bellfor-landgut-mini",b:"bf",n:"란트굿 슈마우스 미니",sp:"dog",st:["adult","senior"],prot:"insect",pl:"곤충 (동애등에)",gf:1,ltd:0,also:{chicken:"닭고기지방",fish:"연어오일"},small:1,kcal:3450,sizes:[1.2,2.5,7.5],pt:"하이포알러지 눈물사료로 알려진 8mm 작은 알갱이예요. 조단백 28%, 조지방 18%예요.",tags:["novel","small"]}
 ];
 const byId = Object.fromEntries(P.map(p=>[p.id,p]));
+// 용량별 가격 [판매가, 정가(할인 전, 없으면 생략)] · 개밥왕 스마트스토어 목록 기준 (2026-10-30)
+const PRICE = {
+ "tow-pacific-stream-dog":{2:[30000],4.5:[63000],5.6:[75000],12.2:[129000],18.14:[169000]},
+ "tow-pacific-stream-puppy":{2:[30000],5.6:[69000],12.2:[119000]},
+ "tow-prey-trout-dog":{3.63:[37100,53000],11.34:[139000]},
+ "tow-prey-turkey-dog":{3.63:[37100,53000],11.34:[139000]},
+ "tow-canyon-river-cat":{1.36:[24000],2:[31000],4.5:[63000],6.6:[88000]},
+ "tow-prey-turkey-cat":{2.72:[40000]},
+ "pv-dog-salmon-peas":{1.81:[16000,25000],5.44:[43000,65000],11.3:[79000,119000]},
+ "pv-dog-pork-blueberry":{1.81:[16000,27000],5.44:[43000,65000],11.3:[79000,129000]},
+ "pv-dog-turkey-sweetpotato":{1.81:[16000,23000],5.44:[43000,59000],11.3:[79000,109000]},
+ "pv-dog-chicken-brownrice":{1.81:[16000,23000],5.44:[43000,59000],11.3:[79000,105000]},
+ "pv-cat-salmon-peas":{1.81:[24000],5.44:[43000,63000]},
+ "pv-cat-chicken-peas":{1.81:[10700,22000],5.44:[31000,53000]},
+ "ns-choice-chicken-barley":{2.27:[25000],18.14:[129000]},
+ "ns-choice-turkey-barley":{18.14:[139000]},
+ "ns-choice-whitefish-rice":{2.27:[30000],18.14:[149000]},
+ "ns-choice-large-breed":{18.14:[139000]},
+ "ns-choice-performance":{18.14:[139000]},
+ "ns-choice-puppy":{2.27:[25000]},
+ "ns-gf-senior":{1.81:[25000],5.44:[65000],11.79:[119000]},
+ "ns-gf-chicken-peas":{1.81:[25000],5.44:[65000],11.79:[119000]},
+ "ns-cat-kitten-country":{1.81:[16000,23000],5.44:[43000,63000]},
+ "bellfor-naturgut-coldpressed":{4:[68000]},
+ "bellfor-landgut":{7.5:[145000]},
+ "bellfor-landgut-mini":{1.2:[29900],2.5:[55000],7.5:[145000]}
+};
+const SOLDOUT = {"tow-canyon-river-cat":[6.6]}; // 스토어에서 일시품절
+const won = n=> n.toLocaleString("ko-KR")+"원";
+const priceOf = (p,size)=> (PRICE[p.id]||{})[size] || null;
+const soldOut = (p,size)=> (SOLDOUT[p.id]||[]).includes(size);
+const fromPrice = p=> { const v=Object.values(PRICE[p.id]||{}).map(x=>x[0]); return v.length?Math.min(...v):null; };
+const AUTO_OFF = 0.07;
+const autoPrice = n=> Math.round(n*(1-AUTO_OFF)/100)*100;
+
 const STAGE = {puppy:"퍼피",kitten:"키튼",adult:"성견·성묘",senior:"시니어"};
 const stageName = (st,sp)=> st==="adult" ? (sp==="cat"?"성묘":"성견") : STAGE[st];
 
@@ -437,6 +476,7 @@ function feeding(pt, kcalPerKg){
 }
 const DEFAULT_KCAL = 3600;
 const sizesOf = p=> p.sizes || [2,5,10];
+const szText = s=> s<1 ? `${Math.round(s*1000)}g` : `${s}kg`;
 function bagDays(pt,p,size){ return Math.floor(size*1000/feeding(pt,p.kcal||DEFAULT_KCAL).grams); }
 function suggestWeeks(pt,p,size){ return Math.max(1,Math.min(12,Math.floor(bagDays(pt,p,size)/7))); }
 
@@ -470,6 +510,8 @@ function pcard(p){
     <div class="brand">${BRANDS[p.b].name}</div>
     <div class="name">${esc(p.n)}</div>
     <div class="badges">${p.hot?'<span class="badge hot">인기</span>':""}<span class="badge">${spName(p.sp)}</span><span class="badge">${esc(p.pl.split(" ")[0])}</span>${p.gf?'<span class="badge">그레인프리</span>':""}</div>
+    ${fromPrice(p)?`<div class="price"><b>${won(fromPrice(p))}</b>${sizesOf(p).length>1?"~":""}</div>`:""}
+    <div class="sizes">${sizesOf(p).map(sz=>szText(sz)).join(" · ")}</div>
   </button>`;
 }
 function recCard(r,i){
@@ -608,7 +650,8 @@ function vShop(){
     <div class="chips">${[["all","전체"],["dog","강아지"],["cat","고양이"]].map(([v,l])=>`<button class="chip" type="button" data-fsp="${v}" aria-pressed="${shopFilter.sp===v}">${l}</button>`).join("")}</div>
     <div class="chips">${[["all","모든 브랜드"],...Object.entries(BRANDS).map(([k,v])=>[k,v.name])].map(([v,l])=>`<button class="chip" type="button" data-fb="${v}" aria-pressed="${shopFilter.b===v}">${l}</button>`).join("")}</div>
     ${brand?`<div class="brand-banner"><img src="${BRAND_IMG[shopFilter.b]}" alt="${brand.name} 브랜드 이미지"><div><b>${brand.name} · ${brand.en}</b>${brand.line}</div></div>`:""}
-    <div class="pgrid">${list.map(pcard).join("")||'<p class="muted">이 조건의 제품이 아직 없어요.</p>'}</div>`;
+    ${shopFilter.b==="all" ? (Object.keys(BRANDS).map(k=>{const g=list.filter(p=>p.b===k); return g.length?`<section class="bsec"><div class="section-head"><h2>${BRANDS[k].name} <span class="small muted">${BRANDS[k].en} · ${g.length}개</span></h2><button class="link" type="button" data-fb="${k}">브랜드관 보기</button></div><div class="pgrid">${g.map(pcard).join("")}</div></section>`:""}).join("")||'<p class="muted">이 조건의 제품이 아직 없어요.</p>')
+      : `<div class="pgrid">${list.map(pcard).join("")||'<p class="muted">이 조건의 제품이 아직 없어요.</p>'}</div>`}`;
 }
 
 /* ---------- 정기배송 ---------- */
@@ -618,7 +661,7 @@ function shipCard(a){
   const p=byId[a.prodId], owner=pets.find(x=>x.id===a.petId), d=dday(a.next);
   const weeks=[1,2,3,4,5,6,7,8,10,12];
   return `<div class="ship">
-    <div class="top"><img src="${img(p.id)}" alt="${esc(BRANDS[p.b].name+" "+p.n)}"><div><span class="small muted">${BRANDS[p.b].name}${owner?" · "+esc(owner.name)+" 밥":""}</span><h3>${esc(p.n)} ${a.size}kg</h3><span class="save" style="margin:0">정기배송 7% 할인</span></div></div>
+    <div class="top"><img src="${img(p.id)}" alt="${esc(BRANDS[p.b].name+" "+p.n)}"><div><span class="small muted">${BRANDS[p.b].name}${owner?" · "+esc(owner.name)+" 밥":""}</span><h3>${esc(p.n)} ${a.size}kg</h3><span class="save" style="margin:0">정기배송 7% 할인${priceOf(p,a.size)?` · 회당 ${won(autoPrice(priceOf(p,a.size)[0]))}`:""}</span></div></div>
     <div class="next"><b>다음 배송 ${fmt(parseYmd(a.next))}</b><span>${d<=0?"오늘 출발":`${d}일 남음`}</span></div>
     <label class="f">배송 주기<select data-weeks="${a.id}">${weeks.map(w=>`<option value="${w}" ${w===a.weeks?"selected":""}>${w}주마다</option>`).join("")}</select></label>
     <div class="acts">
@@ -838,7 +881,10 @@ function openProduct(id, opt={}){
     <div class="buy">
       <label class="opt"><input type="radio" name="buy" value="once" ${buy.mode==="once"?"checked":""}> 한 번 구매</label>
       <label class="opt"><input type="radio" name="buy" value="auto" ${buy.mode==="auto"?"checked":""}> 정기배송 <span class="save">매번 7% 할인</span></label>
-      <label class="f">용량<select id="b-size">${sizes.map(s=>`<option value="${s}" ${s===buy.size?"selected":""}>${s}kg${p.sizes?"":" (예시)"}</option>`).join("")}</select></label>
+      <label class="f">용량<select id="b-size">${sizes.map(s=>{const pr=priceOf(p,s);return `<option value="${s}" ${s===buy.size?"selected":""}>${szText(s)}${pr?` · ${won(buy.mode==="auto"?autoPrice(pr[0]):pr[0])}`:""}${soldOut(p,s)?" (일시품절)":""}${p.sizes?"":" (예시)"}</option>`}).join("")}</select></label>
+      ${(()=>{const pr=priceOf(p,buy.size); if(!pr) return ""; const now=buy.mode==="auto"?autoPrice(pr[0]):pr[0], was=buy.mode==="auto"?pr[0]:pr[1];
+        return `<div class="pricebox">${was?`<s>${won(was)}</s>`:""}<b>${won(now)}</b><span class="small muted">${szText(buy.size)} · 100g당 ${won(Math.round(now/(buy.size*10)))}${buy.mode==="auto"?" · 정기배송 7% 할인가":""}</span>${soldOut(p,buy.size)?'<span class="badge">일시품절</span>':""}</div>`;})()}
+      <p class="small muted">가격은 개밥왕 스마트스토어 기준이에요. 실제 결제 금액은 스토어에서 확인해 주세요.</p>
       ${buy.mode==="auto"?`
         <label class="f">배송 주기<select id="b-weeks">${[1,2,3,4,5,6,7,8,10,12].map(w=>`<option value="${w}" ${w===buy.weeks?"selected":""}>${w}주마다${w===sug&&fits?" (추천)":""}</option>`).join("")}</select></label>
         <p class="hint">${fits?`${esc(pt.name)} 기준 하루 ${feeding(pt,p.kcal||DEFAULT_KCAL).grams}g이라 ${buy.size}kg은 약 ${bagDays(pt,p,buy.size)}일 가요. <b>${sug}주마다</b> 받으면 떨어지기 전에 도착해요.`:`${spName(p.sp)}용 제품이라 ${esc(pt.name)} 급여량으로는 계산하지 않았어요. 주기를 직접 골라 주세요.`}</p>
@@ -880,7 +926,7 @@ function orderCard(o){
   return `<div class="ship">
     <div class="top"><img src="${img(p.id)}" alt="${esc(BRANDS[p.b].name+" "+p.n)}"><div>
       <span class="small muted">${fmt(start)} 주문${o.example?' · <span class="badge">예시 주문</span>':""}</span>
-      <h3>${BRANDS[p.b].name} ${esc(p.n)} ${o.size}kg × ${o.qty}</h3>
+      <h3>${BRANDS[p.b].name} ${esc(p.n)} ${o.size}kg × ${o.qty}</h3>${priceOf(p,o.size)?`<span class="small muted">${won(priceOf(p,o.size)[0]*o.qty)}</span>`:""}
       <span class="pill s${st}">${ORDER_STEPS[st]}</span></div></div>
     ${trackOpen===o.id?`<ol class="track">${ORDER_STEPS.map((s,i)=>`<li class="${i<=st?"done":""}"><b>${s}</b><span>${i<=st?fmt(stepDate[i]):"예정"}</span></li>`).join("")}</ol>
       ${st===2?'<p class="small muted">택배사 송장 번호는 실제 서비스에서 연결돼요. (시제품)</p>':""}`:""}
