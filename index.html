@@ -304,31 +304,31 @@ const BRANDS = {
   ns:{name:"뉴트리소스", en:"NutriSource", line:"미국 · 퍼피부터 시니어까지 데일리 균형 영양"},
   bf:{name:"벨포아", en:"Bellfor", line:"독일 · 곤충 단백질과 저온압착"}
 };
-// sp: dog/cat · st: 대상 단계 · prot: 단백질 키 · gf: 그레인프리 · ltd: 단일 단백질 · chicken: 닭 원료(닭 지방 포함) 여부
+// sp: dog/cat · st: 대상 단계 · prot: 주 단백질 키 · gf: 그레인프리 · ltd: 동물성 단백질 하나 · also: 주 단백질 말고 들어 있는 알러지 원료 {키:"어디에"} · kcal: kcal/kg (컵 표기만 있으면 g으로 나눈 값)
 const P = [
- {id:"tow-pacific-stream-dog",b:"tow",n:"퍼시픽 스트림",sp:"dog",st:["adult"],prot:"fish",pl:"훈연 향 연어",gf:1,ltd:0,chicken:0,hot:1,kcal:3600,sizes:[2,4.5,5.6,12.2,18],pt:"토우 대표 그레인프리 레시피. 동물성 단백질을 연어와 생선에서만 얻어요.",tags:["picky","fish"]},
- {id:"tow-pacific-stream-puppy",b:"tow",n:"퍼시픽 스트림 퍼피",sp:"dog",st:["puppy"],prot:"fish",pl:"훈연 향 연어",gf:1,ltd:0,chicken:0,sizes:[2,5.6,12.2],pt:"성장기 강아지를 위한 그레인프리 레시피예요.",tags:["fish"]},
- {id:"tow-prey-trout-dog",b:"tow",n:"PREY 송어",sp:"dog",st:["adult","senior"],prot:"fish",pl:"송어",gf:1,ltd:1,chicken:1,sizes:[3.63],pt:"동물성 단백질은 송어 하나인 제한 원료 레시피예요. 지방원으로 닭 지방이 들어가요.",tags:["fish","novel"]},
- {id:"tow-prey-turkey-dog",b:"tow",n:"PREY 칠면조",sp:"dog",st:["adult","senior"],prot:"turkey",pl:"칠면조",gf:1,ltd:1,chicken:0,sizes:[3.63],pt:"동물성 단백질 하나만 담은 제한 원료 레시피예요.",tags:[]},
- {id:"tow-canyon-river-cat",b:"tow",n:"캐니언 리버",sp:"cat",st:["kitten","adult","senior"],prot:"fish",pl:"송어 · 훈연 향 연어",gf:1,ltd:0,chicken:0,hot:1,sizes:[1.36,2,4.5,6.6],pt:"생선파 고양이를 위한 그레인프리 레시피예요.",tags:["picky","fish"]},
- {id:"tow-prey-turkey-cat",b:"tow",n:"PREY 칠면조 (고양이)",sp:"cat",st:["adult","senior"],prot:"turkey",pl:"칠면조",gf:1,ltd:1,chicken:0,sizes:[2.72],pt:"고양이용 제한 원료 레시피예요.",tags:[]},
- {id:"pv-dog-salmon-peas",b:"pv",n:"연어 & 완두",sp:"dog",st:["puppy","adult","senior"],prot:"fish",pl:"연어",gf:1,ltd:1,chicken:0,pt:"생선 단일 단백질 그레인프리. 대형견 퍼피를 포함한 전 연령용이에요.",tags:["fish"]},
- {id:"pv-dog-pork-blueberry",b:"pv",n:"돼지고기 & 블루베리",sp:"dog",st:["adult","senior"],prot:"pork",pl:"돼지고기",gf:1,ltd:1,chicken:0,pt:"닭·소 말고 다른 단백질을 찾을 때 고르는 레시피예요.",tags:["novel"]},
- {id:"pv-dog-chicken-brownrice",b:"pv",n:"치킨 & 현미",sp:"dog",st:["adult","senior"],prot:"chicken",pl:"닭고기",gf:0,ltd:1,chicken:1,pt:"통곡물을 담은 그레인 프렌들리 레시피예요.",tags:[]},
- {id:"pv-cat-salmon-peas",b:"pv",n:"캣 연어 & 완두",sp:"cat",st:["adult","senior"],prot:"fish",pl:"연어",gf:1,ltd:1,chicken:0,sizes:[5.44],pt:"예민한 고양이를 위한 그레인프리 단일 단백질이에요.",tags:["fish"]},
- {id:"pv-cat-chicken-peas",b:"pv",n:"캣 치킨 & 완두",sp:"cat",st:["kitten","adult","senior"],prot:"chicken",pl:"닭고기",gf:1,ltd:1,chicken:1,hot:1,sizes:[1.81,5.44],pt:"고양이용 그레인프리. 필린에서 많이 찾는 고양이 사료예요.",tags:["picky"]},
- {id:"ns-choice-chicken-barley",b:"ns",n:"초이스 치킨밀 & 보리",sp:"dog",st:["adult"],prot:"chicken",pl:"닭고기",gf:0,ltd:0,chicken:1,pt:"매일 먹는 기본 데일리 사료예요.",tags:[]},
- {id:"ns-choice-turkey-barley",b:"ns",n:"초이스 칠면조밀 & 보리",sp:"dog",st:["adult"],prot:"turkey",pl:"칠면조",gf:0,ltd:0,chicken:0,pt:"닭 대신 칠면조로 바꿔볼 때 좋아요.",tags:[]},
- {id:"ns-choice-whitefish-rice",b:"ns",n:"초이스 화이트피쉬밀 & 라이스",sp:"dog",st:["adult"],prot:"fish",pl:"흰살 생선",gf:0,ltd:0,chicken:0,pt:"생선 단백질 데일리 사료예요.",tags:["fish"]},
- {id:"ns-choice-large-breed",b:"ns",n:"초이스 라지브리드",sp:"dog",st:["adult"],prot:"chicken",pl:"닭고기",gf:0,ltd:0,chicken:1,large:1,pt:"큰 아이들을 위한 레시피예요.",tags:["large"]},
- {id:"ns-choice-performance",b:"ns",n:"초이스 퍼포먼스",sp:"dog",st:["adult"],prot:"chicken",pl:"닭고기",gf:0,ltd:0,chicken:1,pt:"운동량 많은 아이를 위한 레시피예요.",tags:["active"]},
- {id:"ns-choice-puppy",b:"ns",n:"초이스 퍼피",sp:"dog",st:["puppy"],prot:"chicken",pl:"닭고기",gf:0,ltd:0,chicken:1,pt:"처음 밥을 고를 때 시작하기 좋은 퍼피 레시피예요.",tags:[]},
- {id:"ns-gf-senior",b:"ns",n:"그레인프리 시니어",sp:"dog",st:["senior"],prot:"chicken",pl:"닭고기",gf:1,ltd:0,chicken:1,pt:"곡물 없이 시니어 단계로 옮겨갈 때 고르는 레시피예요.",tags:[]},
- {id:"ns-gf-chicken-peas",b:"ns",n:"그레인프리 치킨 & 완두",sp:"dog",st:["adult"],prot:"chicken",pl:"닭고기",gf:1,ltd:0,chicken:1,pt:"곡물을 빼고 싶을 때 고르는 데일리 레시피예요.",tags:[]},
- {id:"ns-cat-kitten-country",b:"ns",n:"캣 & 키튼 컨트리 셀렉트",sp:"cat",st:["kitten","adult"],prot:"chicken",pl:"닭고기",gf:0,ltd:0,chicken:1,pt:"키튼부터 성묘까지 한 브랜드로 이어 먹일 수 있어요.",tags:[]},
- {id:"bellfor-naturgut-coldpressed",b:"bf",n:"네이처굿 슈마우스",sp:"dog",st:["adult","senior"],prot:"insect",pl:"곤충 (동애등에 유충)",gf:1,ltd:0,chicken:0,pt:"벨포아 저온압착 대표 제품. 곡물 무첨가예요.",tags:["novel"]},
- {id:"bellfor-landgut",b:"bf",n:"란트굿 슈마우스",sp:"dog",st:["adult","senior"],prot:"insect",pl:"곤충 (동애등에 유충)",gf:1,ltd:0,chicken:0,pt:"벨포아 곤충 건사료의 기본형. 곡물 무첨가예요.",tags:["novel"]},
- {id:"bellfor-landgut-mini",b:"bf",n:"란트굿 슈마우스 미니",sp:"dog",st:["adult","senior"],prot:"insect",pl:"곤충 (동애등에 유충)",gf:1,ltd:0,chicken:0,small:1,pt:"작은 알갱이로 만든 소형견용이에요.",tags:["novel","small"]}
+ {id:"tow-pacific-stream-dog",b:"tow",n:"퍼시픽 스트림",sp:"dog",st:["adult"],prot:"fish",pl:"훈연 향 연어",gf:1,ltd:0,hot:1,kcal:3600,sizes:[2,4.5,5.6,12.2,18],pt:"토우 대표 그레인프리 레시피. 동물성 단백질을 연어와 생선에서만 얻어요.",tags:["picky","fish"]},
+ {id:"tow-pacific-stream-puppy",b:"tow",n:"퍼시픽 스트림 퍼피",sp:"dog",st:["puppy"],prot:"fish",pl:"훈연 향 연어",gf:1,ltd:0,sizes:[2,5.6,12.2],pt:"성장기 강아지를 위한 그레인프리 레시피예요.",tags:["fish"]},
+ {id:"tow-prey-trout-dog",b:"tow",n:"PREY 송어",sp:"dog",st:["adult","senior"],prot:"fish",pl:"송어",gf:1,ltd:1,also:{chicken:"닭 지방"},sizes:[3.63],pt:"동물성 단백질은 송어 하나인 제한 원료 레시피예요. 지방원으로 닭 지방이 들어가요.",tags:["fish","novel"]},
+ {id:"tow-prey-turkey-dog",b:"tow",n:"PREY 칠면조",sp:"dog",st:["adult","senior"],prot:"turkey",pl:"칠면조",gf:1,ltd:1,sizes:[3.63],pt:"동물성 단백질 하나만 담은 제한 원료 레시피예요.",tags:[]},
+ {id:"tow-canyon-river-cat",b:"tow",n:"캐니언 리버",sp:"cat",st:["kitten","adult","senior"],prot:"fish",pl:"송어 · 훈연 향 연어",gf:1,ltd:0,hot:1,sizes:[1.36,2,4.5,6.6],pt:"생선파 고양이를 위한 그레인프리 레시피예요.",tags:["picky","fish"]},
+ {id:"tow-prey-turkey-cat",b:"tow",n:"PREY 칠면조 (고양이)",sp:"cat",st:["adult","senior"],prot:"turkey",pl:"칠면조",gf:1,ltd:1,sizes:[2.72],pt:"고양이용 제한 원료 레시피예요.",tags:[]},
+ {id:"pv-dog-salmon-peas",b:"pv",n:"연어 & 완두",sp:"dog",st:["puppy","adult","senior"],prot:"fish",pl:"연어",gf:1,ltd:1,pt:"생선 단일 단백질 그레인프리. 대형견 퍼피를 포함한 전 연령용이에요.",tags:["fish"]},
+ {id:"pv-dog-pork-blueberry",b:"pv",n:"돼지고기 & 블루베리",sp:"dog",st:["adult","senior"],prot:"pork",pl:"돼지고기",gf:1,ltd:1,pt:"닭·소 말고 다른 단백질을 찾을 때 고르는 레시피예요.",tags:["novel"]},
+ {id:"pv-dog-chicken-brownrice",b:"pv",n:"치킨 & 현미",sp:"dog",st:["adult","senior"],prot:"chicken",pl:"닭고기",gf:0,ltd:1,also:{chicken:"닭 지방"},pt:"통곡물을 담은 그레인 프렌들리 레시피예요.",tags:[]},
+ {id:"pv-cat-salmon-peas",b:"pv",n:"캣 연어 & 완두",sp:"cat",st:["adult","senior"],prot:"fish",pl:"연어",gf:1,ltd:1,sizes:[5.44],pt:"예민한 고양이를 위한 그레인프리 단일 단백질이에요.",tags:["fish"]},
+ {id:"pv-cat-chicken-peas",b:"pv",n:"캣 치킨 & 완두",sp:"cat",st:["kitten","adult","senior"],prot:"chicken",pl:"닭고기",gf:1,ltd:1,also:{chicken:"닭 지방"},hot:1,sizes:[1.81,5.44],pt:"고양이용 그레인프리. 필린에서 많이 찾는 고양이 사료예요.",tags:["picky"]},
+ {id:"ns-choice-chicken-barley",b:"ns",n:"초이스 치킨 & 보리",sp:"dog",st:["adult"],prot:"chicken",pl:"닭고기",gf:0,ltd:0,also:{turkey:"천연 향미제(칠면조)"},kcal:3474,sizes:[2.27,18.14],pt:"닭고기 분말과 보리·수수로 만든 기본 데일리 사료예요. 글루코사민·콘드로이틴이 들어 있어요.",tags:[]},
+ {id:"ns-choice-turkey-barley",b:"ns",n:"초이스 칠면조 & 보리",sp:"dog",st:["adult"],prot:"turkey",pl:"칠면조",gf:0,ltd:0,also:{chicken:"닭지방·천연 향미제(닭)"},kcal:3492,sizes:[18.14],pt:"칠면조 분말이 주 단백질인 데일리 사료예요. 닭지방과 닭 향미제도 들어 있어요.",tags:[]},
+ {id:"ns-choice-whitefish-rice",b:"ns",n:"초이스 화이트피쉬 & 라이스",sp:"dog",st:["adult"],prot:"fish",pl:"대구",gf:0,ltd:1,also:{},kcal:3492,sizes:[2.27,18.14],pt:"대구 어분이 유일한 동물성 원료인 데일리 사료예요. 현미·오트밀·보리가 들어가요.",tags:["fish"]},
+ {id:"ns-choice-large-breed",b:"ns",n:"초이스 라지브리드",sp:"dog",st:["adult"],prot:"chicken",pl:"닭고기",gf:0,ltd:0,also:{turkey:"천연 향미제(칠면조)",fish:"청어 어분"},large:1,kcal:3756,sizes:[18.14],pt:"큰 아이들을 위한 레시피예요. 글루코사민·콘드로이틴이 들어 있어요.",tags:["large"]},
+ {id:"ns-choice-performance",b:"ns",n:"초이스 퍼포먼스",sp:"dog",st:["adult"],prot:"chicken",pl:"닭고기",gf:0,ltd:0,also:{turkey:"천연 향미제(칠면조)"},kcal:3746,sizes:[18.14],pt:"조단백 30%, 조지방 20%로 운동량 많은 아이를 위한 레시피예요.",tags:["active"]},
+ {id:"ns-choice-puppy",b:"ns",n:"초이스 퍼피",sp:"dog",st:["puppy"],prot:"chicken",pl:"닭고기",gf:0,ltd:0,also:{turkey:"천연 향미제(칠면조)",fish:"연어 어유"},kcal:3756,sizes:[2.27],pt:"처음 밥을 고를 때 시작하기 좋은 퍼피 레시피예요. 연어 어유로 DHA를 더했어요.",tags:[]},
+ {id:"ns-gf-senior",b:"ns",n:"그레인프리 시니어 칠면조",sp:"dog",st:["senior"],prot:"turkey",pl:"칠면조",gf:1,ltd:0,also:{chicken:"천연 향미제(닭)",fish:"청어 어분"},kcal:3600,sizes:[1.81,5.44,11.79],pt:"7살 이상 아이를 위한 그레인프리 레시피예요. 칠면조가 주 단백질이고 렌틸콩·병아리콩이 들어가요.",tags:[]},
+ {id:"ns-gf-chicken-peas",b:"ns",n:"그레인프리 치킨 & 완두",sp:"dog",st:["adult"],prot:"chicken",pl:"닭고기",gf:1,ltd:0,also:{turkey:"천연 향미제(칠면조)",fish:"연어 분말"},kcal:3991,sizes:[1.81,5.44,11.79],pt:"곡물을 빼고 싶을 때 고르는 데일리 레시피예요. 조단백 28%, 조지방 18%예요.",tags:[]},
+ {id:"ns-cat-kitten-country",b:"ns",n:"캣 & 키튼 컨트리 셀렉트",sp:"cat",st:["kitten","adult"],prot:"chicken",pl:"닭고기 · 오리",gf:1,ltd:0,also:{turkey:"칠면조 분말",fish:"천연 향미제(어류)·연어유"},kcal:4165,sizes:[1.81,5.44],pt:"키튼부터 성묘까지 먹일 수 있는 그레인프리 레시피예요. 조단백 36%예요.",tags:[]},
+ {id:"bellfor-naturgut-coldpressed",b:"bf",n:"네이처굿 슈마우스",sp:"dog",st:["adult","senior"],prot:"insect",pl:"곤충 (동애등에 유충)",gf:1,ltd:0,pt:"벨포아 저온압착 대표 제품. 곡물 무첨가예요.",tags:["novel"]},
+ {id:"bellfor-landgut",b:"bf",n:"란트굿 슈마우스",sp:"dog",st:["adult","senior"],prot:"insect",pl:"곤충 (동애등에 유충)",gf:1,ltd:0,pt:"벨포아 곤충 건사료의 기본형. 곡물 무첨가예요.",tags:["novel"]},
+ {id:"bellfor-landgut-mini",b:"bf",n:"란트굿 슈마우스 미니",sp:"dog",st:["adult","senior"],prot:"insect",pl:"곤충 (동애등에 유충)",gf:1,ltd:0,small:1,pt:"작은 알갱이로 만든 소형견용이에요.",tags:["novel","small"]}
 ];
 const byId = Object.fromEntries(P.map(p=>[p.id,p]));
 const STAGE = {puppy:"퍼피",kitten:"키튼",adult:"성견·성묘",senior:"시니어"};
@@ -343,6 +343,7 @@ const store = {
 
 /* ---------- 반려동물 프로필 ---------- */
 const ALLERGENS = [["chicken","닭고기"],["beef","소고기"],["fish","생선"],["turkey","칠면조"],["pork","돼지고기"],["grain","곡물 (밀·보리 등)"]];
+const allergenName = k=> k==="grain" ? "곡물" : (ALLERGENS.find(a=>a[0]===k)||[k,k])[1];
 const PREFS = {
   dog:[["simple","원재료가 단순했으면"],["picky","입이 짧아요"],["novel","새로운 단백질을 찾아요"],["fish","생선을 좋아해요"],["gf","곡물 없는 사료가 좋아요"]],
   cat:[["simple","원재료가 단순했으면"],["picky","입이 짧아요"],["fish","생선을 좋아해요"],["gf","곡물 없는 사료가 좋아요"]]
@@ -405,10 +406,9 @@ function recommend(pt){
     let s=0; const why=[]; let caution=null;
     if(p.st.includes(st)){s+=4; why.push(`${stageName(st,pt.sp)} 단계에 맞는 레시피`);}
     else if(st!=="adult"){s-=6;}
-    if(al.includes("chicken")){
-      if(p.chicken){s-=1; caution=`동물성 단백질은 ${p.pl}이지만 닭 지방이 들어가요. 닭을 엄격히 피해야 하면 확인이 필요해요.`;}
-      else {s+=3; why.push(`닭고기 없이 ${p.pl} 단백질`);}
-    }
+    const hit=al.filter(a=>p.also && p.also[a]);
+    if(hit.length){s-=1; caution=`주 단백질은 ${p.pl}이지만 ${hit.map(a=>`${allergenName(a)}(${p.also[a]})`).join(", ")}도 들어 있어요. 엄격히 피해야 하면 확인이 필요해요.`;}
+    else if(al.includes("chicken")){s+=3; why.push(`닭고기 없이 ${p.pl} 단백질`);}
     if((pr.includes("gf")||al.includes("grain")) && p.gf){s+=2; why.push("곡물을 뺀 그레인프리");}
     if(pr.includes("simple") && p.ltd){s+=3; why.push("동물성 단백질이 하나라 원재료표가 짧아요");}
     if(pr.includes("picky") && p.tags.includes("picky")){s+=2; why.push("향이 뚜렷해 입 짧은 아이들이 많이 찾는 레시피");}
@@ -827,6 +827,7 @@ function openProduct(id, opt={}){
     <dl class="spec">
       <dt>대상</dt><dd>${spName(p.sp)} · ${p.st.map(s=>stageName(s,p.sp)).join(", ")}</dd>
       <dt>주 단백질</dt><dd>${esc(p.pl)}${p.ltd?" (단일 동물성 단백질)":""}</dd>
+      ${p.also&&Object.keys(p.also).length?`<dt>함께 든 원료</dt><dd>${Object.entries(p.also).map(([k,v])=>`${allergenName(k)} (${esc(v)})`).join(", ")}</dd>`:""}
       <dt>곡물</dt><dd>${p.gf?"그레인프리":"곡물 포함"}</dd>
       ${p.kcal?`<dt>열량</dt><dd>${p.kcal.toLocaleString()} kcal/kg</dd>`:""}
     </dl>
@@ -999,7 +1000,7 @@ function exampleReviews(p){
 function faqs(p){
   const list = [
     {q:"몇 살부터 먹일 수 있나요?", a:`${spName(p.sp)} ${p.st.map(s=>stageName(s,p.sp)).join(", ")} 단계에 맞춘 레시피예요. 새 사료는 7~10일에 걸쳐 천천히 바꿔 주세요.`},
-    {q:"닭고기 알러지가 있어도 먹일 수 있나요?", a: p.prot==="chicken" ? "닭고기가 주 단백질이라 닭고기 알러지가 있다면 다른 제품을 권해요." : p.chicken ? `주 단백질은 ${p.pl}이지만 닭 지방이 들어가요. 닭을 엄격히 피해야 한다면 수의사 선생님과 먼저 상담해 주세요.` : `동물성 단백질은 ${p.pl}이에요. 알러지가 의심된다면 수의사 선생님과 급여 계획을 함께 세워 주세요.`},
+    {q:"닭고기 알러지가 있어도 먹일 수 있나요?", a: p.prot==="chicken" ? "닭고기가 주 단백질이라 닭고기 알러지가 있다면 다른 제품을 권해요." : p.also&&p.also.chicken ? `주 단백질은 ${p.pl}이지만 닭 원료(${p.also.chicken})가 들어 있어요. 닭을 엄격히 피해야 한다면 수의사 선생님과 먼저 상담해 주세요.` : `동물성 단백질은 ${p.pl}이에요. 알러지가 의심된다면 수의사 선생님과 급여 계획을 함께 세워 주세요.`},
     {q:"곡물이 들어 있나요?", a: p.gf ? "곡물을 넣지 않은 그레인프리 레시피예요." : "곡물이 들어간 레시피예요. 곡물을 빼고 싶다면 같은 브랜드의 그레인프리 제품을 함께 살펴보세요."}
   ];
   return list;
