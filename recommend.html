@@ -68,6 +68,7 @@ main{display:flex;flex-direction:column;gap:22px;padding-top:20px}
 .answer{padding-left:50px}
 .chip{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 14px;font:inherit;font-size:14.5px;cursor:pointer}
 .chip[aria-pressed="true"]{background:var(--slate);color:var(--slate-ink);border-color:var(--slate)}
+.multi{display:inline-block;font-size:11.5px;font-weight:500;color:var(--amber-ink);background:var(--amber-soft);border-radius:6px;padding:0 6px;margin-left:2px;white-space:nowrap}
 .chip small{display:block;font-size:11.5px;opacity:.75;line-height:1.3}
 
 .chat{display:flex;flex-direction:column;gap:10px}
@@ -348,13 +349,17 @@ function vChat(){
   let h=`<div class="stack"><span class="eyebrow">세리가 묻고 올리가 추천해요</span><h1>우리 아이 밥, 같이 골라 볼까요?</h1></div><div class="chat">`;
   for(let i=0;i<list.length && i<=step;i++){
     const q=list[i];
-    h += bubble("seri", esc(q.q(ans)));
+    h += bubble("seri", esc(q.q(ans)) + (q.multi?' <span class="multi">중복 가능</span>':""));
     if(i<step){
       h += bubble("me", `${esc(answerText(q,ans[q.key]))}<button class="edit-a" type="button" data-redo="${i}">✎ 바꾸기</button>`);
     } else {
       h += chatNav();
       h += `<div class="answer">${q.opts(ans).map(([v,l])=>`<button class="chip" type="button" data-ans="${v}" aria-pressed="${q.multi?ans[q.key].includes(v):ans[q.key]===v}">${l}</button>`).join("")}</div>`;
+      const last = i===list.length-1;
       if(q.multi) h += `<div class="row end"><button class="btn ghost" type="button" data-none>${q.none}</button><button class="btn primary" type="button" data-next>다음</button></div>`;
+      if(last) h += `<button class="btn primary block" type="button" data-next>추천 보기</button>`;
+      // 나이까지 답했으면 남은 질문은 지금 값(기본값)으로 두고 바로 결과로 갈 수 있어요
+      else if(ans.sp && ans.stage) h += `<div class="row end"><button class="link" type="button" data-jump>바로 추천 보기 →</button></div>`;
     }
   }
   if(step<list.length) return h+`</div>`;
@@ -425,10 +430,14 @@ document.addEventListener("click", e=>{
     if(q.multi){ const s=new Set(ans[q.key]); s.has(d.ans)?s.delete(d.ans):s.add(d.ans); ans[q.key]=[...s]; t.setAttribute("aria-pressed",s.has(d.ans)); }
     else {
       if(q.key==="sp" && ans.sp!==d.ans){ ans={...fresh(), sp:d.ans}; } // 강아지↔고양이를 바꾸면 나머지 답은 새로
-      ans[q.key]=d.ans; advance();
+      ans[q.key]=d.ans;
+      // 마지막 질문은 눌러도 넘어가지 않고 선택만 바꿔요. '추천 보기'로 결과로 가요
+      if(step===qs().length-1) document.querySelectorAll(".chat .answer .chip").forEach(c=>c.setAttribute("aria-pressed",c===t));
+      else advance();
     }
   }
   else if("next" in d){ advance(); }
+  else if("jump" in d){ step=qs().length; render(); scrollTo("#recEnd"); }
   else if("none" in d){ ans[qs()[step].key]=[]; advance(); }
   else if(d.redo!==undefined){ step=+d.redo; render(); scrollTo(".chat .answer"); }
   else if("back" in d){ step=Math.max(0,step-1); render(); scrollTo(".chat .answer"); }
