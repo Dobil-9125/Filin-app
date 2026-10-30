@@ -155,6 +155,24 @@ const P = [
  {id:"bellfor-landgut-mini",b:"bf",n:"란트굿 슈마우스 미니",sp:"dog",st:["adult","senior"],prot:"insect",pl:"곤충 (동애등에)",gf:1,ltd:0,also:{chicken:"닭고기지방",fish:"연어오일"},small:1,kcal:3450,sizes:[1.2,2.5,7.5],pt:"하이포알러지 눈물사료로 알려진 8mm 작은 알갱이예요. 조단백 28%, 조지방 18%예요.",tags:["novel","small"]}
 ];
 const byId = Object.fromEntries(P.map(p=>[p.id,p]));
+
+/* ---------- 구매 링크 (개밥왕 스마트스토어) ----------
+   상품 주소를 알면 STORE_URL에 넣어 주세요. 없으면 스토어 안 검색 결과로 보내요. */
+const STORE = "https://smartstore.naver.com/gaebabking";
+const STORE_URL = {
+  // "tow-pacific-stream-dog": "https://smartstore.naver.com/gaebabking/products/상품번호",
+};
+const STORE_Q = {
+  "tow-pacific-stream-dog":"토우 훈제연어 고구마", "tow-pacific-stream-puppy":"토우 퍼피", "tow-prey-trout-dog":"토우 프레이 송어",
+  "tow-prey-turkey-dog":"토우 프레이 칠면조", "tow-canyon-river-cat":"토우 고양이 송어", "tow-prey-turkey-cat":"토우 프레이 고양이",
+  "pv-dog-salmon-peas":"퓨어비타 연어", "pv-dog-pork-blueberry":"퓨어비타 포크", "pv-dog-turkey-sweetpotato":"퓨어비타 칠면조",
+  "pv-dog-chicken-brownrice":"퓨어비타 치킨 현미", "pv-cat-salmon-peas":"퓨어비타 캣 연어", "pv-cat-chicken-peas":"퓨어비타 캣 치킨",
+  "ns-choice-chicken-barley":"뉴트리소스 치킨", "ns-choice-turkey-barley":"뉴트리소스 칠면조", "ns-choice-whitefish-rice":"뉴트리소스 화이트피쉬",
+  "ns-choice-large-breed":"뉴트리소스 라지브리드", "ns-choice-performance":"뉴트리소스 퍼포먼스", "ns-choice-puppy":"뉴트리소스 퍼피",
+  "ns-gf-senior":"뉴트리소스 시니어", "ns-gf-chicken-peas":"뉴트리소스 그레인프리 치킨", "ns-cat-kitten-country":"뉴트리소스 캣",
+  "bellfor-naturgut-coldpressed":"벨포아", "bellfor-landgut":"벨포아", "bellfor-landgut-mini":"벨포아"
+};
+const storeUrl = p=> STORE_URL[p.id] || `${STORE}/search?q=${encodeURIComponent(STORE_Q[p.id]||BRANDS[p.b].name)}`;
 // 용량별 가격 [판매가, 정가(할인 전, 없으면 생략)] · 개밥왕 스마트스토어 목록 기준 (2026-10-30)
 const PRICE = {
  "tow-pacific-stream-dog":{2:[30000],4.5:[63000],5.6:[75000],12.2:[129000],18.14:[169000]},
@@ -329,8 +347,9 @@ function vResult(){
   h += chatNav();
   h += `<section class="stack" id="recEnd">${recs.map(recCard).join("")}</section>`;
   if(out.length) h += `<p class="note">피해야 할 재료(${ans.allergies.map(allergenName).join("·")})가 주 원료인 제품 ${out.length}가지는 추천에서 뺐어요.</p>`;
-  if(recs.length) h += `<section class="cta"><h3>정기배송이면 7% 더 저렴해요</h3><p class="small">필린 앱에서 1순위 사료를 정기배송으로 받거나, 급여량에 맞춰 배송 주기를 정할 수 있어요.</p>
-      <div class="row"><a class="btn dark" href="https://dobil-9125.github.io/Filin-app/">필린 앱에서 이어가기</a><button class="btn ghost" type="button" data-share>결과 링크 복사</button></div></section>`;
+  if(recs.length) h += `<section class="cta"><h3>마음에 드는 사료를 찾았나요?</h3><p class="small">1순위 추천 <b>${esc(BRANDS[recs[0].p.b].name+" "+recs[0].p.n)}</b>, 네이버 스토어에서 바로 살 수 있어요. 다른 추천 사료도 카드를 눌러 구매 버튼을 찾을 수 있어요.</p>
+      <div class="row"><a class="btn primary" href="${storeUrl(recs[0].p)}" target="_blank" rel="noopener">네이버 스토어에서 구매하기</a><button class="btn ghost" type="button" data-share>결과 링크 복사</button></div>
+      <a class="link" href="https://dobil-9125.github.io/Filin-app/">필린 앱에서 정기배송 알아보기</a></section>`;
   h += `<p class="note">추천은 참고용이에요. 사료 전환은 7~10일에 걸쳐 천천히, 알러지나 건강 고민은 수의사 선생님과 먼저 상담해 주세요. 가격은 스마트스토어 기준(2026-10-30)이라 바뀔 수 있어요.</p>
     <button class="btn ghost block" type="button" data-restart>처음부터 다시</button>`;
   return h;
@@ -369,7 +388,8 @@ function openProduct(id){
       ${p.also&&Object.keys(p.also).length?`<dt>함께 든 원료</dt><dd>${Object.entries(p.also).map(([k,v])=>`${allergenName(k)} (${esc(v)})`).join(", ")}</dd>`:""}
       <dt>열량</dt><dd>${p.kcal?`${p.kcal.toLocaleString("ko-KR")} kcal/kg`:"표기 준비 중"}</dd>
     </dl>
-    <a class="btn dark block" href="https://dobil-9125.github.io/Filin-app/">필린 앱에서 구매·정기배송</a>`;
+    <a class="btn primary block" href="${storeUrl(p)}" target="_blank" rel="noopener">네이버 스토어에서 구매하기</a>
+    <a class="link" href="https://dobil-9125.github.io/Filin-app/" style="align-self:center">필린 앱에서 정기배송 알아보기</a>`;
   $("#sheetBg").hidden=false; document.body.style.overflow="hidden"; $("#sheet").scrollTop=0;
   $("#sheet [data-close]").focus();
 }
