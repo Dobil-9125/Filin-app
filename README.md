@@ -48,7 +48,7 @@ FILIN(필린) 고객용 앱의 첫 시제품이에요. 휴대폰 화면에 맞�
 
 | 파일 | 하는 일 |
 | --- | --- |
-| `recommend.html` | 웹 버전 원본. GitHub Pages에서 https://dobil-9125.github.io/filin-app/recommend.html 로 열려요 (`img/` 폴더 필요) |
+| `recommend.html` | 웹 버전 원본. GitHub Pages에서 https://dobil-9125.github.io/Filin-app/recommend.html 로 열려요 (`img/` 폴더 필요) |
 | `recommend-onefile.html` | 사진까지 파일 하나에 담은 버전. 카톡·메일로 보내거나 다른 곳에 올리기 좋아요 |
 
 - 질문: 강아지/고양이 → 나이 → 몸무게(강아지만) → 찾는 밥 → 피할 재료 → 활동량. 앱은 나이·체중을 프로필에서 가져오니 웹에서는 질문으로 받아요.
@@ -67,7 +67,7 @@ FILIN(필린) 고객용 앱의 첫 시제품이에요. 휴대폰 화면에 맞�
 ## 휴대폰에 앱으로 설치하기
 
 1. 저장소 **Settings → Pages**에서 Source를 **Deploy from a branch**, Branch를 **main / (root)**로 두고 **Save**
-2. 1~2분 뒤 휴대폰에서 https://dobil-9125.github.io/filin-app/ 열기
+2. 1~2분 뒤 휴대폰에서 https://dobil-9125.github.io/Filin-app/ 열기
 3. 아이폰(사파리): 공유 버튼 → **홈 화면에 추가** / 갤럭시(크롬): ⋮ → **앱 설치** 또는 **홈 화면에 추가**
 
 설치에 쓰이는 파일:
