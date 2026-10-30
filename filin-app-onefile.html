@@ -304,6 +304,7 @@ form.card .link{align-self:center}
   .ptr{left:calc(50% + 230px)}
 }
 .shop-q{display:flex;gap:8px}.shop-q input{flex:1;min-width:0}
+.badge.multi{background:var(--sky);color:var(--slate);font-weight:600}
 
 </style>
 </head>
@@ -688,8 +689,12 @@ function vFind(){
       h += bubble("me", `${esc(answerText(q,chat[q.key],pt))}<button class="edit-a" type="button" data-redo="${i}">✎ 바꾸기</button>`);
     } else {
       h += chatNav();
+      const last = i===QUESTIONS.length-1;
+      if(q.multi) h += `<div class="row end"><span class="badge multi">중복 가능</span></div>`;
       h += `<div class="answer">${q.opts(pt).map(([v,l])=>`<button class="chip" type="button" data-ans="${v}" aria-pressed="${q.multi?chat[q.key].includes(v):chat[q.key]===v}">${l}</button>`).join("")}</div>`;
-      if(q.multi) h += `<div class="row end"><button class="btn ghost" type="button" data-none>${q.none}</button><button class="btn primary" type="button" data-next>다음</button></div>`;
+      if(q.multi) h += `<div class="row end"><button class="btn ghost" type="button" data-none>${q.none}</button><button class="btn primary" type="button" data-next>${last?"추천 보기":"다음"}</button></div>`;
+      else if(last) h += `<button class="btn primary block" type="button" data-next>추천 보기</button>`;
+      if(!last) h += `<div class="row end"><button class="link" type="button" data-skipto>바로 추천 보기</button></div>`;
     }
   }
   if(chat.step<QUESTIONS.length) return h+`</div>`;
@@ -1428,7 +1433,8 @@ document.addEventListener("click",e=>{
   else if(d.autoship){ openProduct(d.autoship,{reset:true,mode:"auto",size:d.size}); }
   else if(d.subscribe){ subscribe(d.subscribe); }
   // 추천 대화
-  else if(d.ans!==undefined){ const q=QUESTIONS[chat.step]; if(q.multi){ const s=new Set(chat[q.key]); s.has(d.ans)?s.delete(d.ans):s.add(d.ans); chat[q.key]=[...s]; t.setAttribute("aria-pressed",s.has(d.ans)); } else { chat[q.key]=d.ans; chatAdvance(); } }
+  else if(d.ans!==undefined){ const q=QUESTIONS[chat.step]; if(q.multi){ const s=new Set(chat[q.key]); s.has(d.ans)?s.delete(d.ans):s.add(d.ans); chat[q.key]=[...s]; t.setAttribute("aria-pressed",s.has(d.ans)); } else { chat[q.key]=d.ans; if(chat.step===QUESTIONS.length-1){ t.closest(".answer").querySelectorAll("[data-ans]").forEach(b=>b.setAttribute("aria-pressed",b===t)); } else chatAdvance(); } }
+  else if(d.skipto!==undefined){ chat.step=QUESTIONS.length-1; chatAdvance(); }
   else if("next" in d){ chatAdvance(); }
   else if("none" in d){ chat[QUESTIONS[chat.step].key]=[]; chatAdvance(); }
   else if(d.redo!==undefined){ chat.step=+d.redo; render(false); }
