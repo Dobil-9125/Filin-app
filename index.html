@@ -282,9 +282,51 @@ ul.plain{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;f
 form.card .link{align-self:center}
 .pet-chip,.acct-btn{white-space:nowrap}
 @media (max-width:440px){.logo small{display:none}}
+/* 데스크톱: 왼쪽 소개·검색 패널 + 가운데 휴대폰 폭 쇼핑 화면 (펫프렌즈·어바웃펫과 같은 구성) */
+.side{display:none}
+@media (min-width:1024px){
+  body{background:linear-gradient(135deg,#fff6dc 0%,#fffcf7 45%,#e7f0ff 100%) fixed}
+  .side{display:flex;position:fixed;left:0;top:0;bottom:0;width:50%;justify-content:flex-end;align-items:center;padding-right:72px;z-index:1}
+  .side-in{width:360px;display:flex;flex-direction:column;gap:22px}
+  .side-logo{font-size:40px}
+  .side-copy{margin:0;font-size:26px;line-height:1.45;color:var(--ink)}
+  .side-copy b{font-weight:800;color:var(--slate)}
+  .side-search{display:flex;align-items:center;background:var(--surface);border:2px solid var(--slate);border-radius:999px;padding:4px 6px 4px 20px}
+  .side-search input{flex:1;border:0;outline:0;background:transparent;font:inherit;font-size:15px;padding:10px 0;min-width:0}
+  .side-search button{border:0;background:var(--slate);color:#fff;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;cursor:pointer}
+  .side-keys{display:flex;flex-wrap:wrap;gap:8px}
+  .side-keys button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;color:var(--ink);cursor:pointer}
+  .side-keys button:hover{border-color:var(--slate)}
+  .side-app{display:flex;gap:14px;align-items:center;background:var(--surface);border-radius:var(--r);padding:14px;box-shadow:0 6px 24px rgba(23,51,107,.08);font-size:14px;line-height:1.5}
+  .side-app span{color:var(--muted);font-size:12px}
+  .app{margin:0 0 0 50%;width:460px;box-shadow:0 0 40px rgba(23,51,107,.12);border:0;position:relative;z-index:2}
+  nav.tabs{left:50%;right:auto;width:460px}
+  .sheet-bg{justify-content:flex-start;padding-left:50%}
+  .sheet{width:460px}
+  .toast{left:calc(50% + 230px)}
+  .ptr{left:calc(50% + 230px)}
+}
+.shop-q{display:flex;gap:8px}.shop-q input{flex:1;min-width:0}
+
 </style>
 </head>
 <body>
+
+<aside class="side" aria-label="FILIN 소개">
+  <div class="side-in">
+    <div class="logo side-logo">FILIN<i>♥</i></div>
+    <p class="side-copy">공식 수입원이 직접 보내는<br><b>우리 아이 맞춤 사료</b></p>
+    <form class="side-search" id="sideSearch" role="search">
+      <input id="sideQ" type="search" placeholder="사료 이름, 브랜드, 단백질로 찾아보세요" aria-label="제품 검색">
+      <button type="submit" aria-label="검색"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
+    </form>
+    <div class="side-keys" id="sideKeys"></div>
+    <div class="side-app">
+      <img src="img/qr-app.png" alt="휴대폰으로 FILIN 앱 열기 QR 코드" width="92" height="92">
+      <div><b>휴대폰으로 찍으면</b><br>FILIN 앱이 바로 열려요.<br><span>홈 화면에 추가하면 앱처럼 쓸 수 있어요.</span></div>
+    </div>
+  </div>
+</aside>
 
 <div class="app">
   <header class="top wrap">
@@ -423,7 +465,14 @@ function savePets(){ store.set("pets",pets); store.set("cur",curId); }
 let samples = store.get("samples", []);
 let autoship = store.get("autoship", []); // {id, petId, prodId, size, weeks, next:"YYYY-MM-DD"}
 const saveShip = ()=> store.set("autoship", autoship);
-let shopFilter = {sp:"all",b:"all"};
+let shopFilter = {sp:"all",b:"all",q:""};
+const SEARCH_KEYS = ["토우","그레인프리","연어","칠면조","고양이","퍼피","대형견","눈물사료","곤충"];
+function searchText(p){
+  return [BRANDS[p.b].name,BRANDS[p.b].en,p.n,p.pl,p.pt,spName(p.sp),p.gf?"그레인프리":"곡물",
+    ...p.st.map(x=>stageName(x,p.sp)),p.large?"대형견":"",p.small?"소형견":"",p.prot==="fish"?"생선":"",p.prot==="insect"?"곤충":""].join(" ").toLowerCase().replace(/\s+/g,"");
+}
+const matchQ = (p,q)=> !q || q.toLowerCase().split(/\s+/).filter(Boolean).every(t=>searchText(p).includes(t));
+function searchFor(q){ shopFilter={sp:"all",b:"all",q:q.trim()}; const el=document.getElementById("sideQ"); if(el) el.value=shopFilter.q; go("shop"); }
 
 /* ---------- 날짜 ---------- */
 const ymd = d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
@@ -641,9 +690,11 @@ function chatAdvance(){
 
 /* ---------- 제품 ---------- */
 function vShop(){
-  const list = P.filter(p=>(shopFilter.sp==="all"||p.sp===shopFilter.sp)&&(shopFilter.b==="all"||p.b===shopFilter.b));
+  const list = P.filter(p=>(shopFilter.sp==="all"||p.sp===shopFilter.sp)&&(shopFilter.b==="all"||p.b===shopFilter.b)&&matchQ(p,shopFilter.q));
   const brand = shopFilter.b!=="all"?BRANDS[shopFilter.b]:null;
   return `<div class="stack"><span class="eyebrow">공식 브랜드관</span><h1>브랜드별 제품</h1></div>
+    <form class="shop-q" id="shopSearch" role="search"><input id="shopQ" type="search" value="${esc(shopFilter.q)}" placeholder="사료 이름, 브랜드, 단백질로 찾기" aria-label="제품 검색"><button class="btn dark" type="submit">찾기</button></form>
+    ${shopFilter.q?`<p class="small muted">"${esc(shopFilter.q)}" 검색 결과 ${list.length}개 · <button class="link" type="button" data-clearq>검색 지우기</button></p>`:""}
     <div class="chips">${[["all","전체"],["dog","강아지"],["cat","고양이"]].map(([v,l])=>`<button class="chip" type="button" data-fsp="${v}" aria-pressed="${shopFilter.sp===v}">${l}</button>`).join("")}</div>
     <div class="chips">${[["all","모든 브랜드"],...Object.entries(BRANDS).map(([k,v])=>[k,v.name])].map(([v,l])=>`<button class="chip" type="button" data-fb="${v}" aria-pressed="${shopFilter.b===v}">${l}</button>`).join("")}</div>
     ${brand?`<div class="brand-banner"><img src="${BRAND_IMG[shopFilter.b]}" alt="${brand.name} 브랜드 이미지"><div><b>${brand.name} · ${brand.en}</b>${brand.line}</div></div>`:""}
@@ -1357,6 +1408,8 @@ document.addEventListener("click",e=>{
   // 제품
   else if(d.fsp){ shopFilter.sp=d.fsp; render(); }
   else if(d.fb){ shopFilter.b=d.fb; render(); }
+  else if(d.q){ searchFor(d.q); }
+  else if(d.clearq!==undefined){ searchFor(""); }
   else if(d.brand){ shopFilter={sp:"all",b:d.brand}; go("shop"); }
   // 정기배송 관리
   else if(d.skip){ const a=autoship.find(x=>x.id===d.skip); a.next=ymd(addDays(parseYmd(a.next),a.weeks*7)); saveShip(); toast(`이번 배송을 건너뛰었어요. 다음 배송은 ${fmt(parseYmd(a.next))}이에요.`); render(false); }
@@ -1436,6 +1489,8 @@ document.addEventListener("change",e=>{
   if(e.target.dataset.weeks){ const a=autoship.find(x=>x.id===e.target.dataset.weeks); a.weeks=parseInt(v,10); saveShip(); toast(`${a.weeks}주마다 배송으로 바꿨어요.`); }
 });
 document.addEventListener("submit",e=>{ if(e.target.id==="authForm"){ e.preventDefault(); submitAuth(); } });
+document.addEventListener("submit",e=>{ if(e.target.id==="sideSearch"||e.target.id==="shopSearch"){ e.preventDefault(); searchFor((e.target.querySelector("input").value)||""); } });
+(function(){ const k=document.getElementById("sideKeys"); if(k) k.innerHTML=SEARCH_KEYS.map(w=>`<button type="button" data-q="${w}">${w}</button>`).join(""); })();
 document.addEventListener("change",e=>{
   if(e.target.id==="c-all") document.querySelectorAll(".c-one").forEach(c=>c.checked=e.target.checked);
   else if(e.target.classList.contains("c-one")){ const all=[...document.querySelectorAll(".c-one")].every(c=>c.checked); const a=document.getElementById("c-all"); if(a) a.checked=all; }
