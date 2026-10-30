@@ -406,6 +406,34 @@ const PRICE = {
  "bellfor-landgut-mini":{1.2:[29900],2.5:[55000],7.5:[145000]}
 };
 const SOLDOUT = {"tow-canyon-river-cat":[6.6]}; // 스토어에서 일시품절
+// 개밥왕 스마트스토어 상품 주소 (요셉님이 준 목록). 구매는 스토어에서 해요.
+const STORE = "https://smartstore.naver.com/gaebabking";
+const STORE_URL = {
+ "ns-cat-kitten-country":"https://smartstore.naver.com/gaebabking/products/13680020906",
+ "tow-pacific-stream-puppy":"https://smartstore.naver.com/gaebabking/products/12765059059",
+ "tow-prey-turkey-cat":"https://smartstore.naver.com/gaebabking/products/13585785169",
+ "tow-pacific-stream-dog":"https://smartstore.naver.com/gaebabking/products/13586433442",
+ "tow-prey-trout-dog":"https://smartstore.naver.com/gaebabking/products/13753838331",
+ "tow-prey-turkey-dog":"https://smartstore.naver.com/gaebabking/products/13753838333",
+ "tow-canyon-river-cat":"https://smartstore.naver.com/gaebabking/products/13585785168",
+ "bellfor-landgut-mini":"https://smartstore.naver.com/gaebabking/products/5419779306",
+ "bellfor-landgut":"https://smartstore.naver.com/gaebabking/products/13820687796",
+ "bellfor-naturgut-coldpressed":"https://smartstore.naver.com/gaebabking/products/13820790245",
+ "pv-cat-salmon-peas":"https://smartstore.naver.com/gaebabking/products/11586228961",
+ "pv-cat-chicken-peas":"https://smartstore.naver.com/gaebabking/products/13393753468",
+ "pv-dog-turkey-sweetpotato":"https://smartstore.naver.com/gaebabking/products/13679768191",
+ "pv-dog-pork-blueberry":"https://smartstore.naver.com/gaebabking/products/13679849300",
+ "pv-dog-salmon-peas":"https://smartstore.naver.com/gaebabking/products/13679849302",
+ "pv-dog-chicken-brownrice":"https://smartstore.naver.com/gaebabking/products/13679849304",
+ "ns-gf-chicken-peas":"https://smartstore.naver.com/gaebabking/products/13676893110",
+ "ns-gf-senior":"https://smartstore.naver.com/gaebabking/products/13676893113",
+ "ns-choice-whitefish-rice":"https://smartstore.naver.com/gaebabking/products/13676893115",
+ "ns-choice-puppy":"https://smartstore.naver.com/gaebabking/products/13676893116",
+ "ns-choice-performance":"https://smartstore.naver.com/gaebabking/products/13676893117",
+ "ns-choice-turkey-barley":"https://smartstore.naver.com/gaebabking/products/13676893118",
+ "ns-choice-chicken-barley":"https://smartstore.naver.com/gaebabking/products/13676893120",
+ "ns-choice-large-breed":"https://smartstore.naver.com/gaebabking/products/13676893121"
+};
 const won = n=> n.toLocaleString("ko-KR")+"원";
 const priceOf = (p,size)=> (PRICE[p.id]||{})[size] || null;
 const soldOut = (p,size)=> (SOLDOUT[p.id]||[]).includes(size);
@@ -940,7 +968,7 @@ function openProduct(id, opt={}){
     </div>
     <div class="two">
       <button class="btn ghost" type="button" data-sample-add="${p.id}">샘플 담기</button>
-      ${buy.mode==="auto"?`<button class="btn primary" type="button" data-subscribe="${p.id}">정기배송 신청</button>`:`<button class="btn primary" type="button" data-order="${p.id}">주문하기</button>`}
+      ${buy.mode==="auto"?`<button class="btn primary" type="button" data-subscribe="${p.id}">정기배송 신청</button>`:`<button class="btn primary" type="button" data-order="${p.id}">스마트스토어에서 구매 ↗</button>`}
     </div>
     <p class="note">미국·독일에서 직접 들여와 정식 통관을 거친 정품만, 유통기한을 관리해서 보내 드려요.</p>`}
     <button class="btn ghost block" type="button" data-close>닫기</button>
@@ -986,11 +1014,9 @@ function orderCard(o){
   </div>`;
 }
 function placeOrder(id){
-  const pt=cur(), p=byId[id];
-  orders.unshift({id:"o"+Date.now(), date:ymd(today()), prodId:id, size:buy.size, qty:1, petId:p.sp===pt.sp?pt.id:null});
-  saveOrders(); closeSheet();
-  toast("주문을 넣었어요. 실제 결제는 네이버 브랜드스토어에서 하게 돼요. (시제품)");
-  go("ship");
+  // 1단계: 결제는 개밥왕 스마트스토어에서 해요. 스토어 주문을 앱 주문내역에 띄우는 건 네이버 커머스 API 연동 뒤에 해요.
+  window.open(STORE_URL[id]||STORE, "_blank", "noopener");
+  toast(`스마트스토어에서 ${szText(buy.size)}을 골라 결제해 주세요.`);
 }
 
 /* ---------- 건강 체크 ---------- */
