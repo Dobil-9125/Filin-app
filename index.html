@@ -14,36 +14,36 @@
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>FILIN 앱 시제품</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
-/* Layout: one phone-width app column, white top bar, bottom tabs. Bright light look taken from the FILIN logo: navy, sunny yellow, heart red, with pastel tiles */
+/* Layout: one phone-width app column, white top bar, bottom tabs. Clean look like current shopping apps: light grey canvas, white borderless cards, one brand blue for actions; the logo keeps FILIN navy and heart red */
 :root{
-  --bg:#fffcf7; --surface:#ffffff; --ink:#1b2847; --muted:#636d86; --line:#ede6da;
-  --slate:#17336b; --slate-ink:#ffffff; --amber:#ffc23d; --amber-soft:#fff3cf; --amber-ink:#6a4900;
-  --coral:#ec5446; --sky:#e7f0ff; --peach:#ffeadf; --mint:#e2f5ea; --lilac:#efe9ff;
-  --good:#2f7a4f; --warn:#b4531a;
-  --display:"Gowun Dodum","Noto Sans KR",system-ui,sans-serif;
-  --body:"Noto Sans KR",system-ui,-apple-system,sans-serif;
-  --r:16px;
+  --bg:#f2f4f6; --surface:#ffffff; --ink:#191f28; --muted:#6b7684; --line:#e5e8eb;
+  --slate:#2f5bea; --slate-ink:#ffffff; --slate-deep:#2349cf; --navy:#17336b;
+  --amber:#ffc83d; --amber-soft:#fff6db; --amber-ink:#7a5200;
+  --coral:#f04452; --sky:#edf2ff; --peach:#fff0eb; --mint:#e8f7ee; --lilac:#f2efff;
+  --good:#12814a; --warn:#c2410c;
+  --display:"Pretendard Variable",Pretendard,"Noto Sans KR",system-ui,-apple-system,sans-serif;
+  --body:"Pretendard Variable",Pretendard,"Noto Sans KR",system-ui,-apple-system,sans-serif;
+  --r:18px;
   color-scheme:light;
 }
 *,*::before,*::after{box-sizing:border-box}
 html,body{height:100%}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;word-break:keep-all;overflow-wrap:anywhere}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
 .app{max-width:460px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;background:var(--bg)}
 @media (min-width:520px){.app{border-left:1px solid var(--line);border-right:1px solid var(--line)}}
 .wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 
 header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);color:var(--slate);border-bottom:1px solid var(--line);padding-block:12px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.logo{font-family:var(--body);font-weight:700;font-size:22px;letter-spacing:.06em;color:var(--slate)}
+.logo{font-family:var(--body);font-weight:800;font-size:22px;letter-spacing:.06em;color:var(--navy)}
 .logo i{color:var(--coral);font-style:normal;font-size:12px;vertical-align:top;margin-left:1px}
 .logo small{font-family:var(--body);font-weight:400;font-size:11px;letter-spacing:.02em;color:var(--muted);margin-left:6px}
-.pet-chip{background:var(--amber-soft);color:var(--amber-ink);border:0;border-radius:999px;padding:5px 12px;font:inherit;font-size:13px;cursor:pointer}
+.pet-chip{background:var(--bg);color:var(--ink);font-weight:600;border:0;border-radius:999px;padding:5px 12px;font:inherit;font-size:13px;cursor:pointer}
 
 main{flex:1;padding-block:18px 110px;display:flex;flex-direction:column;gap:22px}
-h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0}
+h1,h2,h3{font-family:var(--display);font-weight:700;letter-spacing:-.02em;text-wrap:balance;margin:0}
 h1{font-size:26px;line-height:1.3}
 h2{font-size:20px}
 h3{font-size:16px}
@@ -54,12 +54,12 @@ p{margin:0}
 .stack{display:flex;flex-direction:column;gap:10px}
 .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 
-.hello{position:relative;border-radius:22px;overflow:hidden;background:linear-gradient(170deg,var(--sky) 0%,#f4f8ff 55%,var(--amber-soft) 100%);padding:22px 18px 0;display:flex;flex-direction:column;gap:12px}
-.hello h1{font-size:27px;line-height:1.32;color:var(--slate)}
-.hello h1 em{font-style:normal;color:var(--coral)}
+.hello{position:relative;border-radius:24px;overflow:hidden;background:linear-gradient(180deg,#e6edff 0%,#f4f7ff 100%);padding:22px 18px 0;display:flex;flex-direction:column;gap:12px}
+.hello h1{font-size:27px;line-height:1.32;color:var(--ink)}
+.hello h1 em{font-style:normal;color:var(--slate)}
 .hello p{color:var(--muted);font-size:14px;max-width:30ch}
 .hello .duo{display:flex;justify-content:center;align-items:flex-end;gap:0;margin-top:2px;position:relative}
-.hello .duo::before{content:"";position:absolute;left:-18px;right:-18px;bottom:0;height:34px;background:#cfe8c4;border-radius:50% 50% 0 0/100% 100% 0 0}
+.hello .duo::before{content:"";position:absolute;left:-18px;right:-18px;bottom:0;height:34px;background:#d7ebcf;border-radius:50% 50% 0 0/100% 100% 0 0}
 .hello .duo img{position:relative;height:170px;width:auto;max-width:48%;object-fit:contain}
 .hello .duo img+img{margin-left:-14px}
 @media (prefers-reduced-motion:no-preference){.hello .duo img:first-child{animation:wave 2.6s ease-in-out infinite;transform-origin:50% 100%}@keyframes wave{0%,100%{transform:rotate(0)}50%{transform:rotate(-3deg)}}}
@@ -87,7 +87,7 @@ p{margin:0}
 .start .in{padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px}
 .steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
 .steps li{display:grid;grid-template-columns:26px 1fr;gap:10px;align-items:center;font-size:14px}
-.steps li i{font-style:normal;width:26px;height:26px;border-radius:50%;background:var(--amber);color:var(--ink);display:grid;place-items:center;font-weight:700;font-size:13px}
+.steps li i{font-style:normal;width:26px;height:26px;border-radius:50%;background:var(--slate);color:var(--slate-ink);display:grid;place-items:center;font-weight:700;font-size:13px}
 .trust{display:grid;grid-template-columns:110px 1fr;gap:14px;align-items:center;background:var(--mint);border-radius:var(--r);padding:14px}
 .trust img{border-radius:12px;aspect-ratio:1;object-fit:cover}
 .trust ul{margin:6px 0 0;padding-left:18px;font-size:13px;color:var(--ink);display:flex;flex-direction:column;gap:2px}
@@ -97,12 +97,13 @@ p{margin:0}
 .brand-banner b{display:block;font-size:17px}
 .foot{display:flex;flex-direction:column;align-items:center;gap:6px}
 .foot img{width:84px;height:auto}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:0;border-radius:12px;padding:12px 16px;font:inherit;font-weight:500;cursor:pointer;text-decoration:none}
-.btn.primary{background:var(--amber);color:var(--ink);box-shadow:0 3px 0 #e2a21c}
-.btn.dark{background:var(--slate);color:var(--slate-ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:0;border-radius:14px;padding:13px 16px;font:inherit;font-weight:700;cursor:pointer;text-decoration:none}
+.btn.primary{background:var(--slate);color:var(--slate-ink)}
+.btn.primary:hover{background:var(--slate-deep)}
+.btn.dark{background:var(--ink);color:#fff}
 .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
 .btn.block{width:100%}
-.btn:focus-visible,.chip:focus-visible,.tab:focus-visible,.pcard:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.btn:focus-visible,.chip:focus-visible,.tab:focus-visible,.pcard:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--slate);outline-offset:2px}
 
 .quick{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .qcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:4px;cursor:pointer;text-align:left;font:inherit;color:inherit}
@@ -129,12 +130,12 @@ p{margin:0}
 .bsec{display:flex;flex-direction:column;gap:10px;margin-top:6px}.bsec h2{font-size:18px}
 .pcard .name{font-size:14px;font-weight:500;line-height:1.35}
 .badges{display:flex;gap:4px;flex-wrap:wrap}
-.badge{font-size:11px;border-radius:6px;padding:1px 6px;background:var(--bg);color:var(--muted);border:1px solid var(--line)}
+.badge{font-size:11px;font-weight:600;border-radius:6px;padding:2px 6px;background:var(--bg);color:var(--muted);border:0}
 .badge.hot{background:var(--amber-soft);color:var(--amber-ink);border-color:transparent}
 
 .chips{display:flex;gap:6px;flex-wrap:wrap}
 .chip{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 13px;font:inherit;font-size:14px;cursor:pointer}
-.chip[aria-pressed="true"]{background:var(--slate);color:var(--slate-ink);border-color:var(--slate)}
+.chip[aria-pressed="true"]{background:var(--sky);color:var(--slate);border-color:var(--slate);font-weight:600}
 
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:12px}
 label.f{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted)}
@@ -180,7 +181,7 @@ dl.spec dd{margin:0}
 .mini{display:flex;align-items:center;gap:10px;min-width:0}
 .mini img{width:40px;height:40px;object-fit:contain;background:var(--sky);border-radius:50%;padding:3px}
 .ptr{position:fixed;left:50%;top:0;z-index:30;width:40px;height:40px;margin-left:-20px;border-radius:50%;background:var(--surface);box-shadow:0 2px 10px rgba(23,51,107,.18);display:grid;place-items:center;color:var(--slate);font-size:20px;transform:translateY(-60px);opacity:0;pointer-events:none}
-.ptr.ready{background:var(--amber)}
+.ptr.ready{background:var(--slate);color:#fff}
 .ptr.spin span{animation:ptrspin .8s linear infinite}
 @keyframes ptrspin{to{transform:rotate(360deg)}}
 .swipe{position:relative;border-radius:var(--r);overflow:hidden}
@@ -285,12 +286,13 @@ form.card .link{align-self:center}
 /* 데스크톱: 왼쪽 소개·검색 패널 + 가운데 휴대폰 폭 쇼핑 화면 (펫프렌즈·어바웃펫과 같은 구성) */
 .side{display:none}
 @media (min-width:1024px){
-  body{background:linear-gradient(135deg,#fff6dc 0%,#fffcf7 45%,#e7f0ff 100%) fixed}
+  body{background:linear-gradient(135deg,#e9efff 0%,#f2f4f6 55%,#f2f4f6 100%) fixed}
   .side{display:flex;position:fixed;left:0;top:0;bottom:0;width:50%;justify-content:flex-end;align-items:center;padding-right:72px;z-index:1}
   .side-in{width:360px;display:flex;flex-direction:column;gap:22px}
   .side-logo{font-size:40px}
   .side-copy{margin:0;font-size:26px;line-height:1.45;color:var(--ink)}
   .side-copy b{font-weight:800;color:var(--slate)}
+  .side-copy{font-weight:600;letter-spacing:-.02em}
   .side-search{display:flex;align-items:center;background:var(--surface);border:2px solid var(--slate);border-radius:999px;padding:4px 6px 4px 20px}
   .side-search input{flex:1;border:0;outline:0;background:transparent;font:inherit;font-size:15px;padding:10px 0;min-width:0}
   .side-search button{border:0;background:var(--slate);color:#fff;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;cursor:pointer}
@@ -308,6 +310,16 @@ form.card .link{align-self:center}
 }
 .shop-q{display:flex;gap:8px}.shop-q input{flex:1;min-width:0}
 .badge.multi{background:var(--sky);color:var(--slate);font-weight:600}
+/* 요즘 앱 느낌: 회색 바탕 위 테두리 없는 흰 카드, 타일은 흰 카드 + 색 아이콘 */
+.pcard,.card,.qcard,.rec,.start,.article,.ship,.petbar,.day,.chatnav,.petcard:not([aria-pressed="true"]),.msg .bub{border-color:transparent}
+.tiles .tile,.worry{background:var(--surface)}
+.tile .ic{background:var(--sky);color:var(--slate)}
+.t-mint .ic{background:var(--mint);color:#12a150}.t-peach .ic{background:var(--peach);color:#e8590c}.t-amber .ic{background:var(--amber-soft);color:#d99000}
+.t-lilac .ic{background:var(--lilac);color:#7048e8}.t-rose .ic{background:#ffeef1;color:#e64980}
+.worry b{color:var(--ink)}.worry u{color:var(--slate)}
+.trust{background:var(--surface)}
+.pcard .price b,.pricebox b{color:var(--ink)}
+.tab[aria-current="page"]{font-weight:700}
 
 </style>
 </head>
