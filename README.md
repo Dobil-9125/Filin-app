@@ -40,6 +40,20 @@ FILIN(필린) 고객용 앱의 첫 시제품이에요. 휴대폰 화면에 맞�
 
 `index.html`을 고친 뒤에는 `filin-app-onefile.html`도 다시 만들어야 같은 화면이 돼요. (첫 화면 사진은 통합 브랜드관 기획안 PDF에서 뽑은 올리·세리와 브랜드 이미지예요.)
 
+## 맞춤 추천 웹 버전
+
+앱을 설치하지 않은 사람도 링크 하나로 맞춤 추천을 받을 수 있는 웹페이지예요. 로그인이나 저장 없이 바로 써요.
+
+| 파일 | 하는 일 |
+| --- | --- |
+| `recommend.html` | 웹 버전 원본. GitHub Pages에서 https://dobil-9125.github.io/filin-app/recommend.html 로 열려요 (`img/` 폴더 필요) |
+| `recommend-onefile.html` | 사진까지 파일 하나에 담은 버전. 카톡·메일로 보내거나 다른 곳에 올리기 좋아요 |
+
+- 질문: 강아지/고양이 → 나이 → 몸무게(강아지만) → 찾는 밥 → 피할 재료 → 활동량. 앱은 나이·체중을 프로필에서 가져오니 웹에서는 질문으로 받아요.
+- 제품 데이터(`P`, `PRICE`, `SOLDOUT`), 알러지·취향 목록, `function recommend(` 는 `index.html`에서 그대로 복사했어요. 앱에서 제품·가격·추천 규칙을 고치면 `recommend.html`에도 같은 부분을 붙여 넣고 `recommend-onefile.html`을 다시 만들어 주세요.
+- 결과는 '함께 든 원료' 주의 문구(예: 주 단백질은 곤충이지만 닭고기지방이 들어 있어요)와 용량별 가격·정가·정기배송가·일시품절을 보여 줘요.
+- 답은 주소 끝(`#sp=dog&st=adult&...`)에 담겨서 '결과 링크 복사'로 같은 결과를 공유할 수 있어요.
+
 ## 회원가입·로그인 (Supabase)
 
 - 프로젝트 주소와 공개 키(publishable)는 `index.html`의 `SUPABASE_URL`, `SUPABASE_KEY`에 있어요. 공개 키는 앱에 넣어도 되는 키예요. secret/service_role 키는 절대 넣지 마세요.
