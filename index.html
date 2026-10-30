@@ -297,7 +297,7 @@ form.card .link{align-self:center}
 
 <script src="vendor/supabase-js-2.117.3.js"></script>
 <script>
-/* ---------- 제품 데이터 (블로그 원고·수불부 기준) ---------- */
+/* ---------- 제품 데이터 (개밥왕 스마트스토어 상세페이지 기준, 2026-10-30) ---------- */
 const BRANDS = {
   tow:{name:"토우", en:"Taste of the Wild", line:"미국 · 야생에서 영감받은 동물성 단백질 중심"},
   pv:{name:"퓨어비타", en:"PureVita", line:"미국 · 한 레시피에 동물성 단백질 하나"},
@@ -306,17 +306,18 @@ const BRANDS = {
 };
 // sp: dog/cat · st: 대상 단계 · prot: 주 단백질 키 · gf: 그레인프리 · ltd: 동물성 단백질 하나 · also: 주 단백질 말고 들어 있는 알러지 원료 {키:"어디에"} · kcal: kcal/kg (컵 표기만 있으면 g으로 나눈 값)
 const P = [
- {id:"tow-pacific-stream-dog",b:"tow",n:"퍼시픽 스트림",sp:"dog",st:["adult"],prot:"fish",pl:"훈연 향 연어",gf:1,ltd:0,hot:1,kcal:3600,sizes:[2,4.5,5.6,12.2,18],pt:"토우 대표 그레인프리 레시피. 동물성 단백질을 연어와 생선에서만 얻어요.",tags:["picky","fish"]},
- {id:"tow-pacific-stream-puppy",b:"tow",n:"퍼시픽 스트림 퍼피",sp:"dog",st:["puppy"],prot:"fish",pl:"훈연 향 연어",gf:1,ltd:0,sizes:[2,5.6,12.2],pt:"성장기 강아지를 위한 그레인프리 레시피예요.",tags:["fish"]},
- {id:"tow-prey-trout-dog",b:"tow",n:"PREY 송어",sp:"dog",st:["adult","senior"],prot:"fish",pl:"송어",gf:1,ltd:1,also:{chicken:"닭 지방"},sizes:[3.63],pt:"동물성 단백질은 송어 하나인 제한 원료 레시피예요. 지방원으로 닭 지방이 들어가요.",tags:["fish","novel"]},
- {id:"tow-prey-turkey-dog",b:"tow",n:"PREY 칠면조",sp:"dog",st:["adult","senior"],prot:"turkey",pl:"칠면조",gf:1,ltd:1,sizes:[3.63],pt:"동물성 단백질 하나만 담은 제한 원료 레시피예요.",tags:[]},
- {id:"tow-canyon-river-cat",b:"tow",n:"캐니언 리버",sp:"cat",st:["kitten","adult","senior"],prot:"fish",pl:"송어 · 훈연 향 연어",gf:1,ltd:0,hot:1,sizes:[1.36,2,4.5,6.6],pt:"생선파 고양이를 위한 그레인프리 레시피예요.",tags:["picky","fish"]},
- {id:"tow-prey-turkey-cat",b:"tow",n:"PREY 칠면조 (고양이)",sp:"cat",st:["adult","senior"],prot:"turkey",pl:"칠면조",gf:1,ltd:1,sizes:[2.72],pt:"고양이용 제한 원료 레시피예요.",tags:[]},
- {id:"pv-dog-salmon-peas",b:"pv",n:"연어 & 완두",sp:"dog",st:["puppy","adult","senior"],prot:"fish",pl:"연어",gf:1,ltd:1,pt:"생선 단일 단백질 그레인프리. 대형견 퍼피를 포함한 전 연령용이에요.",tags:["fish"]},
- {id:"pv-dog-pork-blueberry",b:"pv",n:"돼지고기 & 블루베리",sp:"dog",st:["adult","senior"],prot:"pork",pl:"돼지고기",gf:1,ltd:1,pt:"닭·소 말고 다른 단백질을 찾을 때 고르는 레시피예요.",tags:["novel"]},
- {id:"pv-dog-chicken-brownrice",b:"pv",n:"치킨 & 현미",sp:"dog",st:["adult","senior"],prot:"chicken",pl:"닭고기",gf:0,ltd:1,also:{chicken:"닭 지방"},pt:"통곡물을 담은 그레인 프렌들리 레시피예요.",tags:[]},
- {id:"pv-cat-salmon-peas",b:"pv",n:"캣 연어 & 완두",sp:"cat",st:["adult","senior"],prot:"fish",pl:"연어",gf:1,ltd:1,sizes:[5.44],pt:"예민한 고양이를 위한 그레인프리 단일 단백질이에요.",tags:["fish"]},
- {id:"pv-cat-chicken-peas",b:"pv",n:"캣 치킨 & 완두",sp:"cat",st:["kitten","adult","senior"],prot:"chicken",pl:"닭고기",gf:1,ltd:1,also:{chicken:"닭 지방"},hot:1,sizes:[1.81,5.44],pt:"고양이용 그레인프리. 필린에서 많이 찾는 고양이 사료예요.",tags:["picky"]},
+ {id:"tow-pacific-stream-dog",b:"tow",n:"훈제연어 & 고구마",sp:"dog",st:["adult"],prot:"fish",pl:"연어 · 청어",gf:1,ltd:0,also:{chicken:"천연 향미제(닭)"},hot:1,kcal:3600,sizes:[2,4.5,5.6,12.2,18.14],pt:"토우 대표 그레인프리 레시피(퍼시픽 스트림). 동물성 단백질은 연어와 생선에서 얻어요.",tags:["picky","fish"]},
+ {id:"tow-pacific-stream-puppy",b:"tow",n:"훈제연어 & 고구마 퍼피",sp:"dog",st:["puppy"],prot:"fish",pl:"연어 · 청어",gf:1,ltd:0,also:{chicken:"천연 향미제(닭)"},kcal:3661,sizes:[2,5.6,12.2],pt:"성장기 강아지를 위한 그레인프리 레시피예요.",tags:["fish"]},
+ {id:"tow-prey-trout-dog",b:"tow",n:"PREY 송어",sp:"dog",st:["adult","senior"],prot:"fish",pl:"송어",gf:1,ltd:0,also:{chicken:"닭 분말"},sizes:[3.63,11.34],pt:"송어가 주 단백질인 제한 원료 레시피예요. 닭 분말과 연어 오일도 들어 있어요.",tags:["fish","novel"]},
+ {id:"tow-prey-turkey-dog",b:"tow",n:"PREY 칠면조",sp:"dog",st:["adult","senior"],prot:"turkey",pl:"칠면조",gf:1,ltd:0,also:{chicken:"닭 분말",fish:"연어오일"},kcal:3670,sizes:[3.63,11.34],pt:"칠면조가 주 단백질인 제한 원료 레시피예요. 닭 분말과 연어오일도 들어 있어요.",tags:[]},
+ {id:"tow-canyon-river-cat",b:"tow",n:"송어 & 훈제연어 (고양이)",sp:"cat",st:["kitten","adult","senior"],prot:"fish",pl:"송어 · 연어",gf:1,ltd:0,also:{chicken:"천연 향미제(닭)"},hot:1,kcal:3741,sizes:[1.36,2,4.5,6.6],pt:"생선파 고양이를 위한 그레인프리 레시피(캐니언 리버)예요.",tags:["picky","fish"]},
+ {id:"tow-prey-turkey-cat",b:"tow",n:"PREY 칠면조 (고양이)",sp:"cat",st:["kitten","adult","senior"],prot:"turkey",pl:"칠면조",gf:1,ltd:0,also:{chicken:"닭 분말",fish:"연어오일"},kcal:3689,sizes:[2.72],pt:"칠면조가 주 단백질인 고양이용 제한 원료 레시피예요. 닭 분말도 들어 있어요.",tags:[]},
+ {id:"pv-dog-salmon-peas",b:"pv",n:"연어 & 완두",sp:"dog",st:["puppy","adult","senior"],prot:"fish",pl:"연어",gf:1,ltd:1,also:{},kcal:3945,sizes:[1.81,5.44,11.3],pt:"동물성 원료가 연어 하나인 그레인프리 전연령 레시피예요.",tags:["fish"]},
+ {id:"pv-dog-pork-blueberry",b:"pv",n:"포크 & 블루베리",sp:"dog",st:["puppy","adult","senior"],prot:"pork",pl:"돼지고기",gf:1,ltd:0,also:{fish:"연어오일"},kcal:3848,sizes:[1.81,5.44,11.3],pt:"닭·소 말고 다른 단백질을 찾을 때 고르는 그레인프리 전연령 레시피예요.",tags:["novel"]},
+ {id:"pv-dog-turkey-sweetpotato",b:"pv",n:"칠면조 & 고구마",sp:"dog",st:["puppy","adult","senior"],prot:"turkey",pl:"칠면조",gf:1,ltd:0,also:{fish:"연어유"},sizes:[1.81,5.44,11.3],pt:"칠면조고기와 고구마로 만든 그레인프리 전연령 레시피예요.",tags:[]},
+ {id:"pv-dog-chicken-brownrice",b:"pv",n:"치킨 & 현미",sp:"dog",st:["puppy","adult","senior"],prot:"chicken",pl:"닭고기",gf:0,ltd:0,also:{fish:"연어오일"},kcal:3786,sizes:[1.81,5.44,11.3],pt:"현미·귀리·보리를 담은 전연령 레시피예요.",tags:[]},
+ {id:"pv-cat-salmon-peas",b:"pv",n:"캣 연어 & 완두",sp:"cat",st:["adult","senior"],prot:"fish",pl:"연어",gf:1,ltd:1,also:{},sizes:[1.81,5.44],pt:"예민한 고양이를 위한 그레인프리 단일 단백질이에요.",tags:["fish"]},
+ {id:"pv-cat-chicken-peas",b:"pv",n:"캣 치킨 & 완두",sp:"cat",st:["kitten","adult","senior"],prot:"chicken",pl:"닭고기",gf:1,ltd:1,also:{},hot:1,sizes:[1.81,5.44],pt:"고양이용 그레인프리. 필린에서 많이 찾는 고양이 사료예요.",tags:["picky"]},
  {id:"ns-choice-chicken-barley",b:"ns",n:"초이스 치킨 & 보리",sp:"dog",st:["adult"],prot:"chicken",pl:"닭고기",gf:0,ltd:0,also:{turkey:"천연 향미제(칠면조)"},kcal:3474,sizes:[2.27,18.14],pt:"닭고기 분말과 보리·수수로 만든 기본 데일리 사료예요. 글루코사민·콘드로이틴이 들어 있어요.",tags:[]},
  {id:"ns-choice-turkey-barley",b:"ns",n:"초이스 칠면조 & 보리",sp:"dog",st:["adult"],prot:"turkey",pl:"칠면조",gf:0,ltd:0,also:{chicken:"닭지방·천연 향미제(닭)"},kcal:3492,sizes:[18.14],pt:"칠면조 분말이 주 단백질인 데일리 사료예요. 닭지방과 닭 향미제도 들어 있어요.",tags:[]},
  {id:"ns-choice-whitefish-rice",b:"ns",n:"초이스 화이트피쉬 & 라이스",sp:"dog",st:["adult"],prot:"fish",pl:"대구",gf:0,ltd:1,also:{},kcal:3492,sizes:[2.27,18.14],pt:"대구 어분이 유일한 동물성 원료인 데일리 사료예요. 현미·오트밀·보리가 들어가요.",tags:["fish"]},
@@ -326,9 +327,9 @@ const P = [
  {id:"ns-gf-senior",b:"ns",n:"그레인프리 시니어 칠면조",sp:"dog",st:["senior"],prot:"turkey",pl:"칠면조",gf:1,ltd:0,also:{chicken:"천연 향미제(닭)",fish:"청어 어분"},kcal:3600,sizes:[1.81,5.44,11.79],pt:"7살 이상 아이를 위한 그레인프리 레시피예요. 칠면조가 주 단백질이고 렌틸콩·병아리콩이 들어가요.",tags:[]},
  {id:"ns-gf-chicken-peas",b:"ns",n:"그레인프리 치킨 & 완두",sp:"dog",st:["adult"],prot:"chicken",pl:"닭고기",gf:1,ltd:0,also:{turkey:"천연 향미제(칠면조)",fish:"연어 분말"},kcal:3991,sizes:[1.81,5.44,11.79],pt:"곡물을 빼고 싶을 때 고르는 데일리 레시피예요. 조단백 28%, 조지방 18%예요.",tags:[]},
  {id:"ns-cat-kitten-country",b:"ns",n:"캣 & 키튼 컨트리 셀렉트",sp:"cat",st:["kitten","adult"],prot:"chicken",pl:"닭고기 · 오리",gf:1,ltd:0,also:{turkey:"칠면조 분말",fish:"천연 향미제(어류)·연어유"},kcal:4165,sizes:[1.81,5.44],pt:"키튼부터 성묘까지 먹일 수 있는 그레인프리 레시피예요. 조단백 36%예요.",tags:[]},
- {id:"bellfor-naturgut-coldpressed",b:"bf",n:"네이처굿 슈마우스",sp:"dog",st:["adult","senior"],prot:"insect",pl:"곤충 (동애등에 유충)",gf:1,ltd:0,pt:"벨포아 저온압착 대표 제품. 곡물 무첨가예요.",tags:["novel"]},
- {id:"bellfor-landgut",b:"bf",n:"란트굿 슈마우스",sp:"dog",st:["adult","senior"],prot:"insect",pl:"곤충 (동애등에 유충)",gf:1,ltd:0,pt:"벨포아 곤충 건사료의 기본형. 곡물 무첨가예요.",tags:["novel"]},
- {id:"bellfor-landgut-mini",b:"bf",n:"란트굿 슈마우스 미니",sp:"dog",st:["adult","senior"],prot:"insect",pl:"곤충 (동애등에 유충)",gf:1,ltd:0,small:1,pt:"작은 알갱이로 만든 소형견용이에요.",tags:["novel","small"]}
+ {id:"bellfor-naturgut-coldpressed",b:"bf",n:"네이처굿 슈마우스 콜드프레스",sp:"dog",st:["adult","senior"],prot:"insect",pl:"곤충 (건조 곤충 23%)",gf:1,ltd:0,also:{chicken:"가금류 지방(종류 표기 없음)",fish:"연어 오일"},kcal:3538,sizes:[4],pt:"저온압착으로 만든 8mm 원통형 알갱이예요. 콘드로이틴·글루코사민이 들어 있어요.",tags:["novel"]},
+ {id:"bellfor-landgut",b:"bf",n:"란트굿 슈마우스 라지바이트",sp:"dog",st:["adult","senior"],prot:"insect",pl:"곤충 (건조 곤충 26%)",gf:1,ltd:0,also:{chicken:"닭고기 지방",fish:"연어 오일"},large:1,kcal:3395,sizes:[7.5],pt:"16.5mm 큰 알갱이로 만든 곤충 단백질 사료예요.",tags:["novel","large"]},
+ {id:"bellfor-landgut-mini",b:"bf",n:"란트굿 슈마우스 미니",sp:"dog",st:["adult","senior"],prot:"insect",pl:"곤충 (동애등에)",gf:1,ltd:0,also:{chicken:"닭고기지방",fish:"연어오일"},small:1,kcal:3450,sizes:[1.2,2.5,7.5],pt:"하이포알러지 눈물사료로 알려진 8mm 작은 알갱이예요. 조단백 28%, 조지방 18%예요.",tags:["novel","small"]}
 ];
 const byId = Object.fromEntries(P.map(p=>[p.id,p]));
 const STAGE = {puppy:"퍼피",kitten:"키튼",adult:"성견·성묘",senior:"시니어"};
