@@ -825,7 +825,7 @@ function openProduct(id, opt={}){
     <div class="ph"><img src="${img(p.id)}" alt="${esc(br.name+" "+p.n)}"></div>
     <div><span class="small muted">${br.name} · ${br.en}</span><h2>${esc(p.n)}</h2></div>
     <p>${esc(p.pt)}</p>
-    <div class="seg">${[["info","정보·구매"],["review",`후기 ${(reviews[p.id]||[]).length+3}`],["qna","Q&A"]].map(([v,l])=>`<button type="button" data-tab="${v}" aria-pressed="${buy.tab===v}">${l}</button>`).join("")}</div>
+    <div class="seg">${[["info","정보·구매"],["review",`후기 ${reviewCount(p)||""}`.trim()],["qna","Q&A"]].map(([v,l])=>`<button type="button" data-tab="${v}" aria-pressed="${buy.tab===v}">${l}</button>`).join("")}</div>
     ${buy.tab==="review"?reviewTab(p):buy.tab==="qna"?qnaTab(p):`
     <dl class="spec">
       <dt>대상</dt><dd>${spName(p.sp)} · ${p.st.map(s=>stageName(s,p.sp)).join(", ")}</dd>
@@ -1008,20 +1008,56 @@ function faqs(p){
   return list;
 }
 const stars = n=> "★★★★★".slice(0,n)+"☆☆☆☆☆".slice(0,5-n);
+// 후기: 로그인 앱에서는 모든 고객이 함께 보는 Supabase 표(product_reviews)에, 파일로 연 화면에서는 이 휴대폰에만 저장해요.
+let shared = {};   // {prodId:{list:[...], loaded, error}}
+async function loadReviews(pid){
+  if(!sb) return;
+  shared[pid]={...(shared[pid]||{}), loading:true};
+  const {data,error}=await sb.from("product_reviews").select("id,product_id,user_id,nickname,pet,stars,body,created_at").eq("product_id",pid).order("created_at",{ascending:false}).limit(50);
+  shared[pid]={list:data||[], loaded:true, error:!!error};
+  if(buy.id===pid && buy.tab==="review" && document.querySelector(".sheet")) openProduct(pid);
+}
+function realReviews(p){
+  if(sb && shared[p.id] && shared[p.id].loaded && !shared[p.id].error) return shared[p.id].list.map(r=>({id:r.id, mine:user&&r.user_id===user.id, stars:r.stars, text:r.body, who:`${r.nickname||"보호자"}${r.pet?" · "+r.pet:""}`, date:r.created_at.slice(0,10)}));
+  return (reviews[p.id]||[]).map(r=>({mine:true, local:true, stars:r.stars, text:r.text, who:`${r.pet} 보호자`, date:r.date}));
+}
+const reviewCount = p=> realReviews(p).length;
 function reviewTab(p){
-  const mine=reviews[p.id]||[], ex=exampleReviews(p), all=[...mine,...ex];
-  const avg=(all.reduce((s,r)=>s+r.stars,0)/all.length).toFixed(1);
-  return `<div class="rating"><b>${avg}</b><span class="stars">${stars(Math.round(avg))}</span><span class="small muted">후기 ${all.length}개</span></div>
+  if(sb && !(shared[p.id]&&(shared[p.id].loaded||shared[p.id].loading))) loadReviews(p.id);
+  const st=shared[p.id]||{}, loading=sb && !st.loaded, real=realReviews(p), ex=real.length?[]:exampleReviews(p);
+  const base=real.length?real:ex, avg=base.length?(base.reduce((s,r)=>s+r.stars,0)/base.length).toFixed(1):"0.0";
+  const canWrite=!sb || user;
+  return `<div class="rating"><b>${avg}</b><span class="stars">${stars(Math.round(avg))}</span><span class="small muted">${real.length?`후기 ${real.length}개`:"아직 후기가 없어요 · 예시 평균"}</span></div>
     <div class="card">
       <b>후기 쓰기</b>
-      <div class="chips">${[1,2,3,4,5].map(n=>`<button class="chip star" type="button" data-star="${n}" aria-pressed="${draftReview.stars>=n}">★</button>`).join("")}</div>
+      ${canWrite?`<div class="chips">${[1,2,3,4,5].map(n=>`<button class="chip star" type="button" data-star="${n}" aria-pressed="${draftReview.stars>=n}" aria-label="별 ${n}개">★</button>`).join("")}</div>
       <textarea id="r-text" maxlength="300" placeholder="우리 아이 반응, 알갱이 크기, 바꾸는 과정처럼 다른 보호자에게 도움이 될 이야기를 들려주세요.">${esc(draftReview.text)}</textarea>
-      <button class="btn dark" type="button" data-savereview="${p.id}">후기 남기기</button>
-      <p class="small muted">효과를 단정하는 표현(예: 며칠 만에 나았어요)은 실제 서비스에서 노출이 제한될 수 있어요.</p>
+      <button class="btn dark" type="button" data-savereview="${p.id}" ${draftReview.busy?"disabled":""}>${draftReview.busy?"올리는 중…":"후기 남기기"}</button>
+      <p class="small muted">${sb?"후기는 모든 고객에게 닉네임과 아이 이름으로 보여요. ":""}효과를 단정하는 표현(예: 며칠 만에 나았어요)은 실제 서비스에서 노출이 제한될 수 있어요.</p>`
+      :`<p class="small muted">후기는 로그인한 회원만 쓸 수 있어요. 별점과 후기는 다른 보호자에게도 보여요.</p><button class="btn primary" type="button" data-go="account">로그인하고 후기 쓰기</button>`}
     </div>
-    ${mine.map(r=>`<div class="review"><div class="section-head"><span class="stars">${stars(r.stars)}</span><span class="badge hot">내 후기</span></div><p>${esc(r.text)}</p><span class="small muted">${esc(r.pet)} 보호자 · ${fmt(parseYmd(r.date))}</span></div>`).join("")}
-    <p class="small muted">아래는 화면을 보여 드리려고 만든 <b>예시 후기</b>예요. 실제 고객 후기가 아니에요.</p>
-    ${ex.map(r=>`<div class="review ex"><div class="section-head"><span class="stars">${stars(r.stars)}</span><span class="badge">예시</span></div><p>${esc(r.text)}</p><span class="small muted">${r.who}</span></div>`).join("")}`;
+    ${loading?`<p class="small muted">후기를 불러오는 중…</p>`:""}
+    ${st.error?`<p class="small muted">후기를 불러오지 못했어요. 잠시 뒤 다시 열어 주세요.</p>`:""}
+    ${real.map(r=>`<div class="review"><div class="section-head"><span class="stars" aria-label="별 ${r.stars}개">${stars(r.stars)}</span>${r.mine?`<span class="badge hot">내 후기</span>`:""}</div><p>${esc(r.text)}</p><div class="section-head"><span class="small muted">${esc(r.who)} · ${fmt(parseYmd(r.date))}</span>${r.mine&&r.id?`<button class="link" type="button" data-delreview="${r.id}">지우기</button>`:""}</div></div>`).join("")}
+    ${ex.length?`<p class="small muted">아래는 화면을 보여 드리려고 만든 <b>예시 후기</b>예요. 실제 고객 후기가 아니에요.</p>
+    ${ex.map(r=>`<div class="review ex"><div class="section-head"><span class="stars">${stars(r.stars)}</span><span class="badge">예시</span></div><p>${esc(r.text)}</p><span class="small muted">${r.who}</span></div>`).join("")}`:""}`;
+}
+async function saveReview(pid){
+  const text=draftReview.text.trim();
+  if(!text){ toast("후기 내용을 적어 주세요."); return; }
+  if(!sb){ (reviews[pid]=reviews[pid]||[]).unshift({stars:draftReview.stars,text,date:ymd(today()),pet:cur().name}); store.set("reviews",reviews); draftReview={stars:5,text:""}; toast("후기를 남겼어요. 고마워요!"); openProduct(pid); return; }
+  if(!user){ toast("로그인하면 후기를 남길 수 있어요."); go("account"); return; }
+  draftReview.busy=true; openProduct(pid);
+  const nick=(user.user_metadata&&user.user_metadata.nickname)||"보호자", pt=cur();
+  const {error}=await sb.from("product_reviews").insert({product_id:pid, stars:draftReview.stars, body:text, nickname:nick.slice(0,20), pet:pt.example?"":`${pt.name} (${spName(pt.sp)})`.slice(0,40)});
+  draftReview.busy=false;
+  if(error){ toast("후기를 올리지 못했어요. 잠시 뒤 다시 시도해 주세요."); openProduct(pid); return; }
+  draftReview={stars:5,text:""}; toast("후기를 남겼어요. 고마워요!"); loadReviews(pid);
+}
+async function deleteReview(id){
+  const {error}=await sb.from("product_reviews").delete().eq("id",id);
+  if(error){ toast("지우지 못했어요."); return; }
+  toast("후기를 지웠어요."); loadReviews(buy.id);
 }
 function qnaTab(p){
   const mine=questions[p.id]||[];
@@ -1300,7 +1336,8 @@ document.addEventListener("click",e=>{
   else if(d.reorder){ const o=orders.find(x=>x.id===d.reorder); openProduct(o.prodId,{reset:true,size:o.size}); }
   else if(d.review){ openProduct(d.review,{reset:true,tab:"review"}); }
   else if(d.star){ draftReview.stars=+d.star; openProduct(buy.id); }
-  else if(d.savereview){ if(!draftReview.text.trim()){ toast("후기 내용을 적어 주세요."); return; } (reviews[d.savereview]=reviews[d.savereview]||[]).unshift({stars:draftReview.stars,text:draftReview.text.trim(),date:ymd(today()),pet:cur().name}); store.set("reviews",reviews); draftReview={stars:5,text:""}; toast("후기를 남겼어요. 고마워요!"); openProduct(buy.id); }
+  else if(d.savereview){ saveReview(d.savereview); }
+  else if(d.delreview){ deleteReview(+d.delreview); }
   else if(d.askq){ if(!draftQ.trim()){ toast("질문을 적어 주세요."); return; } (questions[d.askq]=questions[d.askq]||[]).unshift({text:draftQ.trim(),date:ymd(today())}); store.set("questions",questions); draftQ=""; toast("질문을 남겼어요. 답변이 오면 알려 드릴게요. (시제품)"); openProduct(buy.id); }
   else if(d.chk){ todayLog[d.chk]=d.val; render(false); }
   else if("savelog" in d){ const pt=cur(); const e={...todayLog}; delete e.pet; (logs[pt.id]=logs[pt.id]||{})[ymd(today())]=e; saveLogs(); toast(level(e)==="bad"?"저장했어요. 살펴봐야 할 신호가 있어요.":"오늘 기록을 저장했어요."); render(false); }
