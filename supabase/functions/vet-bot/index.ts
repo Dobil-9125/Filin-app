@@ -40,7 +40,7 @@ const RULES = `너는 FILIN(필린) 앱의 반려동물 건강 안내 도우미�
 
 `;
 
-// 수의 지식 자료 rev 64 (FILIN 수의 지식 자료 문서에서 그대로 옮김)
+// 수의 지식 자료 rev 88 (FILIN 수의 지식 자료 문서에서 그대로 옮김)
 const KNOWLEDGE = `
 # FILIN 수의 지식 자료 (AI 봇용)
 
@@ -388,7 +388,7 @@ Merck·코넬·FDA 자료로 확인함. 독성 음식은 **먹은 양이 적어 
 
 **봇 답변 원칙**: 독성 음식을 먹었다는 질문에는 "양이 적으니 괜찮다"고 말하지 않고, 바로 동물병원에 전화하도록 안내해요. 집에서 토하게 하는 방법은 알려 주지 않아요. 간식 질문에는 위 목록에 있는지 먼저 확인해요.
 
-출처: [Merck 보호자용: 음식 위험](https://www.merckvetmanual.com/special-pet-topics/poisoning/food-hazards) (초콜릿 6\\~12시간·종류별 위험도, 포도 1\\~3일 신장 손상, 자일리톨 30분·간 손상, 마카다미아, 빵 반죽) · [Merck: 양파·마늘 중독](https://www.merckvetmanual.com/toxicology/food-hazards/garlic-and-onion-allium-spp-toxicosis-in-animals) (고양이가 가장 약함, 익힌 양파 1티스푼 미만도 고양이에게 중독, 3\\~5일 뒤 빈혈) · [Merck: 포도·건포도 중독](https://www.merckvetmanual.com/toxicology/food-hazards/grape-raisin-and-tamarind-vitis-spp-tamarindus-spp-toxicosis-in-dogs) · [코넬 고양이 건강센터: 백합 등 부활절 위험](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/cat-health-news/easter-peril-look-out-lilies-and-other-items) (한 입으로도 신장 손상, 수의사 지시 없이 토하게 하지 않기) · [FDA: 자일리톨과 강아지](https://www.fda.gov/consumers/consumer-updates/paws-xylitol-its-dangerous-dogs) (함유 제품, 10\\~60분 저혈당, 12\\~24시간 지연). 술·고양이 퍼메트린·아세트아미노펜 내용은 아직 원문 확인 전이에요 (ASPCA 사이트는 이 환경에서 열리지 않았어요).
+출처: [Merck 보호자용: 음식 위험](https://www.merckvetmanual.com/special-pet-topics/poisoning/food-hazards) (초콜릿 6\\~12시간·종류별 위험도, 포도 1\\~3일 신장 손상, 자일리톨 30분·간 손상, 마카다미아, 빵 반죽) · [Merck: 양파·마늘 중독](https://www.merckvetmanual.com/toxicology/food-hazards/garlic-and-onion-allium-spp-toxicosis-in-animals) (고양이가 가장 약함, 익힌 양파 1티스푼 미만도 고양이에게 중독, 3\\~5일 뒤 빈혈) · [Merck: 포도·건포도 중독](https://www.merckvetmanual.com/toxicology/food-hazards/grape-raisin-and-tamarind-vitis-spp-tamarindus-spp-toxicosis-in-dogs) · [코넬 고양이 건강센터: 백합 등 부활절 위험](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/cat-health-news/easter-peril-look-out-lilies-and-other-items) (한 입으로도 신장 손상, 수의사 지시 없이 토하게 하지 않기) · [FDA: 자일리톨과 강아지](https://www.fda.gov/consumers/consumer-updates/paws-xylitol-its-dangerous-dogs) (함유 제품, 10\\~60분 저혈당, 12\\~24시간 지연) · [ASPCA: 먹이면 안 되는 사람 음식](https://www.aspca.org/pet-care/aspca-poison-control/people-foods-avoid-feeding-your-pets) (술, 반죽, 우유, 마카다미아 24\\~72시간 회복, 날고기·날달걀·뼈, 자일리톨 12\\~24시간 간 손상, 소금) · [ASPCA: 고양이 독성 물질](https://www.aspca.org/news/feline-toxins-steer-clear-kitten-season) (강아지용 퍼메트린 벼룩약은 고양이에게 독, 백합 신장 손상) · [ASPCA: 종마다 다른 독성](https://www.aspca.org/news/not-all-pets-are-same-why-species-matters-pet-toxins) (아세트아미노펜·이부프로펜은 한 알도 위험).
 
 ## 시기별 급여 (어린 시기·대형견 자견·노령)
 
@@ -413,7 +413,7 @@ Merck·코넬 자료로 확인함. 어린 시기에는 **성장기용(퍼피·�
 
 **대형견 자견**
 
-- 다 컸을 때 23kg(50파운드)을 넘을 것 같은 강아지는 **대형견 자견용 사료**(또는 포장에 "대형견 성장 포함"이라고 적힌 사료)를 줘요. 미국 AAFCO 기준선은 32kg(70파운드)이지만 Tufts 영양팀은 23kg을 더 안전한 기준으로 봐요.
+- 다 컸을 때 32kg(70파운드)을 넘을 것 같은 강아지는 **대형견 자견용 사료**(또는 포장에 "대형견 성장 포함"이라고 적힌 사료)를 줘요. 미국 AAFCO 기준선이 32kg(70파운드)이고, 더 보수적으로 23kg(50파운드)부터 대형견용을 고르자는 의견도 있어요 (Tufts). 그 사이 체중이 예상되면 수의사와 상의해요.
 - 대형견 자견은 칼슘이 너무 많거나 적으면 뼈 성장에 문제가 생길 수 있어요. 수의사 지시 없이 칼슘·뼈 영양제를 더하지 않아요.
 - 통통하게 키우기보다 날씬하게(체형점수 4\\~5점) 천천히 키워요.
 
@@ -434,7 +434,7 @@ Merck·코넬 자료로 확인함. 어린 시기에는 **성장기용(퍼피·�
 
 **봇 답변 원칙**: 나이·예상 성견 체중·체형을 먼저 물어보고 안내해요. "몇 살부터 시니어 사료를 꼭 먹여야 한다"고 단정하지 않고, 대형견 자견에게 칼슘 영양제를 권하지 않아요.
 
-출처: [Merck 보호자용: 강아지 돌보기](https://www.merckvetmanual.com/dog-owners/routine-care-of-dogs/puppy-care) (나이별 끼니 표, 7\\~8주 이유, 대형견 거의 2년) · [코넬: 고양이 밥 몇 번](https://www.vet.cornell.edu/departments/cornell-feline-health-center/health-information/feline-health-topics/how-often-should-you-feed-your-cat) · [코넬: 고양이 급여](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feeding-your-cat) (육식 동물, 우유) · [코넬: 나이 든 고양이 돌보기](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/loving-care-older-cats) (12\\~14살, 6개월 검진) · [Tufts: 대형견 자견 사료](https://sites.tufts.edu/petfoodology/2017/02/24/confused-about-what-to-feed-your-large-breed-puppy-new-rules-may-help/) · [Tufts: 시니어 사료는 언제](https://sites.tufts.edu/petfoodology/2016/03/08/when-should-i-switch-my-pet-to-a-senior-diet/). Tufts 두 글은 이번에 원문 페이지가 열리지 않아 검색 요약으로만 확인했어요. 다시 확인이 필요해요.
+출처: [Merck 보호자용: 강아지 돌보기](https://www.merckvetmanual.com/dog-owners/routine-care-of-dogs/puppy-care) (나이별 끼니 표, 7\\~8주 이유, 대형견 거의 2년) · [코넬: 고양이 밥 몇 번](https://www.vet.cornell.edu/departments/cornell-feline-health-center/health-information/feline-health-topics/how-often-should-you-feed-your-cat) · [코넬: 고양이 급여](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feeding-your-cat) (육식 동물, 우유) · [코넬: 나이 든 고양이 돌보기](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/loving-care-older-cats) (12\\~14살, 6개월 검진) · [Tufts: 대형견 자견 사료](https://sites.tufts.edu/petfoodology/2017/02/24/confused-about-what-to-feed-your-large-breed-puppy-new-rules-may-help/) · [Tufts: 시니어 사료는 언제](https://sites.tufts.edu/petfoodology/2016/03/08/when-should-i-switch-my-pet-to-a-senior-diet/) (Tufts 두 글: AAFCO 기준 70파운드·더 보수적으로 50파운드, "시니어"는 법적 정의가 없음, 나이만으로 단백질을 줄이지 않기, 건강하면 꼭 바꿀 필요 없음).
 
 ## 예방접종·구충·심장사상충
 
@@ -464,7 +464,7 @@ WSAVA 2024 접종 가이드라인·Merck 자료로 확인함. 접종과 구충 �
 
 - 모기가 옮겨요. 강아지는 **6\\~8주부터 예방약을 시작해 1년 내내** 주는 것을 권해요. 겨울에 끊었다가 다시 시작하면 빈틈이 생길 수 있어요.
 - 예방약을 먹는 강아지도 **매년 검사**를 받아요.
-- 고양이도 감염될 수 있고, 고양이는 안전한 치료법이 마땅하지 않아서 예방이 중요해요. 실내 고양이도 모기가 들어오면 감염될 수 있어요.
+- 고양이도 감염될 수 있고, 고양이는 승인된 치료약이 없고 강아지 약은 고양이에게 안전하지 않아서 예방이 유일한 보호 방법이에요. 실내 고양이도 모기가 들어오면 감염될 수 있어요.
 
 **병원에 가야 할 신호**
 
@@ -475,7 +475,7 @@ WSAVA 2024 접종 가이드라인·Merck 자료로 확인함. 접종과 구충 �
 
 **봇 답변 원칙**: 접종·구충·심장사상충 약의 이름·용량·날짜를 정해 주지 않고, "다니는 병원에서 일정을 정해요"라고 안내해요. "실내에만 있으니 안 해도 된다"고 말하지 않아요. 반려견의 광견병 접종은 국내 법상 의무가 있을 수 있어 담당 수의사·지자체에 확인하도록 안내해요.
 
-출처: [WSAVA 2024 개·고양이 접종 가이드라인 요약](https://wsava.org/wp-content/uploads/2024/05/2024-Guidelines-for-the-Vaccination-of-Dogs-and-Cats.pdf) (기본 접종, 2\\~4주 간격·16주 이후 마지막, 26주 추가, 성묘·성견은 필요 이상 자주 접종하지 않기, 연간 건강검진, 선택 접종 효과 약 1년) · [Merck 보호자용: 개 심장사상충](https://www.merckvetmanual.com/dog-owners/heart-and-blood-vessel-disorders-of-dogs/heartworm-disease-in-dogs) (모기, 6\\~8주 시작, 1년 내내, 매년 검사) · [Merck 보호자용: 개 장 기생충](https://www.merckvetmanual.com/dog-owners/digestive-disorders-of-dogs/gastrointestinal-parasites-of-dogs) (2주부터 구충, 사람 감염 주의) · [Merck 보호자용: 강아지 돌보기](https://www.merckvetmanual.com/dog-owners/routine-care-of-dogs/puppy-care). 고양이 심장사상충(안전한 치료법 없음, 실내 고양이)과 국내 광견병 접종 의무는 아직 원문 확인 전이에요 (미국 심장사상충학회·CAPC 사이트가 이 환경에서 열리지 않았어요).
+출처: [WSAVA 2024 개·고양이 접종 가이드라인 요약](https://wsava.org/wp-content/uploads/2024/05/2024-Guidelines-for-the-Vaccination-of-Dogs-and-Cats.pdf) (기본 접종, 2\\~4주 간격·16주 이후 마지막, 26주 추가, 성묘·성견은 필요 이상 자주 접종하지 않기, 연간 건강검진, 선택 접종 효과 약 1년) · [Merck 보호자용: 개 심장사상충](https://www.merckvetmanual.com/dog-owners/heart-and-blood-vessel-disorders-of-dogs/heartworm-disease-in-dogs) (모기, 6\\~8주 시작, 1년 내내, 매년 검사) · [Merck 보호자용: 개 장 기생충](https://www.merckvetmanual.com/dog-owners/digestive-disorders-of-dogs/gastrointestinal-parasites-of-dogs) (2주부터 구충, 사람 감염 주의) · [Merck 보호자용: 강아지 돌보기](https://www.merckvetmanual.com/dog-owners/routine-care-of-dogs/puppy-care) · [미국 심장사상충학회: 심장사상충 기초](https://www.heartwormsociety.org/pet-owner-resources/heartworm-basics) (고양이는 승인된 치료약이 없어 예방이 유일한 보호, 실내 고양이도 위험, 12개월마다 검사·12개월 내내 예방, 고양이 신호는 기침·천식 같은 발작·구토·갑작스러운 쓰러짐). 국내 광견병 접종 의무는 아직 원문 확인 전이에요.
 
 ## 행동 (분리불안·짖음·화장실 실수·스트레스)
 
@@ -548,7 +548,7 @@ Merck·코넬 자료로 확인함. 행동이 갑자기 바뀌면 **먼저 몸의
 
 **봇 답변 원칙**: 열사병·저체온·부동액 섭취가 의심되면 응급 처치 한두 줄과 함께 바로 병원 안내부터 해요. 중성화 시기·방법은 담당 수의사와 정하도록 안내하고, 수술 뒤 급여량을 다시 보도록 알려 줘요.
 
-출처: [코넬 고양이 건강센터: 중성화](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/spaying-and-neutering) (3\\~6개월, 약 일주일 조용히, 2주 회복, 사람 진통제 금지) · [고양이 비만 예방 리뷰 (PMC, 2024)](https://pmc.ncbi.nlm.nih.gov/articles/PMC10911305/) (중성화 뒤 열량 최대 30% 감소·섭취 최대 50% 증가) · [Merck: 여름 반려동물 보호](https://www.merckvetmanual.com/news/editorial/2025/05/28/17/27/protecting-pets-during-hot-summer-months) (위험군, 신호, 차갑지 않은 물, 차 안 온도, 발바닥 화상) · [Merck: 겨울 반려동물 안전](https://www.merckvetmanual.com/news/editorial/2025/01/15/15/23/keeping-pets-safe-during-cold-winter-months) · [Merck: 개·고양이 응급 상황](https://www.merckvetmanual.com/special-pet-topics/emergencies/what-to-do-in-a-dog-or-cat-emergency) (저체온·동상 처치) · [Merck: 부동액 중독](https://www.merckvetmanual.com/special-pet-topics/poisoning/ethylene-glycol-antifreeze-poisoning). 강아지 중성화 시기, 넥카라·목욕 기간, 제설제 내용은 일반적인 안내로, 아직 원문 확인 전이에요 (AVMA 사이트가 이 환경에서 열리지 않았어요).
+출처: [코넬 고양이 건강센터: 중성화](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/spaying-and-neutering) (3\\~6개월, 약 일주일 조용히, 2주 회복, 사람 진통제 금지) · [고양이 비만 예방 리뷰 (PMC, 2024)](https://pmc.ncbi.nlm.nih.gov/articles/PMC10911305/) (중성화 뒤 열량 최대 30% 감소·섭취 최대 50% 증가) · [Merck: 여름 반려동물 보호](https://www.merckvetmanual.com/news/editorial/2025/05/28/17/27/protecting-pets-during-hot-summer-months) (위험군, 신호, 차갑지 않은 물, 차 안 온도, 발바닥 화상) · [Merck: 겨울 반려동물 안전](https://www.merckvetmanual.com/news/editorial/2025/01/15/15/23/keeping-pets-safe-during-cold-winter-months) · [Merck: 개·고양이 응급 상황](https://www.merckvetmanual.com/special-pet-topics/emergencies/what-to-do-in-a-dog-or-cat-emergency) (저체온·동상 처치) · [Merck: 부동액 중독](https://www.merckvetmanual.com/special-pet-topics/poisoning/ethylene-glycol-antifreeze-poisoning). 강아지 중성화 시기, 넥카라·목욕 기간, 제설제 내용은 일반적인 안내로, 아직 원문 확인 전이에요.
 
 ## 사료 라벨 읽는 법
 
@@ -590,7 +590,7 @@ FDA·WSAVA 자료로 확인함. 포장에서 가장 먼저 볼 것은 사진이�
 **생식(생고기 사료)**
 
 - 생식은 일반 가공 사료보다 살모넬라·리스테리아 같은 세균이 있을 가능성이 커요. FDA는 생식을 먹이지 않는 것이 감염을 막는 가장 좋은 방법이라고 해요.
-- 반려동물은 아파 보이지 않아도 변·침으로 세균을 퍼뜨릴 수 있어요. 임신부, 아기, 65세 이상, 면역이 약한 가족이 있으면 더 조심해요. 냉장·냉동으로는 세균이 없어지지 않아요 (FDA).
+- 생식을 쓴다면 먹기 전까지 냉동해 두고, 냉장고나 전자레인지로 해동해요. 먹고 남은 것은 덮어 냉장하거나 버리고, 먹은 뒤에는 얼굴을 핥지 않게 해요 (FDA). 아기, 노인, 면역이 약한 가족이 있으면 더 조심해요.
 - 코넬은 고양이 생식의 이점을 보여 주는 과학적 근거가 아직 없다고 보고 권하지 않아요.
 - 그래도 먹인다면: 다룬 뒤 비누로 손 씻기, 그릇·조리대 소독, 사람 음식과 따로 보관, 먹기 전까지 냉동·냉장 (FDA).
 
@@ -598,7 +598,7 @@ FDA·WSAVA 자료로 확인함. 포장에서 가장 먼저 볼 것은 사진이�
 
 **봇 답변 원칙**: 건식과 습식 중 하나가 무조건 좋다고 하지 않고, 아이의 상황(물 마시기, 요로·신장, 체중, 기호성)에 맞춰 설명해요. 생식을 권하지 않고, 물어보면 위 위생 수칙을 알려줘요. 벨포아 콜드프레스드 제품이 어떤 온도로 만들어지는지(생식에 해당하는지)는 제품 자료로 확인해 두면 좋아요.
 
-출처: [코넬: 고양이 급여](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feeding-your-cat) (건식 6\\~10%·습식 75% 이상 수분, 가격·기호성·보관, 집밥, 생식 비권장, 간식 10\\~15%) · [코넬: 나이 든 고양이](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/loving-care-older-cats) (습식 섞어 수분) · [FDA: 생식은 반려동물과 사람에게 위험할 수 있어요](https://www.fda.gov/animal-veterinary/animal-health-literacy/get-facts-raw-pet-food-diets-can-be-dangerous-you-and-your-pet) (검색 요약으로 확인). 강아지 건식·습식 비교와 벨포아 제법은 아직 확인 전이에요.
+출처: [코넬: 고양이 급여](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feeding-your-cat) (건식 6\\~10%·습식 75% 이상 수분, 가격·기호성·보관, 집밥, 생식 비권장, 간식 10\\~15%) · [코넬: 나이 든 고양이](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/loving-care-older-cats) (습식 섞어 수분) · [FDA: 생식은 반려동물과 사람에게 위험할 수 있어요](https://www.fda.gov/animal-veterinary/animal-health-literacy/get-facts-raw-pet-food-diets-can-be-dangerous-you-and-your-pet) · [FDA: 사료·간식 안전하게 다루기](https://www.fda.gov/animal-veterinary/animal-health-literacy/tips-safe-handling-pet-food-and-treats) (가장 좋은 방법은 생식을 주지 않는 것, 냉동 보관, 냉장고·전자레인지 해동, 남은 것 처리, 얼굴 핥기). 강아지 건식·습식 비교와 벨포아 제법은 아직 원문 확인 전이에요.
 
 ## 간식·영양제
 
@@ -617,12 +617,12 @@ WSAVA·코넬·FDA 자료로 확인함. 완전·균형 사료를 먹는 건강�
 - \\*\\*오메가3(EPA·DHA)\\*\\*는 관절염 강아지에게 근거가 있는 편이고, 글루코사민·코드로이틴은 연구 결과가 엇갈려요 ('관절' 참고).
 - **칼슘·비타민 D** 등을 완전 사료에 더하면 오히려 너무 많아질 수 있어요. 특히 대형견 자견에게는 칼슘을 더하지 않아요 ('시기별 급여' 참고).
 - 사람용 영양제·껌 비타민에는 자일리톨이 들어 있을 수 있어요 (FDA).
-- 유산균은 일부 설사에 도움이 될 수 있다는 연구가 있지만 제품마다 균주·품질 차이가 커요. 필요하면 수의사가 권하는 제품을 써요.
+- 유산균은 장 질환·설사에 쓸 때 가장 근거가 있고, 건강한 아이에게 도움이 된다는 근거는 아직 없어요. 효과는 균주마다 달라서 수의사가 권하는 제품을 써요. 한 조사에서는 제품 15개 중 2개만 라벨과 내용이 맞았고, 유산균을 넣은 건사료나 요거트는 효과가 증명되지 않았어요 (Tufts).
 - 약을 먹는 아이, 지병이 있는 아이는 영양제를 시작하기 전에 수의사에게 물어봐요.
 
 **봇 답변 원칙**: 영양제가 병을 고치거나 막는다고 말하지 않아요. 영양제 제품명·용량을 정해 주지 않고, 간식은 10% 규칙과 열량 조절을 안내해요.
 
-출처: [WSAVA 개 간식 가이드](https://wsava.org/wp-content/uploads/2025/11/WSAVA_GuidetoTreats_Dogs_251107.pdf) (간식 10% 미만, 단단한 간식) · [코넬: 고양이 급여](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feeding-your-cat) (간식 10\\~15%, 우유) · [FDA: 완전·균형 사료](https://www.fda.gov/animal-veterinary/animal-health-literacy/complete-and-balanced-pet-food) · [FDA: 동물 영양제 규정 안내 (철회된 CPG 690.100 페이지)](https://www.fda.gov/regulatory-information/search-fda-guidance-documents/cpg-sec-690100-nutritional-supplements-companion-animals-withdrawn-2202020) (검색 요약으로 확인) · [FDA: 자일리톨](https://www.fda.gov/consumers/consumer-updates/paws-xylitol-its-dangerous-dogs). 유산균 내용과 국내 반려동물 영양제 규정은 아직 원문 확인 전이에요.
+출처: [WSAVA 개 간식 가이드](https://wsava.org/wp-content/uploads/2025/11/WSAVA_GuidetoTreats_Dogs_251107.pdf) (간식 10% 미만, 단단한 간식) · [코넬: 고양이 급여](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feeding-your-cat) (간식 10\\~15%, 우유) · [FDA: 완전·균형 사료](https://www.fda.gov/animal-veterinary/animal-health-literacy/complete-and-balanced-pet-food) · [FDA: 동물 영양제 규정 안내 (철회된 CPG 690.100 페이지)](https://www.fda.gov/regulatory-information/search-fda-guidance-documents/cpg-sec-690100-nutritional-supplements-companion-animals-withdrawn-2202020) (검색 요약으로 확인) · [FDA: 자일리톨](https://www.fda.gov/consumers/consumer-updates/paws-xylitol-its-dangerous-dogs) · [Tufts: 유산균](https://sites.tufts.edu/petfoodology/2017/06/12/probiotics/) (장 질환·설사, 건강한 아이는 근거 없음, 균주마다 다름, 15개 중 2개만 라벨과 일치, 건사료·요거트). 국내 반려동물 영양제 규정은 아직 원문 확인 전이에요.
 
 ## 물 마시기
 
@@ -645,7 +645,7 @@ Merck·코넬 자료로 일부 확인함. 건강한 아이는 물을 충분히 �
 
 **봇 답변 원칙**: "물을 많이 마신다"는 질문에는 먼저 나이, 중성화 여부, 소변·식욕·체중 변화를 물어보고 검사를 권해요. 물을 줄여 보라고 권하지 않아요.
 
-출처: [Merck: 소동물 영양 요구량](https://www.merckvetmanual.com/management-and-nutrition/nutrition-small-animals/nutritional-requirements-of-small-animals) (체중 1kg당 약 44\\~66ml, 건강한 동물은 스스로 조절, 물을 제한하지 않기. 검색 요약으로 확인) · [코넬: 나이 든 고양이](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/loving-care-older-cats) · [코넬: 만성 신장병](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/chronic-kidney-disease). "물을 많이 마신다"의 수치 기준, 흐르는 급수기, 자궁축농증 내용은 아직 원문 확인 전이에요.
+출처: [Merck: 소동물 영양 요구량](https://www.merckvetmanual.com/management-and-nutrition/nutrition-small-animals/nutritional-requirements-of-small-animals) (체중 1kg당 약 44\\~66ml, 건강한 동물은 스스로 조절, 물을 제한하지 않기) · [코넬: 나이 든 고양이](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/loving-care-older-cats) · [코넬: 만성 신장병](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/chronic-kidney-disease). "물을 많이 마신다"의 수치 기준, 흐르는 급수기, 자궁축농증 내용은 아직 원문 확인 전이에요.
 
 ## 귀 염증
 
@@ -701,7 +701,7 @@ Merck·코넬 자료로 확인함. 벼룩은 심한 가려움과 벼룩 알러�
 
 **봇 답변 원칙**: 예방약 제품·용량을 정해 주지 않고 수의사와 정하도록 안내해요. 개용 제품을 고양이에게 쓰면 위험할 수 있다는 점을 함께 알려줘요 ('먹으면 안 되는 음식·중독' 참고).
 
-출처: [Merck 보호자용: 개의 진드기](https://www.merckvetmanual.com/dog-owners/skin-disorders-of-dogs/ticks-of-dogs) (피하기·풀 깎기, 핀셋으로 떼기, 맨손·성냥 금지, 옮기는 병) · [Merck 보호자용: 개의 벼룩](https://www.merckvetmanual.com/dog-owners/skin-disorders-of-dogs/fleas-of-dogs) (늦여름, 1살 미만 드묾, 모든 동물에게 꾸준히, 검색 요약으로 확인) · [코넬: 벼룩](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/fleas) (검색 요약으로 확인). SFTS 내용은 질병관리청 자료로 아직 확인 전이에요.
+출처: [Merck 보호자용: 개의 진드기](https://www.merckvetmanual.com/dog-owners/skin-disorders-of-dogs/ticks-of-dogs) (피하기·풀 깎기, 핀셋으로 떼기, 맨손·성냥 금지, 옮기는 병) · [Merck 보호자용: 개의 벼룩](https://www.merckvetmanual.com/dog-owners/skin-disorders-of-dogs/fleas-of-dogs) (늦여름, 1살 미만 드묾, 모든 동물에게 꾸준히, 촌충을 옮김, 심하면 빈혈, 없애는 데 6주\\~3개월) · [코넬: 벼룩](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/fleas) (검색 요약으로 확인). SFTS 내용은 질병관리청 자료로 아직 확인 전이에요.
 
 ## 췌장염
 
@@ -728,7 +728,7 @@ Merck 자료로 확인함. 대부분은 원인을 알 수 없지만, **쓰레기
 
 **봇 답변 원칙**: 구토와 배 통증이 같이 있으면 췌장염을 진단하지 말고 바로 병원 안내를 해요. 췌장염 이력이 있는 아이에게는 지방이 많은 제품·간식을 권하지 않아요.
 
-출처: [Merck 보호자용: 개의 췌장염·췌장 질환](https://www.merckvetmanual.com/dog-owners/digestive-disorders-of-dogs/pancreatitis-and-other-disorders-of-the-pancreas-in-dogs) (쓰레기·사람 음식, 중성지방, 미니어처 슈나우저, 신호, 저지방 사료, 당뇨·췌장 기능 저하). '기도 자세'와 고양이 췌장염 내용은 아직 원문 확인 전이에요.
+출처: [Merck 보호자용: 개의 췌장염·췌장 질환](https://www.merckvetmanual.com/dog-owners/digestive-disorders-of-dogs/pancreatitis-and-other-disorders-of-the-pancreas-in-dogs) (쓰레기·사람 음식, 중성지방, 미니어처 슈나우저, 신호, 저지방 사료, 당뇨·췌장 기능 저하) · [Merck 보호자용: 고양이 췌장 질환](https://www.merckvetmanual.com/cat-owners/digestive-disorders-of-cats/disorders-of-the-pancreas-in-cats) (기운 없음, 식욕 저하, 탈수, 체중 감소, 체온 저하, 구토, 황달, 열, 통증, 신호가 없을 수도 있음). '기도 자세' 내용은 아직 원문 확인 전이에요.
 
 ## 당뇨·고양이 갑상선 항진증
 
@@ -825,7 +825,7 @@ Merck 자료로 확인함. 아래 상황은 **바로 동물병원(가까운 24�
 
 **봇 답변 원칙**: 위 상황에 해당하면 다른 설명보다 먼저 "지금 바로 동물병원에 전화하고 가 주세요"를 말하고, 응급 처치는 한두 줄만 덧붙여요. 집에서 지켜보라고 하지 않아요. 앱에 병원 찾기 기능이 있으면 그쪽으로 안내해요.
 
-출처: [Merck: 개·고양이 응급 상황](https://www.merckvetmanual.com/special-pet-topics/emergencies/what-to-do-in-a-dog-or-cat-emergency) (응급 목록, 출혈 압박, 목 막힘, 화상, 옮기기, 입마개 주의) · [Merck: 개·고양이 경련 응급 치료](https://www.merckvetmanual.com/pharmacology/systemic-pharmacotherapeutics-of-the-nervous-system/anticonvulsants-for-emergency-treatment-of-seizures-in-dogs-and-cats) (긴 경련·군발 경련은 치료 필요, 검색 요약으로 확인). 경련 "5분" 기준과 경련 중 할 일, 출산·산후 응급 내용은 일반적인 안내로, 아직 원문 확인 전이에요.
+출처: [Merck: 개·고양이 응급 상황](https://www.merckvetmanual.com/special-pet-topics/emergencies/what-to-do-in-a-dog-or-cat-emergency) (응급 목록, 출혈 압박, 목 막힘, 화상, 옮기기, 입마개 주의) · [Merck: 개·고양이 경련 응급 치료](https://www.merckvetmanual.com/pharmacology/systemic-pharmacotherapeutics-of-the-nervous-system/anticonvulsants-for-emergency-treatment-of-seizures-in-dogs-and-cats) (긴 경련·군발 경련은 치료 필요, 검색 요약으로 확인) · [코넬 Riney 개 건강센터: 경련 대처](https://www.vet.cornell.edu/departments-centers-and-institutes/riney-canine-health-center/canine-health-topics/managing-seizures) (5분 넘으면 응급, 위험한 물건 치우기, 입에 손 넣지 않기, 시간 재고 영상 찍기, 첫 경련은 진료) · [Merck 보호자용: 개 번식 관리](https://www.merckvetmanual.com/dog-owners/reproductive-disorders-of-dogs/management-of-reproduction-in-dogs) (난산 신호, 산후 저칼슘).
 
 ## 새 아이 데려왔을 때·고양이 합사
 
@@ -842,12 +842,12 @@ Merck 자료로 확인함. 아래 상황은 **바로 동물병원(가까운 24�
 
 **고양이 합사 (천천히)**
 
-- 처음에는 방을 따로 쓰고, 문 너머로 냄새에 익숙해지게 해요. 서로의 냄새가 묻은 담요를 바꿔 주는 방법도 있어요.
+- 처음에는 방을 따로 쓰고, 문 너머로 냄새에 익숙해지게 해요. 며칠 뒤부터 하루 30분쯤 서로의 공간을 바꿔 지내게 하는 것을 며칠 반복해요 (코넬).
 - 밥을 문 양쪽에 두고 점점 가까이 옮겨서, 상대 냄새와 좋은 일을 연결해요.
 - 다음에는 방묘문·안전문 너머로 짧게 보게 하고, 편안해하면 지켜보는 가운데 같은 공간에 둔어요.
 - 하악거림·으르렁거림이 보이면 이전 단계로 돌아가요. 벌주거나 억지로 만나게 하지 않아요.
 - 밥그릇·물·화장실·높은 자리·숨을 곳을 여러 군데 두어 서로 다투지 않게 해요.
-- 며칠에서 몇 주, 더 걸릴 수도 있어요. 서두르지 않는 것이 가장 중요해요.
+- 몇 주에서 몇 달이 걸릴 수 있어요. 서두르지 않는 것이 가장 중요해요.
 - 강아지와 고양이를 합사할 때는 강아지에게 목줄을 하고, 고양이가 올라가 피할 수 있는 높은 곳을 마련해요.
 
 **병원에 가야 할 신호**
@@ -862,7 +862,7 @@ Merck 자료로 확인함. 아래 상황은 **바로 동물병원(가까운 24�
 
 **봇 답변 원칙**: 합사 기간을 "며칠이면 된다"고 단정하지 않고, 싸움이 심하면 수의사나 행동 전문가 상담을 안내해요.
 
-출처: [코넬: 새 고양이 고르기와 돌보기](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/choosing-and-caring-your-new-cat) (빨리 검진, FeLV·FIV 검사, 검진 전 따로, 화장실 수+1, 스크래처) · [Merck 보호자용: 강아지 돌보기](https://www.merckvetmanual.com/dog-owners/routine-care-of-dogs/puppy-care) · [Merck 보호자용: 개의 행동 문제](https://www.merckvetmanual.com/dog-owners/behavior-of-dogs/behavior-problems-in-dogs) (배변 습관 8\\~9주). 고양이 합사 단계(냄새 교환, 문 양쪽 밥, 방묘문)와 강아지·고양이 합사는 널리 쓰이는 방법이지만 아직 원문 확인 전이에요.
+출처: [코넬: 새 고양이 고르기와 돌보기](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/choosing-and-caring-your-new-cat) (빨리 검진, FeLV·FIV 검사, 검진 전 따로, 화장실 수+1, 스크래처) · [Merck 보호자용: 강아지 돌보기](https://www.merckvetmanual.com/dog-owners/routine-care-of-dogs/puppy-care) · [Merck 보호자용: 개의 행동 문제](https://www.merckvetmanual.com/dog-owners/behavior-of-dogs/behavior-problems-in-dogs) (배변 습관 8\\~9주) · [코넬: 고양이 공격성](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-behavior-problems-aggression) (따로 방, 하루 30분쯤 공간 바꾸기, 이동장·하네스로 멀리서 함께 밥, 몇 주에서 몇 달) · [ASPCA: 집 안 고양이끼리 공격성](https://www.aspca.org/pet-care/cat-care/common-cat-behavior-issues/aggression-between-cats-your-household) (자원 따로, 문 조금씩 열기, 매일 지켜보는 만남). 방묘문 사용과 강아지·고양이 합사는 일반적인 방법으로, 아직 원문 확인 전이에요.
 
 ## 임신·수유 중 급여
 
@@ -874,7 +874,7 @@ Merck 자료로 확인함. 임신하거나 수유 중인 엄마는 **성장기�
 | 임신 초기 | 임신 기간의 앞 2/3는 평소 양 정도 | 임신 내내 조금씩 늘어요 |
 | 임신 말기 | 마지막 1/3에 평소보다 20\\~30% 이상 더 | 마지막 3주에 약 25% 더 |
 | 수유 중 | 새끼 수에 따라 평소의 2\\~4배, 자유 급식 | 평소의 2\\~3배, 자주 또는 자유 급식 |
-| 임신 기간 | 약 63일쯤 (확인 전) | 보통 60\\~65일 |
+| 임신 기간 | 약 62\\~64일 | 보통 60\\~65일 |
 
 **알아두면 좋은 것**
 
@@ -886,8 +886,8 @@ Merck 자료로 확인함. 임신하거나 수유 중인 엄마는 **성장기�
 
 **바로 병원에 가야 할 신호**
 
-- 수유 중인 엄마가 떨고, 비틀거리고, 심하게 헐떡이거나, 경련해요 (혈중 칼슘 저하 가능, 응급).
-- 출산 중 새끼가 나오지 않으며 강하게 오래 힘주거나, 녹색·검은 분비물이 나오는데 새끼가 없어요.
+- 수유 중인 엄마가 떨고, 비틀거리고, 심하게 헐떡이거나, 경련해요 (혈중 칼슘 저하 가능, 20kg 미만 개에게 흔함, 응급).
+- 출산 준비(안절부절, 헐떡임, 둥지 만들기)가 24시간 넘게 이어지거나, 힘주기 시작하고 12\\~24시간이 지나도 새끼가 없거나, 새끼 사이 간격이 1\\~4시간을 넘어요 (개 기준, Merck). 출산 뒤 며칠간 나오는 검붉은 분비물은 정상이에요.
 - 젖이 빨갛고 뜨겁고 붓거나 엄마가 열이 나고 기운이 없어요 (유선염).
 - 엄마가 하루 넘게 안 먹거나 새끼를 돌보지 않아요.
 
@@ -895,7 +895,7 @@ Merck 자료로 확인함. 임신하거나 수유 중인 엄마는 **성장기�
 
 **봇 답변 원칙**: 임신·출산 관리는 수의사 진료를 먼저 안내해요. 칼슘 영양제를 권하지 않고, 급여량은 위 범위를 출발점으로 엄마 체형을 보며 조절하도록 알려줘요.
 
-출처: [Merck: 소동물 급여 방법](https://www.merckvetmanual.com/management-and-nutrition/nutrition-small-animals/feeding-practices-in-small-animals) (개: 임신 초 성장기용, 앞 2/3는 유지량, 마지막 1/3에 20\\~30% 더, 수유 2\\~4배·자유 급식, 대형견 엄마도 일반 성장기용, 칼슘 추가는 드물게 필요하고 금기일 수 있음) · [Merck 보호자용: 고양이 번식 관리](https://www.merckvetmanual.com/cat-owners/reproductive-disorders-of-cats/management-of-reproduction-of-cats) (키튼용, 마지막 3주 25% 더, 수유 2\\~3배, 칼슘 금지, 60\\~65일). 강아지 임신 기간, 출산 응급 신호, 유선염 내용은 아직 원문 확인 전이에요.
+출처: [Merck: 소동물 급여 방법](https://www.merckvetmanual.com/management-and-nutrition/nutrition-small-animals/feeding-practices-in-small-animals) (개: 임신 초 성장기용, 앞 2/3는 유지량, 마지막 1/3에 20\\~30% 더, 수유 2\\~4배·자유 급식, 대형견 엄마도 일반 성장기용, 칼슘 추가는 드물게 필요하고 금기일 수 있음) · [Merck 보호자용: 고양이 번식 관리](https://www.merckvetmanual.com/cat-owners/reproductive-disorders-of-cats/management-of-reproduction-of-cats) (키튼용, 마지막 3주 25% 더, 수유 2\\~3배, 칼슘 금지, 60\\~65일) · [Merck 보호자용: 개 번식 관리](https://www.merckvetmanual.com/dog-owners/reproductive-disorders-of-dogs/management-of-reproduction-in-dogs) (임신 62\\~64일, 난산 신호, 산후 검붉은 분비물 정상, 20kg 미만 저칼슘, 칼슘·옥시토신은 수의사 지시로만). 유선염 내용은 아직 원문 확인 전이에요.
 
 `;
 
