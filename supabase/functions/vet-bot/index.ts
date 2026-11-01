@@ -3,7 +3,7 @@
 import Anthropic from "npm:@anthropic-ai/sdk@0.135.0";
 import { createClient } from "npm:@supabase/supabase-js@2.117.3";
 
-const MODEL = "claude-opus-5-5";
+const MODEL = "claude-haiku-5-5"; // 비용이 가장 적은 모델. 더 꼼꼼한 답이 필요하면 "claude-sonnet-5-5"로 바꿔요
 const MAX_TURNS = 12;      // 앞선 대화는 최근 12개까지만 보내요
 const MAX_CHARS = 1000;    // 메시지 하나 최대 글자 수
 
@@ -590,16 +590,14 @@ Deno.serve(async (req) => {
   if (!turns.length || turns[turns.length - 1].role !== "user") return json({ error: "no_question" }, 400);
 
   const pet = petLine(body.pet);
-  const messages: Anthropic.Beta.BetaMessageParam[] = turns.map((t, i) =>
+  const messages: Anthropic.MessageParam[] = turns.map((t, i) =>
     i === turns.length - 1 && pet ? { role: "user", content: `${pet}\n\n${t.content}` } : t
   );
 
   try {
-    const res = await anthropic.beta.messages.create({
+    const res = await anthropic.messages.create({
       model: MODEL,
       max_tokens: 2000,
-      betas: ["server-side-fallback-2026-07-01"],
-      fallbacks: "default", // 안전 분류기가 거절하면 서버가 다른 모델로 다시 시도해요
       output_config: { effort: "low" },
       system: [{ type: "text", text: SYSTEM, cache_control: { type: "ephemeral" } }],
       messages,
