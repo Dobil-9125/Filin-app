@@ -1181,6 +1181,8 @@ function vGuide(){
 }
 
 /* ---------- AI 수의 봇 ---------- */
+// Supabase에 올린 AI 봇 함수 이름 (편집기에서 자동으로 정해진 이름)
+const VET_BOT_FN = "bright-responder";
 let ask = {petId:null, msgs:[], busy:false, err:"", draft:""};
 const ASK_EX = ["사료를 바꾸고 변이 묽어졌어요","하루에 물을 얼마나 마셔야 정상인가요?","간식은 하루에 얼마나 줘도 되나요?"];
 function askFmt(t){ return esc(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/\n/g,"<br>"); }
@@ -1216,7 +1218,7 @@ async function sendAsk(q){
     avoid:(pt.allergies||[]).map(allergenName), conditions:pt.note||""};
   let err="", why="";
   try{
-    const {data,error}=await sb.functions.invoke("vet-bot",{body:{messages:ask.msgs, pet}});
+    const {data,error}=await sb.functions.invoke(VET_BOT_FN,{body:{messages:ask.msgs, pet}});
     if(error){
       const r=error.context; let code="";
       if(r && typeof r.json==="function"){ try{ const j=await r.clone().json(); code=j.error||""; why=j.code||j.message||""; }catch(_){ try{ why=(await r.text()).slice(0,60); }catch(_){} } }
