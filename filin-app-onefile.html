@@ -195,6 +195,16 @@ img.photo{object-fit:cover!important;padding:0!important;border-radius:50%}
 .btn.sm{padding:8px 14px;font-size:14px;cursor:pointer}
 .mini b{display:block;font-size:14px}
 .mini span{font-size:12px;color:var(--muted)}
+.hub{display:flex;flex-direction:column;gap:10px}
+.hubbtn{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:center;border:0;border-radius:var(--r);padding:16px;background:var(--surface);font:inherit;color:var(--ink);text-align:left;cursor:pointer}
+.hubbtn .ic{width:44px;height:44px;border-radius:14px;display:grid;place-items:center}
+.hubbtn .ic svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hub .hubbtn{background:var(--surface)}
+.hubbtn b{display:block;font-size:16px}
+.hubbtn span{font-size:13px;color:var(--muted)}
+.hubbtn.t-sky .ic{background:var(--sky);color:var(--slate)}.hubbtn.t-mint .ic{background:var(--mint);color:var(--good)}.hubbtn.t-rose .ic{background:#ffeef1;color:#e64980}
+.askhead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px}
+.askhead h1{font-size:24px;margin:0 0 2px}
 .emerg{background:#ffe4e0;border-radius:14px;padding:12px 14px}
 .emerg summary{font-weight:700;color:#b3261e;cursor:pointer}
 .emerg[open] summary{margin-bottom:8px}
@@ -597,6 +607,8 @@ function toast(msg){const t=$("#toast");t.textContent=msg;t.hidden=false;clearTi
 function josa(name,a,b){const c=name.charCodeAt(name.length-1);if(c<0xAC00||c>0xD7A3)return name+b;return name+((c-0xAC00)%28?a:b);}
 
 const ICONS = {
+  chat:'<path d="M4 5h16v11H9l-5 4z"/><path d="M8 10h.01M12 10h.01M16 10h.01"/>',
+  guide:'<path d="M6 3h9l4 4v14H6z"/><path d="M9 12h7M9 16h5M9 8h4"/>',
   home:'<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/>',
   find:'<circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/><path d="M9 11h4M11 9v4"/>',
   shop:'<path d="M5 8h14l-1 12H6z"/><path d="M9 8a3 3 0 016 0"/>',
@@ -655,7 +667,7 @@ function vHome(){
       <button class="tile t-peach" type="button" data-go="pet">${ic("pet")}<b>내 아이</b><span>프로필·알러지 관리</span></button>
       <button class="tile t-amber" type="button" data-go="shop">${ic("shop")}<b>브랜드관</b><span>${P.length}가지 제품</span></button>
       <button class="tile t-lilac" type="button" data-go="health">${ic("health")}<b>건강 체크</b><span>매일 30초 컨디션 기록</span></button>
-      <button class="tile t-rose" type="button" data-go="vet">${ic("vet")}<b>수의사 상담</b><span>증상 길잡이·채팅 상담</span></button>
+      <button class="tile t-rose" type="button" data-go="vet">${ic("vet")}<b>건강 상담</b><span>AI·증상 길잡이·수의사</span></button>
     </div>
     <button class="worry" type="button" data-go="find">
       <img src="img/seri-question.png" alt="사료를 보며 고민하는 세리">
@@ -1098,7 +1110,7 @@ function vHealth(){
       <div class="week">${days.map(d=>{ const e=mine[ymd(d)]; const l=level(e); return `<div class="day ${l}"><span>${"일월화수목금토"[d.getDay()]}</span><i></i><small>${d.getDate()}</small></div>`; }).join("")}</div>
       <p class="small muted"><span class="dot ok"></span> 평소처럼 <span class="dot mid"></span> 조금 달라요 <span class="dot bad"></span> 살펴봐야 해요 ${Object.values(mine).some(e=>e.example)?"· 지난 기록은 예시예요":""}</p>
     </section>
-    ${saved && lv==="bad" ? `<div class="alert"><b>병원에 가 보는 게 좋겠어요</b><p>오늘 기록에 살펴봐야 할 신호가 있어요. 헷갈릴 땐 담당 수의사 선생님과 상담해 주세요.</p><button class="btn dark" type="button" data-go="vet">수의사 상담 신청</button></div>` : ""}
+    ${saved && lv==="bad" ? `<div class="alert"><b>병원에 가 보는 게 좋겠어요</b><p>오늘 기록에 살펴봐야 할 신호가 있어요. 헷갈릴 땐 담당 수의사 선생님과 상담해 주세요.</p><button class="btn dark" type="button" data-go="vetform">수의사 상담 신청</button></div>` : ""}
     <div class="card">
       <div class="section-head"><h2>오늘 기록 · ${fmt(today())}</h2>${saved?'<span class="pill s3">저장됨</span>':""}</div>
       ${CHECKS.map(c=>`<div class="q"><b>${c.label}</b><div class="chips">${c.opts.map(([v,l])=>`<button class="chip" type="button" data-chk="${c.key}" data-val="${v}" aria-pressed="${todayLog[c.key]===v}">${l}</button>`).join("")}</div></div>`).join("")}
@@ -1174,14 +1186,14 @@ function guideTopics(sp){ return GUIDE.filter(g=>!g.sp||g.sp===sp); }
 function guideChips(sp){ return guideTopics(sp).map(g=>`<button class="chip" type="button" data-guide="${g.id}">${g.n}</button>`).join(""); }
 function vGuide(){
   const pt=cur(), g=GUIDE.find(x=>x.id===guideState.id);
-  if(!g) return `<div class="stack"><span class="eyebrow">증상 길잡이</span><h1>어떤 게 걱정되세요?</h1><p class="small muted">고르면 병원에 가야 할 신호와 집에서 할 수 있는 걸 알려 드려요.</p></div><div class="chips">${guideChips(pt.sp)}</div>${emergencyBox()}`;
+  if(!g) return `<div class="stack"><span class="eyebrow">증상 길잡이</span><h1>어떤 게 걱정되세요?</h1><p class="small muted">고르면 병원에 가야 할 신호와 집에서 할 수 있는 걸 알려 드려요.</p></div>${emergencyBox()}<div class="chips">${guideChips(pt.sp)}</div>`;
   const on=guideState.flags, urgent=on.some(i=>g.urgent.includes(i));
   return `<div class="stack"><span class="eyebrow">증상 길잡이</span><h1>${g.n}</h1><p>${g.sum}</p></div>
-    <div class="petbar">${petMini(pt)}<button class="link" type="button" data-go="vet">다른 고민 보기</button></div>
+    <div class="petbar">${petMini(pt)}<button class="link" type="button" data-guidehome>다른 고민 보기</button></div>
     <div class="card"><b>이 중에 해당하는 게 있나요?</b>
       <div class="flags">${g.red.map((r,i)=>`<button class="flag" type="button" data-gflag="${i}" aria-pressed="${on.includes(i)}">${r}</button>`).join("")}</div>
     </div>
-    ${on.length ? `<div class="alert"><b>${urgent?"지금 바로 동물병원(응급)에 가 주세요":"동물병원 진료를 받아 보세요"}</b><p>${urgent?"고른 증상은 빨리 진료가 필요한 신호예요. 기다리지 말고 가까운 동물병원이나 24시 응급 병원으로 가 주세요.":"고른 증상은 진료가 필요한 신호예요. 오늘이나 내일 중으로 동물병원에 가 보세요."}</p><button class="btn dark" type="button" data-go="vet">FILIN 수의사 상담 신청</button></div>`
+    ${on.length ? `<div class="alert"><b>${urgent?"지금 바로 동물병원(응급)에 가 주세요":"동물병원 진료를 받아 보세요"}</b><p>${urgent?"고른 증상은 빨리 진료가 필요한 신호예요. 기다리지 말고 가까운 동물병원이나 24시 응급 병원으로 가 주세요.":"고른 증상은 진료가 필요한 신호예요. 오늘이나 내일 중으로 동물병원에 가 보세요."}</p><button class="btn dark" type="button" data-go="vetform">FILIN 수의사 상담 신청</button></div>`
       : `<p class="small muted">해당하는 게 없으면 아래처럼 집에서 살펴봐 주세요. 나빠지면 다시 확인해요.</p>`}
     <section class="stack"><h2>집에서 할 수 있는 것</h2><ul class="plain">${g.home.map(h=>`<li>${h}</li>`).join("")}</ul>${g.note?`<p class="note">${g.note}</p>`:""}</section>
     <p class="small muted">출처: ${g.src}</p>
@@ -1198,14 +1210,13 @@ function askFmt(t){ return esc(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(
 function vAsk(){
   const pt=cur();
   if(ask.petId!==pt.id) ask={petId:pt.id, msgs:[], busy:false, err:"", draft:""};
-  const head=`<div class="stack"><span class="eyebrow">AI 수의 상담</span><h1>AI에게 물어보세요</h1><p class="small muted">수의 자료를 바탕으로 답해요. 우리 아이 정보(나이·몸무게·피해야 할 재료)를 함께 보내요.</p></div>
-    <div class="petbar">${petMini(pt)}<button class="link" type="button" data-go="vet">증상 길잡이</button></div>`;
-  const foot=`<p class="proto">AI 답변은 일반 안내예요. 진단이나 처방을 대신하지 않고, 응급 증상은 바로 동물병원으로 가 주세요.</p>`;
+  const head=`<div class="askhead"><div><h1>AI 상담</h1><span class="small muted">${esc(pt.name)} · ${petLabel(pt)} 정보를 같이 보내요</span></div><button class="link" type="button" data-go="vet">건강 상담</button></div>`;
+  const foot=`<p class="proto">일반 안내예요. 진단·처방을 대신하지 않아요. 응급이면 바로 동물병원으로 가 주세요.</p>`;
   if(!sb) return head+`<div class="card"><b>온라인 앱에서만 쓸 수 있어요</b><p class="small muted">인터넷 주소로 연 FILIN 앱에서 로그인하면 물어볼 수 있어요.</p></div>`+foot;
   if(!user) return head+`<div class="card"><b>로그인하면 물어볼 수 있어요</b><p class="small muted">AI 상담은 회원만 쓸 수 있어요. 로그인한 뒤 이 화면으로 돌아와 주세요.</p><button class="btn primary block" type="button" data-go="account">로그인하기</button></div>`+foot;
   const list=ask.msgs.map(m=>`<div class="bub ${m.role==="user"?"me":"ai"}">${askFmt(m.content)}</div>`).join("");
   return head+`<div class="chat" id="chat">
-      ${ask.msgs.length?"":`<div class="bub ai">${esc(pt.name)}에 대해 궁금한 걸 물어보세요. 예를 들면 이런 거요.</div><div class="chips">${ASK_EX.map((q,i)=>`<button class="chip" type="button" data-askex="${i}">${q}</button>`).join("")}</div>`}
+      ${ask.msgs.length?"":`<div class="bub ai">${esc(pt.name)}에 대해 궁금한 걸 물어보세요.</div><div class="chips">${ASK_EX.map((q,i)=>`<button class="chip" type="button" data-askex="${i}">${q}</button>`).join("")}</div>`}
       ${list}
       ${ask.busy?`<div class="bub ai wait">답을 쓰고 있어요…</div>`:""}
       ${ask.err?`<div class="bub err">${ask.err}</div>`:""}
@@ -1248,14 +1259,22 @@ let vetForm = {how:"chat", topic:null, when:"soon", text:"", attach:true};
 const VET_TOPICS = [["food","사료·영양"],["skin","피부·털"],["gut","소화·구토"],["behavior","행동"],["etc","기타"]];
 const VET_WHEN = [["soon","가장 빠른 시간"],["eve","오늘 저녁"],["am","내일 오전"]];
 function vVet(){
+  const pt=cur();
+  const n=consults.filter(c=>c.petId===pt.id).length;
+  return `<div class="stack"><span class="eyebrow">건강 상담</span><h1>${esc(pt.name)}, 어디가 걱정되세요?</h1></div>
+    ${emergencyBox()}
+    <div class="hub">
+      <button class="hubbtn t-sky" type="button" data-go="ask">${ic("chat")}<div><b>AI에게 물어보기</b><span>궁금한 걸 적으면 바로 답해요</span></div></button>
+      <button class="hubbtn t-mint" type="button" data-guidehome>${ic("guide")}<div><b>증상 길잡이</b><span>병원에 가야 할 신호인지 확인해요 · 무료</span></div></button>
+      <button class="hubbtn t-rose" type="button" data-go="vetform">${ic("vet")}<div><b>수의사 상담 신청</b><span>채팅·영상으로 수의사와 상담해요${n?` · 신청 ${n}건`:""}</span></div></button>
+    </div>
+    <p class="proto">AI 답변과 증상 길잡이는 일반 안내예요. 진단이나 처방을 대신하지 않아요.</p>`;
+}
+function vVetForm(){
   const pt=cur(), f=vetForm;
   const mine=consults.filter(c=>c.petId===pt.id);
-  return `<div class="stack"><span class="eyebrow">수의사 상담</span><h1>수의사 선생님께 물어보세요</h1>
+  return `<div class="stack"><span class="eyebrow">수의사 상담</span><h1>수의사 선생님께 상담 신청</h1>
     <p class="small muted">사료, 피부, 소화처럼 평소 궁금한 걸 채팅이나 영상으로 상담해요.</p></div>
-    <section class="card"><div class="section-head"><h2>증상 길잡이</h2><span class="badge multi">무료 · 바로 확인</span></div>
-      <p class="small muted">걱정되는 걸 고르면 병원에 가야 할 신호와 집에서 할 수 있는 걸 바로 알려 드려요.</p>
-      <div class="chips">${guideChips(pt.sp)}</div>${emergencyBox()}</section>
-    <button class="shipbanner" type="button" data-go="ask"><div><b>AI에게 물어보기</b><span>수의 자료를 바탕으로 우리 아이 맞춤으로 바로 답해요</span></div><span>물어보기</span></button>
     <div class="trust"><img src="img/vet.jpg" alt="수의사 일러스트"><div><b>상담 전에 꼭 확인해 주세요</b>
       <ul><li>숨쉬기 힘들어하거나, 경련, 큰 출혈 같은 응급 상황은 바로 가까운 동물병원으로 가 주세요.</li><li>온라인 상담은 진단·처방을 대신하지 않아요.</li></ul></div></div>
     <div class="petbar">${petMini(pt)}<button class="link" type="button" data-go="pet">다른 아이</button></div>
@@ -1565,8 +1584,8 @@ async function wipeAccount(){
 }
 
 /* ---------- 라우팅 ---------- */
-const VIEWS={home:vHome,find:vFind,shop:vShop,ship:vShip,pet:vPet,edit:vEdit,health:vHealth,vet:vVet,guide:vGuide,ask:vAsk,account:vAccount};
-const TAB_OF={edit:"pet",health:"pet",vet:"pet",guide:"pet",ask:"pet",account:"pet"};
+const VIEWS={home:vHome,find:vFind,shop:vShop,ship:vShip,pet:vPet,edit:vEdit,health:vHealth,vet:vVet,guide:vGuide,ask:vAsk,vetform:vVetForm,account:vAccount};
+const TAB_OF={edit:"pet",health:"pet",vet:"pet",guide:"pet",ask:"pet",vetform:"pet",account:"pet"};
 function current(){ const h=location.hash.slice(1); if(h==="feed") return "ship"; return VIEWS[h]?h:"home"; }
 function render(top=true){
   const v=current();
@@ -1633,6 +1652,7 @@ document.addEventListener("click",e=>{
   else if(d.vhow){ vetForm.how=d.vhow; render(false); }
   else if(d.vtopic){ vetForm.topic=d.vtopic; render(false); }
   else if(d.askex!==undefined){ sendAsk(ASK_EX[+d.askex]); }
+  else if("guidehome" in d){ guideState={id:null, flags:[]}; go("guide"); }
   else if(d.guide){ guideState={id:d.guide, flags:[]}; go("guide"); }
   else if(d.gflag!==undefined){ const i=+d.gflag, f=new Set(guideState.flags); f.has(i)?f.delete(i):f.add(i); const had=guideState.flags.length>0; guideState.flags=[...f].sort(); render(false); const al=document.querySelector(".alert"); if(al&&!had) al.scrollIntoView({behavior:"smooth",block:"center"}); }
   else if(d.vwhen){ vetForm.when=d.vwhen; render(false); }
