@@ -1217,18 +1217,19 @@ async function sendAsk(q){
   ask.msgs.push({role:"user", content:q}); ask.draft=""; ask.busy=true; ask.err=""; render(false); askScroll();
   const pet={name:pt.name, species:spName(pt.sp), age:ageText(pt), weight:pt.weight, breed:pt.breed||"",
     avoid:(pt.allergies||[]).map(allergenName), conditions:pt.note||""};
-  let err="";
+  let err="", why="";
   try{
     const {data,error}=await sb.functions.invoke("vet-bot",{body:{messages:ask.msgs, pet}});
     if(error){
       const r=error.context; let code="";
-      if(r && typeof r.json==="function"){ try{ code=(await r.json()).error||""; }catch(_){} }
+      if(r && typeof r.json==="function"){ try{ const j=await r.clone().json(); code=j.error||""; why=j.code||j.message||""; }catch(_){ try{ why=(await r.text()).slice(0,60); }catch(_){} } }
+      why=[r?.status, typeof code==="string"&&code, why, !r?.status&&error.name].filter(Boolean).join(" · ");
       err = code==="login"||r?.status===401 ? "login" : code==="busy"||r?.status===429 ? "busy" : code==="server_key" ? "server_key"
           : r?.status===404 ? "notready" : error.name==="FunctionsFetchError" ? "notready" : "net";
     } else if(data && data.answer){ ask.msgs.push({role:"assistant", content:data.answer}); }
     else err="net";
   }catch(_){ err="net"; }
-  if(err){ ask.err=ASK_ERR[err]; ask.msgs.pop(); ask.draft=q; }
+  if(err){ ask.err=ASK_ERR[err]+(why?` <span class="small">(${esc(String(why))})</span>`:""); ask.msgs.pop(); ask.draft=q; }
   ask.busy=false; if(location.hash.slice(1)==="ask"){ render(false); askScroll(); }
 }
 function askScroll(){ const c=document.getElementById("chat"); if(c) c.lastElementChild?.scrollIntoView({behavior:"smooth",block:"end"}); }
