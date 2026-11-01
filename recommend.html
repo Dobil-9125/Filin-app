@@ -107,6 +107,20 @@ dl.spec{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-s
 dl.spec dt{color:var(--muted)}
 dl.spec dd{margin:0}
 .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;z-index:30;max-width:calc(100% - 32px);text-align:center}
+.save{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:12px}
+.save label.f{display:flex;flex-direction:column;gap:4px;font-size:13.5px;font-weight:500}
+.save input[type=text],.save input[type=tel]{font:inherit;font-weight:400;font-size:16px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg);color:var(--ink)}
+.save input:focus-visible{outline:2px solid var(--amber);outline-offset:1px}
+.save .agree{display:flex;gap:8px;align-items:flex-start;font-size:13.5px}
+.save .agree input{width:18px;height:18px;margin:2px 0 0;flex:none;accent-color:var(--slate)}
+.save .agree .link{margin-left:4px}
+.save .err{font-size:13px;color:var(--coral)}
+.save .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.save.done{background:var(--amber-soft);border-color:var(--amber-soft)}
+.terms{font-size:13.5px;display:flex;flex-direction:column;gap:10px}
+.terms table{border-collapse:collapse;width:100%}
+.terms th,.terms td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+.terms th{background:var(--bg);font-weight:500;white-space:nowrap}
 .foot{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;font-size:12.5px;color:var(--muted);margin-top:10px}
 .foot img{width:84px;height:auto}
 @media (max-width:420px){.logo small{display:none}.rec{grid-template-columns:76px minmax(0,1fr)}}
@@ -119,6 +133,7 @@ dl.spec dd{margin:0}
 </div>
 <div class="toast" id="toast" hidden></div>
 <div class="sheet-bg" id="sheetBg" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"></div></div>
+<script src="vendor/supabase-js-2.117.3.js"></script>
 <script>
 /* 제품 데이터와 추천 규칙은 앱(index.html)과 똑같아요. 앱에서 제품을 고치면 여기도 함께 고쳐 주세요. */
 const BRANDS = {
@@ -376,10 +391,104 @@ function vResult(){
   if(recs.length) h += `<section class="cta"><h3>마음에 드는 사료를 찾았나요?</h3><p class="small">1순위 추천 <b>${esc(BRANDS[recs[0].p.b].name+" "+recs[0].p.n)}</b>, 네이버 스토어에서 바로 살 수 있어요. 다른 추천 사료도 카드를 눌러 구매 버튼을 찾을 수 있어요.</p>
       <div class="row"><a class="btn primary" href="${storeUrl(recs[0].p)}" target="_blank" rel="noopener">네이버 스토어에서 구매하기</a><button class="btn ghost" type="button" data-share>결과 링크 복사</button></div>
       <a class="link" href="./">필린 앱에서 정기배송 알아보기</a></section>`;
+  if(recs.length) h += vSave();
   h += `<p class="note">추천은 참고용이에요. 사료 전환은 7~10일에 걸쳐 천천히, 알러지나 건강 고민은 수의사 선생님과 먼저 상담해 주세요. 가격은 스마트스토어 기준(2026-10-30)이라 바뀔 수 있어요.</p>
     <button class="btn ghost block" type="button" data-restart>처음부터 다시</button>`;
   return h;
 }
+/* ---------- 결과 저장 (고객 명단) ----------
+   추천 결과 아래에서 휴대폰 번호와 동의를 받아 Supabase leads 표에 넣어요 (supabase/leads.sql).
+   웹에서는 넣기만 되고 읽을 수 없어요. 명단은 Supabase 대시보드 Table Editor에서 봐요. */
+const SUPABASE_URL = "https://jafmexguhgvlokbnidof.supabase.co";
+const SUPABASE_KEY = "sb_publishable_N90l5kBICxa5yO0RQrQu3Q_PNhq6d_j";
+const sb = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {auth:{persistSession:false, autoRefreshToken:false}}) : null;
+const CONSENT_VERSION = "2026-11-01";
+const ss = { get:k=>{try{return sessionStorage.getItem(k);}catch(e){return null;}}, set:(k,v)=>{try{sessionStorage.setItem(k,v);}catch(e){}} };
+// 처음 들어온 링크의 utm_… 값과 이전 페이지를 기억해 둬요 (질문을 다시 해도 유지)
+const SRC = (()=>{
+  const saved=ss.get("filin_src"); if(saved){ try{ return JSON.parse(saved); }catch(e){} }
+  const q=new URLSearchParams(location.search), cut=v=>(v||"").slice(0,100);
+  const src={utm_source:cut(q.get("utm_source")), utm_medium:cut(q.get("utm_medium")), utm_campaign:cut(q.get("utm_campaign")), utm_content:cut(q.get("utm_content")), referrer:(document.referrer||"").slice(0,300)};
+  ss.set("filin_src", JSON.stringify(src)); return src;
+})();
+let saveState = ss.get("filin_saved") ? "done" : "form"; // form · sending · done
+let saveErr = "";
+
+function vSave(){
+  if(saveState==="done") return `<section class="save done" id="saveBox"><h3>저장했어요, 고마워요!</h3><p class="small">FILIN이 문을 열면 남겨 주신 번호로 오픈 소식과 첫 구매 샘플키트 안내를 보내 드릴게요. 다른 아이 결과도 남기려면 <button class="link" type="button" data-save-again>한 번 더 남기기</button>를 눌러 주세요.</p></section>`;
+  const busy = saveState==="sending";
+  return `<section class="save" id="saveBox">
+    <div class="stack" style="gap:4px"><h3>이 결과, 저장해 둘까요?</h3>
+      <p class="small muted">번호를 남기면 FILIN 오픈 소식과 우리 아이에게 맞춘 첫 구매 샘플키트 안내를 보내 드려요.</p></div>
+    <form class="stack" id="saveForm" novalidate style="gap:12px">
+      <label class="f"><span>아이 이름 <span class="small muted" style="font-weight:400">(선택)</span></span><input type="text" name="pet" maxlength="20" autocomplete="off" placeholder="예: 콩이"></label>
+      <label class="f">휴대폰 번호<input type="tel" name="phone" inputmode="numeric" autocomplete="tel" maxlength="13" placeholder="010-1234-5678" required></label>
+      <div class="hp" aria-hidden="true"><label>비워 두세요<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+      <label class="agree"><input type="checkbox" name="privacy" required><span><b>[필수]</b> 개인정보 수집·이용에 동의해요<button class="link" type="button" data-terms="privacy">내용 보기</button></span></label>
+      <label class="agree"><input type="checkbox" name="marketing"><span><b>[선택]</b> 혜택·새 소식 알림(문자·카카오 알림톡)을 받을게요<button class="link" type="button" data-terms="marketing">내용 보기</button></span></label>
+      ${saveErr?`<p class="err" role="alert">${esc(saveErr)}</p>`:""}
+      <button class="btn dark block" type="submit" ${busy?"disabled":""}>${busy?"저장하는 중…":"결과 저장하기"}</button>
+    </form>
+  </section>`;
+}
+const TERMS = {
+  privacy:{title:"개인정보 수집·이용 동의 (필수)", body:`<table>
+      <tr><th>수집하는 곳</th><td>온힐펫 (FILIN)</td></tr>
+      <tr><th>수집 항목</th><td>휴대폰 번호, 아이 이름(남긴 경우), 추천 질문의 답(강아지·고양이, 나이대, 몸 크기, 찾는 밥, 피할 재료, 활동량), 추천받은 제품, 들어온 경로(링크 정보·이전 페이지)</td></tr>
+      <tr><th>이용 목적</th><td>추천 결과 저장, FILIN 오픈 소식과 첫 구매 샘플키트 안내, 맞춤 추천 개선</td></tr>
+      <tr><th>보관 기간</th><td>남긴 날부터 1년. 그 전에 삭제를 요청하면 바로 지워요.</td></tr>
+    </table>
+    <p>동의하지 않을 수 있어요. 동의하지 않으면 결과 저장과 안내 발송만 할 수 없고, 맞춤 추천은 그대로 이용할 수 있어요.</p>`},
+  marketing:{title:"혜택·새 소식 알림 수신 동의 (선택)", body:`<table>
+      <tr><th>보내는 곳</th><td>온힐펫 (FILIN)</td></tr>
+      <tr><th>보내는 내용</th><td>할인·사은품·샘플 등 혜택, 새 제품, 반려생활 정보</td></tr>
+      <tr><th>보내는 방법</th><td>문자(SMS), 카카오 알림톡</td></tr>
+      <tr><th>보관 기간</th><td>남긴 날부터 1년, 또는 수신을 거부할 때까지</td></tr>
+    </table>
+    <p>동의하지 않아도 결과 저장과 오픈 소식 안내는 받을 수 있어요. 받은 메시지 안의 수신 거부 방법으로 언제든 그만 받을 수 있어요.</p>`}
+};
+function openTerms(k){
+  const t=TERMS[k];
+  $("#sheet").innerHTML = `<div class="row" style="justify-content:space-between"><h2 id="sheetTitle" style="font-size:18px">${t.title}</h2><button class="link" type="button" data-close>닫기</button></div><div class="terms">${t.body}</div><button class="btn ghost block" type="button" data-close>확인</button>`;
+  $("#sheetBg").hidden=false; document.body.style.overflow="hidden"; $("#sheet").scrollTop=0;
+  $("#sheet [data-close]").focus();
+}
+function rerenderSave(){ const box=$("#saveBox"); if(box) box.outerHTML=vSave(); }
+async function submitSave(form){
+  const fd=new FormData(form);
+  const keep=()=>{ const f=$("#saveForm"); if(!f) return; f.pet.value=fd.get("pet")||""; f.phone.value=fd.get("phone")||""; f.privacy.checked=!!fd.get("privacy"); f.marketing.checked=!!fd.get("marketing"); };
+  const fail=(msg,focus)=>{ saveState="form"; saveErr=msg; rerenderSave(); keep(); if(focus){ const el=$("#saveForm")[focus]; if(el) el.focus(); } };
+  if(fd.get("website")) { saveState="done"; ss.set("filin_saved","1"); return rerenderSave(); } // 자동 입력 봇은 조용히 넘겨요
+  const phone=String(fd.get("phone")||"").replace(/\D/g,"");
+  if(!/^01[0-9]{8,9}$/.test(phone)) return fail("휴대폰 번호를 다시 확인해 주세요. (예: 010-1234-5678)","phone");
+  if(!fd.get("privacy")) return fail("결과를 저장하려면 [필수] 개인정보 수집·이용에 동의해 주세요.","privacy");
+  if(!sb) return fail("지금은 저장할 수 없어요. 인터넷 연결을 확인하고 잠시 뒤 다시 눌러 주세요.");
+  saveState="sending"; saveErr=""; rerenderSave(); keep();
+  const recs=recommend({sp:ans.sp, stage:ans.stage, size:ans.sp==="dog"?ans.size:"small", prefs:ans.prefs, allergies:ans.allergies, active:ans.active});
+  const row={
+    phone, pet_name:String(fd.get("pet")||"").trim().slice(0,20),
+    species:ans.sp, stage:ans.stage||"", size:ans.sp==="dog"?ans.size:"", prefs:ans.prefs, allergies:ans.allergies, active:ans.active||"",
+    recommended:recs.map(r=>r.p.id),
+    consent_privacy:true, consent_marketing:!!fd.get("marketing"), consent_version:CONSENT_VERSION,
+    ...SRC
+  };
+  try{
+    const {error}=await sb.from("leads").insert(row);
+    if(error) throw error;
+    saveState="done"; ss.set("filin_saved","1"); rerenderSave(); toast("결과를 저장했어요.");
+  }catch(e){
+    console.warn("leads insert", e);
+    fail("저장하지 못했어요. 잠시 뒤 다시 눌러 주세요.");
+  }
+}
+document.addEventListener("submit", e=>{ if(e.target.id==="saveForm"){ e.preventDefault(); if(saveState!=="sending") submitSave(e.target); } });
+document.addEventListener("input", e=>{
+  if(e.target.name==="phone" && e.target.closest("#saveForm")){ // 숫자만 받고 010-1234-5678 꼴로 보여 줘요
+    const d=e.target.value.replace(/\D/g,"").slice(0,11);
+    e.target.value = d.length<4?d : d.length<8?`${d.slice(0,3)}-${d.slice(3)}` : `${d.slice(0,3)}-${d.slice(3,d.length-4)}-${d.slice(-4)}`;
+  }
+});
+
 function chatNav(){
   const n=qs().length, done=step>=n;
   return `<div class="chatnav">
@@ -444,6 +553,8 @@ document.addEventListener("click", e=>{
   else if("restart" in d){ ans=fresh(); step=0; render(); window.scrollTo({top:0}); toast("처음 질문부터 다시 시작해요."); }
   else if(d.open){ openProduct(d.open); }
   else if("close" in d){ closeSheet(); }
+  else if(d.terms){ openTerms(d.terms); }
+  else if("saveAgain" in d){ saveState="form"; saveErr=""; rerenderSave(); }
   else if("share" in d){
     const url=location.href;
     (navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(()=>toast("결과 링크를 복사했어요."),()=>{ prompt("이 링크를 복사해 주세요", url); });

@@ -47,7 +47,7 @@ FILIN(필린) 고객용 앱의 첫 시제품이에요. 휴대폰 화면에 맞�
 
 ## 맞춤 추천 웹 버전
 
-앱을 설치하지 않은 사람도 링크 하나로 맞춤 추천을 받을 수 있는 웹페이지예요. 로그인이나 저장 없이 바로 써요.
+앱을 설치하지 않은 사람도 링크 하나로 맞춤 추천을 받을 수 있는 웹페이지예요. 로그인 없이 바로 써요. 결과 아래에서 원하는 사람만 번호를 남겨 결과를 저장해요(아래 '결과 저장').
 
 | 파일 | 하는 일 |
 | --- | --- |
@@ -59,6 +59,21 @@ FILIN(필린) 고객용 앱의 첫 시제품이에요. 휴대폰 화면에 맞�
 - 결과는 '함께 든 원료' 주의 문구(예: 주 단백질은 곤충이지만 닭고기지방이 들어 있어요)와 용량별 가격·정가·정기배송가·일시품절을 보여 줘요.
 - '네이버 스토어에서 구매하기' 버튼은 개밥왕 스마트스토어로 가요. 24개 제품 모두 `recommend.html`의 `STORE_URL`에 상품 주소가 들어 있어요(2026-10-30). 주소가 없는 제품은 스토어 안 검색 결과(`STORE_Q`의 검색어)로 보내요. 상품이 바뀌거나 새로 생기면 `recommend.html`의 `STORE_URL`에 `"제품id": "https://smartstore.naver.com/gaebabking/products/번호"`처럼 넣으면 그 상품으로 바로 가요.
 - 답은 주소 끝(`#sp=dog&st=adult&...`)에 담겨서 '결과 링크 복사'로 같은 결과를 공유할 수 있어요.
+
+### 결과 저장 (고객 명단 모으기)
+
+네이버 스토어 고객 정보는 우리가 가져올 수 없어서, 자사몰로 넘어갈 때 쓸 명단을 이 웹에서 직접 모아요.
+
+- 추천 결과 아래 **'이 결과, 저장해 둘까요?'** 칸에서 아이 이름(선택), 휴대폰 번호, 동의 2개([필수] 개인정보 수집·이용, [선택] 혜택 알림 수신)를 받아요. 동의 문구는 '내용 보기'로 열려요 (`recommend.html`의 `TERMS`, 바꾸면 `CONSENT_VERSION` 날짜도 바꿔 주세요).
+- 함께 저장되는 것: 추천 질문의 답, 추천받은 제품 3개, 들어온 링크의 `utm_source`·`utm_medium`·`utm_campaign`·`utm_content`, 이전 페이지.
+- **처음 한 번:** Supabase → SQL Editor에서 `supabase/leads.sql` 실행. 실행 전에는 '저장하지 못했어요'가 나와요.
+- 웹에서는 넣기만 되고 읽을 수 없게 잠가 두었어요. 명단은 Supabase → **Table Editor → leads**에서 보고 CSV로 내려받아요.
+- 보관 기간은 동의서대로 1년이에요. 지우는 SQL은 `leads.sql` 맨 아래에 있어요.
+- 링크 예시 (어디서 왔는지 남기기):
+  - 블로그: `https://dobil-9125.github.io/Filin-app/recommend.html?utm_source=naver_blog&utm_medium=blog&utm_campaign=2026w45`
+  - 스토어 배너: `...recommend.html?utm_source=naver_store&utm_medium=banner&utm_campaign=open`
+  - 샘플키트 QR: `...recommend.html?utm_source=samplekit&utm_medium=qr&utm_campaign=kit1`
+- 아직 시제품인 부분: 문자 인증이 없어 번호가 본인 것인지 확인하지 않아요. 같은 번호가 여러 번 들어올 수 있어요(아이별로 남길 수 있게 막지 않았어요). 동의 문구는 정식 오픈 전에 검토받아 주세요.
 
 ## 회원가입·로그인 (Supabase)
 
