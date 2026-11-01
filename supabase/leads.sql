@@ -50,8 +50,13 @@ create policy "명단 넣기만" on public.leads
   for insert to anon, authenticated with check (consent_privacy);
 
 -- 3) 보관 기간: 동의서에 "남긴 날부터 1년"이라고 안내해요.
---    1년 지난 줄을 지우려면 아래 한 줄을 가끔(예: 매달 1일) 실행하세요.
--- delete from public.leads where created_at < now() - interval '1 year';
+--    매일 UTC 3시(한국 시각 낮 12시)에 1년 지난 줄을 자동으로 지워요.
+--    pg_cron 확장을 써요. 처음 한 번만 아래 블록을 실행하면 돼요 (다시 실행해도 일정이 하나만 남아요).
+create extension if not exists pg_cron;
+select cron.unschedule(jobid) from cron.job where jobname = 'leads-1y-delete';
+select cron.schedule('leads-1y-delete', '0 3 * * *',
+  $$delete from public.leads where created_at < now() - interval '1 year'$$);
+--    잘 걸렸는지 보기: select * from cron.job;  지운 기록 보기: select * from cron.job_run_details order by start_time desc limit 5;
 --
 --    고객이 삭제를 요청하면 (번호는 숫자만):
 -- delete from public.leads where phone = '01012345678';
