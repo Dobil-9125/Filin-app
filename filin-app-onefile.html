@@ -195,6 +195,10 @@ img.photo{object-fit:cover!important;padding:0!important;border-radius:50%}
 .btn.sm{padding:8px 14px;font-size:14px;cursor:pointer}
 .mini b{display:block;font-size:14px}
 .mini span{font-size:12px;color:var(--muted)}
+.emerg{background:#ffe4e0;border-radius:14px;padding:12px 14px}
+.emerg summary{font-weight:700;color:#b3261e;cursor:pointer}
+.emerg[open] summary{margin-bottom:8px}
+.emerg ul{margin-top:8px}
 .chat{display:flex;flex-direction:column;gap:10px}
 .msg{display:flex;gap:8px;align-items:flex-end;max-width:92%}
 .msg .av{width:42px;height:42px;object-fit:contain;border-radius:50%;background:var(--lilac);padding:2px;flex:none}
@@ -1164,11 +1168,13 @@ const GUIDE = [
   src:"Merck 수의 매뉴얼, 미국 FDA"},
 ];
 let guideState = {id:null, flags:[]};
+const EMERGENCY = ["숨쉬기 힘들어하거나, 잇몸·혀가 파랗거나 창백해요. 고양이가 입을 벌리고 숨쉬어요.","쓰러졌거나 의식이 없어요.","피가 많이 나거나 멈추지 않아요.","경련이 5분 넘게 이어지거나, 하루에 여러 번 반복돼요. 첫 경련도 당일 진료를 받아요.","중독 물질을 먹었거나 먹었을 수 있어요.","심하게 아파해요. 다리를 전혀 딛지 못하거나 뼈가 부러진 것 같아요.","눈을 다쳤어요.","토하려는데 안 나오고 배가 부풀어요(큰 개의 위 확장·염전).","수컷 고양이가 소변을 못 봐요.","심하게 헐떡이거나 비틀거리고 쓰러져요(열사병).","차에 치였거나 높은 곳에서 떨어졌어요. 겉으로 멀쩡해 보여도 속을 다쳤을 수 있어요.","출산 중 오래 힘주는데 아기가 안 나오거나, 수유 중인 엄마가 떨고 비틀거려요."];
+function emergencyBox(){ return `<details class="emerg"><summary>응급 신호 한눈에 보기</summary><p class="small">아래 중 하나라도 해당하면 <b>바로 가까운 동물병원(24시 병원)에 전화하고 가 주세요.</b> 전화하면 가는 동안 할 일을 알려 줄 수 있어요.</p><ul class="plain">${EMERGENCY.map(x=>`<li>${x}</li>`).join("")}</ul><p class="small muted">출처: Merck 수의 매뉴얼</p></details>`; }
 function guideTopics(sp){ return GUIDE.filter(g=>!g.sp||g.sp===sp); }
 function guideChips(sp){ return guideTopics(sp).map(g=>`<button class="chip" type="button" data-guide="${g.id}">${g.n}</button>`).join(""); }
 function vGuide(){
   const pt=cur(), g=GUIDE.find(x=>x.id===guideState.id);
-  if(!g) return `<div class="stack"><span class="eyebrow">증상 길잡이</span><h1>어떤 게 걱정되세요?</h1><p class="small muted">고르면 병원에 가야 할 신호와 집에서 할 수 있는 걸 알려 드려요.</p></div><div class="chips">${guideChips(pt.sp)}</div>`;
+  if(!g) return `<div class="stack"><span class="eyebrow">증상 길잡이</span><h1>어떤 게 걱정되세요?</h1><p class="small muted">고르면 병원에 가야 할 신호와 집에서 할 수 있는 걸 알려 드려요.</p></div><div class="chips">${guideChips(pt.sp)}</div>${emergencyBox()}`;
   const on=guideState.flags, urgent=on.some(i=>g.urgent.includes(i));
   return `<div class="stack"><span class="eyebrow">증상 길잡이</span><h1>${g.n}</h1><p>${g.sum}</p></div>
     <div class="petbar">${petMini(pt)}<button class="link" type="button" data-go="vet">다른 고민 보기</button></div>
@@ -1248,7 +1254,7 @@ function vVet(){
     <p class="small muted">사료, 피부, 소화처럼 평소 궁금한 걸 채팅이나 영상으로 상담해요.</p></div>
     <section class="card"><div class="section-head"><h2>증상 길잡이</h2><span class="badge multi">무료 · 바로 확인</span></div>
       <p class="small muted">걱정되는 걸 고르면 병원에 가야 할 신호와 집에서 할 수 있는 걸 바로 알려 드려요.</p>
-      <div class="chips">${guideChips(pt.sp)}</div></section>
+      <div class="chips">${guideChips(pt.sp)}</div>${emergencyBox()}</section>
     <button class="shipbanner" type="button" data-go="ask"><div><b>AI에게 물어보기</b><span>수의 자료를 바탕으로 우리 아이 맞춤으로 바로 답해요</span></div><span>물어보기</span></button>
     <div class="trust"><img src="img/vet.jpg" alt="수의사 일러스트"><div><b>상담 전에 꼭 확인해 주세요</b>
       <ul><li>숨쉬기 힘들어하거나, 경련, 큰 출혈 같은 응급 상황은 바로 가까운 동물병원으로 가 주세요.</li><li>온라인 상담은 진단·처방을 대신하지 않아요.</li></ul></div></div>
