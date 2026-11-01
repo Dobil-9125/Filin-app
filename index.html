@@ -310,6 +310,11 @@ form.card .link{align-self:center}
 }
 .shop-q{display:flex;gap:8px}.shop-q input{flex:1;min-width:0}
 .badge.multi{background:var(--sky);color:var(--slate);font-weight:600}
+.flags{display:flex;flex-direction:column;gap:8px}
+.flag{display:flex;align-items:center;gap:10px;text-align:left;border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:11px 12px;font:inherit;font-size:14.5px;color:var(--ink);cursor:pointer}
+.flag::before{content:"";flex:none;width:20px;height:20px;border-radius:6px;border:1.5px solid var(--line);background:var(--surface)}
+.flag[aria-pressed="true"]{border-color:var(--coral);background:#fff5f4}
+.flag[aria-pressed="true"]::before{background:var(--coral);border-color:var(--coral);box-shadow:inset 0 0 0 3px #fff}
 /* 요즘 앱 느낌: 회색 바탕 위 테두리 없는 흰 카드, 타일은 흰 카드 + 색 아이콘 */
 .pcard,.card,.qcard,.rec,.start,.article,.ship,.petbar,.day,.chatnav,.petcard:not([aria-pressed="true"]),.msg .bub{border-color:transparent}
 .tiles .tile,.worry{background:var(--surface)}
@@ -633,7 +638,7 @@ function vHome(){
       <button class="tile t-peach" type="button" data-go="pet">${ic("pet")}<b>내 아이</b><span>프로필·알러지 관리</span></button>
       <button class="tile t-amber" type="button" data-go="shop">${ic("shop")}<b>브랜드관</b><span>${P.length}가지 제품</span></button>
       <button class="tile t-lilac" type="button" data-go="health">${ic("health")}<b>건강 체크</b><span>매일 30초 컨디션 기록</span></button>
-      <button class="tile t-rose" type="button" data-go="vet">${ic("vet")}<b>수의사 상담</b><span>채팅·영상으로 물어보기</span></button>
+      <button class="tile t-rose" type="button" data-go="vet">${ic("vet")}<b>수의사 상담</b><span>증상 길잡이·채팅 상담</span></button>
     </div>
     <button class="worry" type="button" data-go="find">
       <img src="img/seri-question.png" alt="사료를 보며 고민하는 세리">
@@ -1100,6 +1105,70 @@ function openArticle(id){
   </div></div>`;
 }
 
+
+/* ---------- 증상 길잡이 (AI 없이 수의 지식 자료로 안내) ---------- */
+// 수의 지식 자료(FILIN 수의 지식 자료, 2026-10-30판)에서 옮긴 내용. red: 병원에 가야 할 신호, home: 집에서 할 수 있는 것, urgent: 고르면 응급 안내를 띄우는 red 번호
+const GUIDE = [
+ {id:"vomit",n:"구토",sum:"한두 번 토하고 잘 먹고 잘 노는 아이는 지켜볼 수 있어요.",
+  red:["짧은 시간에 여러 번 토하거나, 물도 못 넘기고 토해요","토사물에 피(빨간색, 커피 가루 같은 검은색)가 있어요","토하려는데 아무것도 안 나오고 배가 부풀어요","기운이 없거나, 배를 만지면 아파하거나, 설사·열이 같이 있어요","이물이나 초콜릿·포도·약·자일리톨을 먹었을 수 있어요","어린 아이, 나이 많은 아이, 지병이 있는 아이예요","하루 넘게 이어지거나, 고양이가 일주일에 한 번보다 자주 토해요"],urgent:[2,4],
+  home:["물은 끊지 말고 조금씩 자주 줘요.","밥은 잠시 쉬었다가, 더 토하지 않으면 소화가 쉬운 음식을 아주 조금씩 다시 줘요.","고양이는 하루(24시간) 넘게 굶기면 안 돼요.","토한 횟수·시간·모양(사진)을 기록해 두면 진료에 도움이 돼요.","사람 약을 주거나 일부러 토하게 하지 않아요."],
+  note:"고양이가 헤어볼을 1~2주에 한 번 토하는 정도는 흔해요.",src:"Merck 수의 매뉴얼, 코넬 고양이 건강센터"},
+ {id:"diarrhea",n:"설사·묽은 변",sum:"기운·식욕이 좋고 피가 없는 가벼운 설사는 며칠 안에 좋아지는 경우가 많아요.",
+  red:["변에 피가 많이 섞이거나, 검고 끈적한(타르 같은) 변이에요","구토, 기운 없음, 밥 안 먹음, 배 통증, 열이 같이 있어요","어린 아이(특히 예방접종 전 강아지), 나이 많은 아이, 지병이 있는 아이예요","하루이틀 넘게 이어지거나, 자주 재발하거나, 체중이 줄어요","이물이나 독성 물질을 먹었을 수 있어요"],urgent:[],
+  home:["깨끗한 물을 항상 마실 수 있게 해요. 탈수가 가장 큰 위험이에요.","기름기 적고 소화가 쉬운 음식을 조금씩 자주 주고, 변이 굳으면 원래 사료로 천천히 돌아가요.","새로 바꾼 사료나 간식이 있으면 멈추고 기록해 두어요.","사람용 지사제는 주지 않아요."],
+  src:"Merck 수의 매뉴얼, 코넬 고양이 건강센터"},
+ {id:"skin",n:"가려움·피부",sum:"가려움은 벼룩 같은 기생충, 환경 알러지, 음식 알러지 순으로 흔해요.",
+  red:["피나 진물이 나는 상처, 털이 빠지고 빨간 부위가 퍼져요","잠을 못 자거나 계속 핥을 만큼 가려워해요","귀에서 냄새가 나거나 머리를 자주 흔들어요","얼굴이 갑자기 붓거나 두드러기가 생기고 숨쉬기 힘들어해요"],urgent:[3],
+  home:["벼룩·기생충 예방이 잘 되고 있는지 먼저 확인해요.","음식 알러지가 의심되면 수의사와 함께 제거식 시험(8주 이상, 간식·영양제도 끊기)을 해요.","피해야 할 재료를 '내 아이'에 등록하면 맞춤 추천에서 빼고 보여 드려요."],
+  note:"어떤 사료로 바꾼다고 알러지가 낫는다고 말할 수는 없어요. 원인 확인은 진료가 필요해요.",src:"Olivry 외 2015·2017, Mueller 외 2016"},
+ {id:"weight",n:"살이 쪘어요",sum:"몸무게 숫자보다 체형점수(9점 만점에 4~5점이 적정)로 봐요. 갈비뼈가 얇은 지방 아래로 쉽게 만져지고, 위에서 보면 허리가 들어가면 적정이에요.",
+  red:["고양이가 갑자기 여러 날 안 먹어요","많이 먹는데 살이 빠지거나, 물을 많이 마시고 소변이 많아요","먹는 양을 줄여도 살이 쪄요"],urgent:[],
+  home:["사료는 계량컵 대신 저울로 무게를 재서 줘요.","간식은 하루 열량의 10% 미만으로 하고, 그만큼 사료를 줄여요.","한 달에 한 번 체중을 재서 기록해요.","놀이·산책을 조금씩 늘려요. 고양이를 굶겨서 살을 빼면 안 돼요."],
+  src:"WSAVA 체형점수표·간식 가이드"},
+ {id:"switch",n:"사료 바꾸기",sum:"새 사료는 적어도 일주일에 걸쳐 조금씩 섞어서 바꿔요. 아이에 따라 더 오래 걸리기도 해요.",
+  red:["바꾼 뒤 구토가 반복돼요","피가 섞인 변이나 물 같은 설사를 해요","기운이 없거나 아파해요","고양이가 하루 넘게 안 먹어요"],urgent:[],
+  home:["1~2일 새 사료 25% → 3~4일 50% → 5~6일 75% → 7일부터 100%","변이 조금 묽으면 문제없던 비율에서 하루이틀 더 머문 뒤 이어가요.","같은 기간에 새 간식·영양제는 시작하지 않아요.","급여량은 새 사료의 열량(kcal/kg)으로 다시 계산해요.","고양이는 두 그릇을 나란히 두고 스스로 고르게 하는 방법도 있어요."],
+  src:"Tufts 수의영양팀, 코넬 고양이 건강센터"},
+ {id:"urine",n:"소변 문제",sp:"cat",sum:"화장실을 자주 들락거리며 조금씩 보거나 피가 비치면 방광·요도 문제예요.",
+  red:["힘주는데 소변이 거의 또는 전혀 안 나와요 (특히 수컷)","울면서 소변을 보거나, 생식기를 계속 핥아요","구토, 기운 없음, 밥 안 먹음이 같이 있어요","소변에 피가 보이거나 화장실이 아닌 곳에 소변을 봐요"],urgent:[0],
+  home:["물을 더 마시게 해요: 습식 섞기, 물그릇 여러 개, 흐르는 급수기.","화장실은 고양이 수 + 1개, 매일 깨끗하게 치워요.","숨을 곳, 높은 곳, 매일 놀이 시간으로 스트레스를 줄여요.","결석 진단을 받았으면 수의사가 정한 처방식을 이어가요."],
+  note:"수컷이 소변을 아예 못 보면 몇 시간 안에 생명이 위험할 수 있어요.",src:"코넬 고양이 건강센터"},
+ {id:"thirst",n:"물을 많이 마셔요",sum:"나이 든 고양이에게 흔한 만성 신장병은 증상이 늦게 나타나서, 건강검진(혈액·소변 검사)으로 일찍 찾는 게 가장 중요해요.",
+  red:["물을 평소보다 많이 마시고 소변 양이 늘어요","살이 빠지고 입맛이 없어요","구토, 입 냄새, 입안 궤양, 무기력이 있어요","갑자기 소변을 거의 안 봐요 (백합·포도·부동액을 먹었을 수 있어요)"],urgent:[3],
+  home:["나이 든 아이는 정기적으로 혈액·소변 검사와 혈압 측정을 받아요.","신장병 진단을 받았으면 처방식을 이어가고 일반 사료·간식을 섞지 않아요.","물을 충분히 마시게 하고, 습식을 함께 쓰기도 해요."],
+  src:"코넬 고양이 건강센터"},
+ {id:"teeth",n:"입 냄새·치아",sum:"입 냄새는 당연한 게 아니라 치석·잇몸염 신호일 수 있어요. 예방의 기본은 매일 양치질이에요.",
+  red:["한쪽으로만 씹거나, 사료를 떨어뜨리거나, 입을 만지면 싫어해요","잇몸이 빨갛고 피가 나거나 침을 많이 흘려요","이가 부러졌거나 흔들려요, 눈 아래가 붓거나 고름이 나와요","유치가 영구치가 난 뒤에도 남아 있어요"],urgent:[],
+  home:["반려동물 전용 치약으로 매일 양치해요. 사람 치약은 쓰지 않아요.","뼈, 녹용, 딱딱한 장난감처럼 너무 단단한 건 이가 부러질 수 있어요.","이미 생긴 치석은 마취하고 하는 스케일링이 필요해요. 무마취 스케일링은 권하지 않아요."],
+  src:"AVDC 미국 수의치과학회, WSAVA"},
+ {id:"limp",n:"다리를 절어요",sum:"관절 건강에 가장 도움이 되는 건 적정 체중이에요. 통증이 보이면 치료가 먼저예요.",
+  red:["다리를 전혀 딛지 못하거나 갑자기 절어요","뒷다리에 힘이 없거나 끌어요","만지면 울거나, 관절이 붓고 뜨거워요","걷다가 깡충거리는 일이 점점 자주, 오래 이어져요"],urgent:[1],
+  home:["미끄럽지 않은 바닥(매트), 낮은 계단·경사로를 써요.","짧고 자주 산책하고, 높은 곳에서 뛰어내리기를 줄여요.","사람 진통제는 절대 주지 않아요. 아세트아미노펜은 고양이에게 치명적이에요."],
+  src:"Merck 수의 매뉴얼"},
+ {id:"tear",n:"눈물 자국",sum:"갈색 자국은 눈물 속 색소가 털에 묻어서 생겨요. 사료만 바꿔서 없어진다는 근거는 약해요.",
+  red:["한쪽 눈에만 갑자기 눈물이 많아졌어요","눈을 가늘게 뜨거나 비비고, 눈이 빨갛거나 흐려졌어요","눈곱이 노랑·초록색이거나 냄새가 나요","눈 주변 피부가 짓무르거나 털이 빠져요"],urgent:[],
+  home:["하루 1~2번 미지근한 물이나 전용 세정제로 닦고 보송하게 말려요.","눈 주변 털을 짧게 유지해요.","항생제가 든 눈물 자국 제거제는 수의사 처방 없이 쓰지 않아요."],
+  src:"Merck 수의 매뉴얼, 미국 FDA"},
+];
+let guideState = {id:null, flags:[]};
+function guideTopics(sp){ return GUIDE.filter(g=>!g.sp||g.sp===sp); }
+function guideChips(sp){ return guideTopics(sp).map(g=>`<button class="chip" type="button" data-guide="${g.id}">${g.n}</button>`).join(""); }
+function vGuide(){
+  const pt=cur(), g=GUIDE.find(x=>x.id===guideState.id);
+  if(!g) return `<div class="stack"><span class="eyebrow">증상 길잡이</span><h1>어떤 게 걱정되세요?</h1><p class="small muted">고르면 병원에 가야 할 신호와 집에서 할 수 있는 걸 알려 드려요.</p></div><div class="chips">${guideChips(pt.sp)}</div>`;
+  const on=guideState.flags, urgent=on.some(i=>g.urgent.includes(i));
+  return `<div class="stack"><span class="eyebrow">증상 길잡이</span><h1>${g.n}</h1><p>${g.sum}</p></div>
+    <div class="petbar">${petMini(pt)}<button class="link" type="button" data-go="vet">다른 고민 보기</button></div>
+    <div class="card"><b>이 중에 해당하는 게 있나요?</b>
+      <div class="flags">${g.red.map((r,i)=>`<button class="flag" type="button" data-gflag="${i}" aria-pressed="${on.includes(i)}">${r}</button>`).join("")}</div>
+    </div>
+    ${on.length ? `<div class="alert"><b>${urgent?"지금 바로 동물병원(응급)에 가 주세요":"동물병원 진료를 받아 보세요"}</b><p>${urgent?"고른 증상은 빨리 진료가 필요한 신호예요. 기다리지 말고 가까운 동물병원이나 24시 응급 병원으로 가 주세요.":"고른 증상은 진료가 필요한 신호예요. 오늘이나 내일 중으로 동물병원에 가 보세요."}</p><button class="btn dark" type="button" data-go="vet">FILIN 수의사 상담 신청</button></div>`
+      : `<p class="small muted">해당하는 게 없으면 아래처럼 집에서 살펴봐 주세요. 나빠지면 다시 확인해요.</p>`}
+    <section class="stack"><h2>집에서 할 수 있는 것</h2><ul class="plain">${g.home.map(h=>`<li>${h}</li>`).join("")}</ul>${g.note?`<p class="note">${g.note}</p>`:""}</section>
+    <p class="small muted">출처: ${g.src}</p>
+    <p class="proto">수의 자료를 바탕으로 한 일반 안내예요. 진단이나 처방을 대신하지 않아요.</p>`;
+}
+
 /* ---------- 수의사 상담 ---------- */
 let consults = store.get("consults", []);
 let vetForm = {how:"chat", topic:null, when:"soon", text:"", attach:true};
@@ -1110,6 +1179,9 @@ function vVet(){
   const mine=consults.filter(c=>c.petId===pt.id);
   return `<div class="stack"><span class="eyebrow">수의사 상담</span><h1>수의사 선생님께 물어보세요</h1>
     <p class="small muted">사료, 피부, 소화처럼 평소 궁금한 걸 채팅이나 영상으로 상담해요.</p></div>
+    <section class="card"><div class="section-head"><h2>증상 길잡이</h2><span class="badge multi">무료 · 바로 확인</span></div>
+      <p class="small muted">걱정되는 걸 고르면 병원에 가야 할 신호와 집에서 할 수 있는 걸 바로 알려 드려요.</p>
+      <div class="chips">${guideChips(pt.sp)}</div></section>
     <div class="trust"><img src="img/vet.jpg" alt="수의사 일러스트"><div><b>상담 전에 꼭 확인해 주세요</b>
       <ul><li>숨쉬기 힘들어하거나, 경련, 큰 출혈 같은 응급 상황은 바로 가까운 동물병원으로 가 주세요.</li><li>온라인 상담은 진단·처방을 대신하지 않아요.</li></ul></div></div>
     <div class="petbar">${petMini(pt)}<button class="link" type="button" data-go="pet">다른 아이</button></div>
@@ -1419,8 +1491,8 @@ async function wipeAccount(){
 }
 
 /* ---------- 라우팅 ---------- */
-const VIEWS={home:vHome,find:vFind,shop:vShop,ship:vShip,pet:vPet,edit:vEdit,health:vHealth,vet:vVet,account:vAccount};
-const TAB_OF={edit:"pet",health:"pet",vet:"pet",account:"pet"};
+const VIEWS={home:vHome,find:vFind,shop:vShop,ship:vShip,pet:vPet,edit:vEdit,health:vHealth,vet:vVet,guide:vGuide,account:vAccount};
+const TAB_OF={edit:"pet",health:"pet",vet:"pet",guide:"pet",account:"pet"};
 function current(){ const h=location.hash.slice(1); if(h==="feed") return "ship"; return VIEWS[h]?h:"home"; }
 function render(top=true){
   const v=current();
@@ -1486,6 +1558,8 @@ document.addEventListener("click",e=>{
   else if(d.article){ openArticle(d.article); }
   else if(d.vhow){ vetForm.how=d.vhow; render(false); }
   else if(d.vtopic){ vetForm.topic=d.vtopic; render(false); }
+  else if(d.guide){ guideState={id:d.guide, flags:[]}; go("guide"); }
+  else if(d.gflag!==undefined){ const i=+d.gflag, f=new Set(guideState.flags); f.has(i)?f.delete(i):f.add(i); const had=guideState.flags.length>0; guideState.flags=[...f].sort(); render(false); const al=document.querySelector(".alert"); if(al&&!had) al.scrollIntoView({behavior:"smooth",block:"center"}); }
   else if(d.vwhen){ vetForm.when=d.vwhen; render(false); }
   else if("sendvet" in d){ consults.unshift({id:"c"+Date.now(),petId:cur().id,how:vetForm.how,topic:vetForm.topic,when:vetForm.when,text:vetForm.text.trim(),attach:vetForm.attach,date:ymd(today())}); store.set("consults",consults); vetForm={how:"chat",topic:null,when:"soon",text:"",attach:true}; toast("상담을 신청했어요. 수의사 선생님이 확인하면 알려 드려요. (시제품)"); render(false); }
   else if(t.id==="sendSample"){ toast(`${samples.length}가지 샘플 신청을 받았어요. (시제품이라 실제로 접수되진 않아요)`); }
