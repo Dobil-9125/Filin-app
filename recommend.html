@@ -317,8 +317,8 @@ const AGES = {
 };
 const SIZES = [["small","10kg 미만 (소형)"],["medium","10~25kg (중형)"],["large","25kg 이상 · 대형 품종"]];
 const QUESTIONS = [
-  {key:"concerns", multi:true, none:"특별한 고민은 없어요", q:()=>"안녕하세요, 세리예요! 우리 아이, 밥 먹을 때 어떤 고민이 있나요?", opts:()=>CONCERNS},
-  {key:"sp", q:()=>"어떤 아이의 밥을 찾고 있어요?", opts:()=>[["dog","강아지"],["cat","고양이"]]},
+  {key:"sp", q:()=>"안녕하세요, 세리예요! 어떤 아이의 밥을 찾고 있어요?", opts:()=>[["dog","강아지"],["cat","고양이"]]},
+  {key:"concerns", multi:true, none:"특별한 고민은 없어요", q:a=>`우리 ${a.sp==="cat"?"고양이":"강아지"}, 밥 먹을 때 어떤 고민이 있나요?`, opts:()=>CONCERNS},
   {key:"stage", q:a=>`${a.sp==="cat"?"고양이":"강아지"}는 몇 살이에요?`, opts:a=>AGES[a.sp]},
   {key:"size", q:()=>"몸무게는 어느 정도예요?", opts:()=>SIZES, only:a=>a.sp==="dog"},
   {key:"allergies", multi:true, none:"없어요", q:()=>"먹으면 안 되거나 피하고 싶은 재료가 있나요?", opts:()=>ALLERGENS},
