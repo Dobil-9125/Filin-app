@@ -1,4 +1,5 @@
-// FILIN 네이버 톡톡 AI 상담 봇: 손님이 스토어 톡톡에 보낸 질문을 수의 지식 자료와 함께 Claude에게 보내고, 답을 톡톡으로 돌려줘요.
+// FILIN 네이버 톡톡 상담 봇: 자주 묻는 질문은 버튼으로 정해진 답을 바로 보여 주고, 그 밖의 질문은 수의 지식 자료와 함께 Claude에게 보내 답을 톡톡으로 돌려줘요.
+// 브랜드스토어든 일반 스마트스토어든, 스토어에 연결된 톡톡 계정이면 똑같이 붙일 수 있어요.
 // Supabase Edge Function (이름: talk-bot). 필요한 Secrets: ANTHROPIC_API_KEY(앱 봇과 같은 것), NAVER_TALK_TOKEN, TALK_WEBHOOK_KEY
 // Verify JWT 는 꺼 주세요 (네이버는 Supabase 로그인 표를 보내지 않아요).
 import Anthropic from "npm:@anthropic-ai/sdk@0.135.0";
@@ -937,8 +938,42 @@ type TalkEvent = {
   options?: { inflow?: string; under14?: boolean; [k: string]: unknown };
 };
 
+// ───────── 자주 묻는 질문 (버튼으로 고르면 AI 없이 정해진 답이 바로 떠요, 비용 0원) ─────────
+// 요셉님이 FAQ 목록을 주시면 아래를 채워요. 규칙:
+// · 분류 title 은 10자 이내, 질문 q 는 18자 이내 (톡톡 버튼 글자 수 제한)
+// · 분류 하나에 질문 10개까지, 분류는 8개까지
+// · a 가 "" 이면 아직 답이 없는 질문이에요. 손님이 누르면 AI가 대신 답해요 (handover 질문은 바로 담당자에게).
+// · handover: true 이면 정해진 답을 보여 준 뒤 담당자에게 넘겨요 (주문·배송처럼 가게가 확인해야 하는 것)
+type Faq = { id: string; q: string; a: string; handover?: boolean };
+type FaqGroup = { id: string; title: string; items: Faq[] };
+
+const FAQ: FaqGroup[] = [
+  { id: "food", title: "사료 고르기", items: [
+    { id: "food1", q: "우리 아이 사료 추천", a: "" },
+    { id: "food2", q: "브랜드별 차이", a: "" },
+    { id: "food3", q: "알러지 있는 아이", a: "" },
+  ] },
+  { id: "feed", title: "급여·바꾸기", items: [
+    { id: "feed1", q: "하루 급여량", a: "" },
+    { id: "feed2", q: "사료 바꾸는 방법", a: "" },
+    { id: "feed3", q: "개봉 후 보관", a: "" },
+  ] },
+  { id: "order", title: "주문·배송", items: [
+    { id: "order1", q: "배송 기간", a: "", handover: true },
+    { id: "order2", q: "교환·반품", a: "", handover: true },
+    { id: "order3", q: "정기배송", a: "" },
+    { id: "order4", q: "샘플 키트", a: "" },
+  ] },
+];
+
+const FAQ_HOME = "FAQ_HOME";
+const faqGroup = (id: string) => FAQ.find((g) => g.id === id);
+const faqItem = (id: string) => FAQ.flatMap((g) => g.items).find((f) => f.id === id);
+const faqByTitle = (t: string) => FAQ.flatMap((g) => g.items).find((f) => f.q === t.trim());
+
 const quick = (withHandover = true) => ({
   buttonList: [
+    { type: "TEXT", data: { title: "자주 묻는 질문", code: FAQ_HOME } },
     { type: "LINK", data: { title: "맞춤 사료 추천", url: RECOMMEND_URL, mobileUrl: RECOMMEND_URL } },
     ...(withHandover ? [{ type: "TEXT", data: { title: "담당자 연결", code: HANDOVER_CODE } }] : []),
   ],
@@ -1025,33 +1060,95 @@ async function answer(user: string, question: string) {
 }
 
 const WELCOME =
-  "안녕하세요, FILIN이에요. 강아지·고양이 건강이나 사료가 궁금하면 여기에 편하게 물어봐 주세요. AI가 수의 자료를 바탕으로 먼저 답해 드려요.\n\n" +
+  "안녕하세요, FILIN이에요. 아래 분류를 누르면 자주 묻는 질문의 답을 바로 볼 수 있어요. 목록에 없는 건 편하게 적어 주시면 AI가 수의 자료를 바탕으로 답해 드려요.\n\n" +
   "· AI 답은 참고용이고 진단이 아니에요. 아이가 많이 아파 보이면 바로 동물병원에 가 주세요.\n" +
-  "· 주문·배송·교환은 아래 [담당자 연결]을 눌러 주세요.";
+  "· 주문·배송·교환은 [담당자 연결]을 눌러 주세요.";
+
+// 첫 인사와 "자주 묻는 질문": 분류 버튼을 채팅창 아래에 띄워요
+const sendHome = (user: string, text = WELCOME) =>
+  talk({
+    event: "send", user,
+    textContent: {
+      text,
+      quickReply: { buttonList: [
+        ...FAQ.slice(0, 8).map((g) => ({ type: "TEXT", data: { title: g.title, code: `FAQ_CAT:${g.id}` } })),
+        { type: "LINK", data: { title: "맞춤 사료 추천", url: RECOMMEND_URL, mobileUrl: RECOMMEND_URL } },
+        { type: "TEXT", data: { title: "담당자 연결", code: HANDOVER_CODE } },
+      ] },
+    },
+  });
+
+// 분류를 누르면 그 안의 질문 버튼 목록을 보여 줘요
+const sendGroup = (user: string, g: FaqGroup) =>
+  talk({
+    event: "send", user,
+    compositeContent: { compositeList: [{
+      title: g.title,
+      description: "궁금한 질문을 눌러 주세요.",
+      buttonList: g.items.slice(0, 10).map((f) => ({ type: "TEXT", data: { title: f.q, code: `FAQ:${f.id}` } })),
+    }] },
+  });
+
+async function sendFaq(user: string, f: Faq) {
+  if (f.handover) {                               // 가게가 확인할 질문: 답이 있으면 먼저 보여 주고 담당자에게 넘겨요
+    if (f.a) await talk({ event: "send", user, textContent: { text: f.a } });
+    return handover(user);
+  }
+  if (!f.a) return answer(user, f.q);            // 아직 답이 없으면 AI가 답해요
+  return sendText(user, f.a);
+}
+
+// 고정 메뉴(채팅창 아래 ≡ 메뉴). 설정할 때 한 번만 보내면 돼요 (아래 Deno.serve 의 ?setup=menu)
+const MENU = {
+  event: "persistentMenu",
+  menuContent: [{ menus: [
+    { type: "TEXT", data: { title: "자주 묻는 질문", code: FAQ_HOME } },
+    { type: "LINK", data: { title: "맞춤 사료 추천", url: RECOMMEND_URL, mobileUrl: RECOMMEND_URL } },
+    { type: "TEXT", data: { title: "담당자 연결", code: HANDOVER_CODE } },
+  ] }],
+};
 
 async function handle(ev: TalkEvent) {
   const user = String(ev.user ?? "");
   if (!user) return;
 
-  if (ev.event === "open") return sendText(user, WELCOME);
+  if (ev.event === "open") return sendHome(user);
   if (ev.event !== "send") return;          // echo, leave, friend, handover 등은 그냥 넘어가요
-  if (ev.standby) return;                   // 담당자가 대화 중이면 AI는 조용히 있어요
+  if (ev.standby) return;                   // 담당자가 대화 중이면 봇은 조용히 있어요
 
   const code = ev.textContent?.code ?? "";
   const text = clip(ev.textContent?.text, MAX_CHARS);
+
+  // 1) 버튼: 정해진 답을 바로 보여 줘요 (AI 안 씀)
   if (code === HANDOVER_CODE) return handover(user);
-  if (!text) return sendText(user, "사진이나 파일은 AI가 아직 볼 수 없어요. 궁금한 점을 글로 적어 주시거나 [담당자 연결]을 눌러 주세요.");
+  if (code === FAQ_HOME) return sendHome(user, "궁금한 분류를 눌러 주세요.");
+  if (code.startsWith("FAQ_CAT:")) { const g = faqGroup(code.slice(8)); if (g) return sendGroup(user, g); }
+  if (code.startsWith("FAQ:")) { const f = faqItem(code.slice(4)); if (f) return sendFaq(user, f); }
+  const same = text && faqByTitle(text);    // 질문 제목을 그대로 적은 경우도 정해진 답으로
+  if (same) return sendFaq(user, same);
+
+  // 2) 그 밖의 글: 가게 일은 담당자에게, 나머지는 AI가 답해요
+  if (!text) return sendText(user, "사진이나 파일은 아직 볼 수 없어요. 궁금한 점을 글로 적어 주시거나 [담당자 연결]을 눌러 주세요.");
   if (SHOP_WORDS.test(text) && !/사료|먹|증상|아파|토|설사/.test(text)) return handover(user);
   return answer(user, text);
 }
 
 Deno.serve(async (req) => {
-  if (req.method !== "POST") return new Response("ok");
-
   // 주소 끝의 비밀 글자가 맞을 때만 받아요: .../functions/v1/talk-bot/비밀글자  또는  ...?key=비밀글자
   const url = new URL(req.url);
   const given = url.searchParams.get("key") ?? url.pathname.split("/").filter(Boolean).pop() ?? "";
   if (!HOOK_KEY || given !== HOOK_KEY) return new Response("forbidden", { status: 403 });
+
+  // 고정 메뉴 설정: 브라우저에서 .../talk-bot/비밀글자?setup=menu 를 한 번 열어요
+  if (url.searchParams.get("setup") === "menu") {
+    const r = await fetch(TALK_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json;charset=UTF-8", Authorization: TALK_TOKEN },
+      body: JSON.stringify(MENU),
+    });
+    return new Response(`메뉴 설정 결과: ${await r.text()}`, { headers: { "Content-Type": "text/plain;charset=UTF-8" } });
+  }
+  if (req.method !== "POST") return new Response("ok");
 
   let ev: TalkEvent;
   try { ev = await req.json(); } catch { return new Response("bad json", { status: 400 }); }

@@ -77,10 +77,11 @@ FILIN(필린) 고객용 앱의 첫 시제품이에요. 휴대폰 화면에 맞�
 
 ## 네이버 톡톡 AI 상담 (talk-bot)
 
-스토어 손님이 **톡톡 문의**에서 건강·사료를 물으면 앱 봇과 같은 수의 자료로 AI가 답해요. 코드는 `supabase/functions/talk-bot/index.ts`, 대화 기록 표는 `supabase/talk_bot.sql`이에요.
+스토어 손님이 **톡톡 문의**에 들어오면 자주 묻는 질문 분류 버튼이 먼저 떠요. 버튼으로 고른 질문은 코드 안 `FAQ`에 적힌 정해진 답이 바로 나가고(AI 비용 0원), 목록에 없는 질문은 앱 봇과 같은 수의 자료로 AI가 답해요. 브랜드스토어든 일반 스마트스토어든 스토어에 연결된 톡톡 계정이면 똑같이 붙여요. 코드는 `supabase/functions/talk-bot/index.ts`, 대화 기록 표는 `supabase/talk_bot.sql`이에요.
 
 - 네이버 톡톡 챗봇 API([navertalk/chatbot-api](https://github.com/navertalk/chatbot-api))의 Webhook으로 질문을 받고, 5초 제한 때문에 바로 200을 돌려준 뒤 **보내기 API**로 답을 보내요.
 - 주문·배송·교환 같은 질문이나 **[담당자 연결]** 버튼은 핸드오버 API로 파트너센터 상담원에게 넘겨요. 상담원이 대화 중일 때(`standby`)는 AI가 답하지 않아요.
+- FAQ: `FAQ` 배열에 분류(10자 이내)와 질문(18자 이내), 답을 적어요. 답이 비어 있으면 AI가 대신 답하고, `handover: true` 질문은 담당자에게 넘겨요. 채팅창 고정 메뉴는 `.../talk-bot/<TALK_WEBHOOK_KEY>?setup=menu`를 한 번 열면 설정돼요.
 - 손님 한 명 하루 15번, 전체 하루 400번까지만 답해요 (`PER_USER_DAILY`, `ALL_DAILY`).
 - Secrets: `ANTHROPIC_API_KEY`, `NAVER_TALK_TOKEN`(보내기 API 인증 키), `TALK_WEBHOOK_KEY`(이벤트 받을 URL 끝에 붙이는 비밀 글자). Verify JWT는 꺼요.
 - 이벤트 받을 URL: `https://jafmexguhgvlokbnidof.supabase.co/functions/v1/talk-bot/<TALK_WEBHOOK_KEY>`
