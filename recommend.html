@@ -117,6 +117,8 @@ dl.spec dd{margin:0}
 .save .err{font-size:13px;color:var(--coral)}
 .save .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .savebar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:15;border:0;border-radius:999px;padding:12px 20px;background:var(--slate);color:var(--slate-ink);font:inherit;font-weight:700;font-size:15px;box-shadow:0 6px 18px rgba(23,51,107,.28);cursor:pointer;white-space:nowrap}
+.savehint{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;border:0;border-radius:12px;padding:10px 14px;background:var(--amber-soft);color:var(--amber-ink);font:inherit;font-size:13.5px;text-align:left;cursor:pointer}
+.savehint b{white-space:nowrap;font-weight:700}
 .save.done{background:var(--amber-soft);border-color:var(--amber-soft)}
 .terms{font-size:13.5px;display:flex;flex-direction:column;gap:10px}
 .terms table{border-collapse:collapse;width:100%}
@@ -421,6 +423,7 @@ function vResult(){
   const out=P.filter(p=>p.sp===ans.sp && (ans.allergies.includes(p.prot) || (ans.allergies.includes("grain") && !p.gf)));
   let h = bubble("oli", recs.length ? `올리예요! 답해 준 내용으로 맞는 사료 ${recs.length}가지를 골랐어요. 눌러서 원료와 가격을 확인해 보세요.` : `조건에 딱 맞는 사료를 못 찾았어요. 답을 하나 바꿔 볼까요?`) + `</div>`;
   h += chatNav();
+  if(recs.length) h += `<button class="savehint" type="button" data-tosave ${saveState==="done"?"hidden":""}><span>번호를 남기면 이 결과를 저장해 둘 수 있어요</span><b>저장해 두기 ↓</b></button>`;
   h += `<section class="stack" id="recEnd">${recs.map(recCard).join("")}</section>`;
   if(recs.length) h += vSave(); // 추천 카드 바로 아래에 둬서 놓치지 않게 해요
   if(recs.length>1) h += compareTable(recs);
@@ -562,10 +565,12 @@ let saveIO=null;
 function watchSave(){
   const bar=$(".savebar"), box=$("#saveBox"); if(saveIO){ saveIO.disconnect(); saveIO=null; }
   bar.hidden=true;
+  const hint=$(".savehint"); if(hint) hint.hidden = saveState==="done";
   if(!box || saveState==="done" || !("IntersectionObserver" in window)) return;
-  saveIO=new IntersectionObserver(es=>{ const cur=$("#saveBox"); const vis=es.some(x=>x.isIntersecting);
-    bar.hidden = vis || saveState==="done" || !cur || !cur.isConnected; });
-  saveIO.observe(box);
+  const shown=new Map(); // 저장 칸이나 위쪽 안내 줄이 보이면 떠 있는 버튼은 숨겨요
+  saveIO=new IntersectionObserver(es=>{ es.forEach(x=>shown.set(x.target,x.isIntersecting)); const cur=$("#saveBox");
+    bar.hidden = [...shown.values()].some(Boolean) || saveState==="done" || !cur || !cur.isConnected; });
+  saveIO.observe(box); if(hint) saveIO.observe(hint);
 }
 function scrollTo(sel){ requestAnimationFrame(()=>{ const t=document.querySelector(sel); if(t) t.scrollIntoView({block:"center",behavior:"smooth"}); }); }
 function advance(){ step++; render(); scrollTo("#recEnd, .chat .answer"); }
