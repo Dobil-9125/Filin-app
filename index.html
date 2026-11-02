@@ -1199,8 +1199,8 @@ function vGuide(){
 }
 
 /* ---------- AI 수의 봇 ---------- */
-// Supabase에 올린 AI 봇 함수 이름 (편집기에서 자동으로 정해진 이름)
-const VET_BOT_FN = "bright-responder";
+// Supabase에 올린 AI 봇 함수 이름
+const VET_BOT_FN = "vet-bot";
 let ask = {petId:null, msgs:[], busy:false, err:"", draft:""};
 const ASK_EX = ["사료를 바꾸고 변이 묽어졌어요","하루에 물을 얼마나 마셔야 정상인가요?","간식은 하루에 얼마나 줘도 되나요?"];
 function askFmt(t){ return esc(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/\n/g,"<br>"); }
@@ -1374,8 +1374,8 @@ function qnaTab(p){
 
 /* ---------- 회원가입 · 로그인 (Supabase) ---------- */
 // 공개 키(publishable)는 앱에 넣어도 되는 키예요. 데이터는 데이터베이스의 잠금장치(RLS)로 회원 본인만 볼 수 있어요.
-const SUPABASE_URL = "https://jafmexguhgvlokbnidof.supabase.co";
-const SUPABASE_KEY = "sb_publishable_N90l5kBICxa5yO0RQrQu3Q_PNhq6d_j";
+const SUPABASE_URL = "https://eiojasxqcgfhypzvgdzp.supabase.co";
+const SUPABASE_KEY = "sb_publishable_IzblR7JHCcBhHfRniZG0Vw_Q3wl3wEJ";
 const sb = (window.supabase && location.protocol.startsWith("http")) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 let user = null, syncMsg = "", syncTimer = null, loadingAccount = false;
 let acct = {mode:"login", email:"", msg:"", ok:"", busy:false, delArm:false};
