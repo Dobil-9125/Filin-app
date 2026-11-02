@@ -404,7 +404,7 @@ function vResult(){
 const SUPABASE_URL = "https://eiojasxqcgfhypzvgdzp.supabase.co";
 const SUPABASE_KEY = "sb_publishable_IzblR7JHCcBhHfRniZG0Vw_Q3wl3wEJ";
 const sb = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {auth:{persistSession:false, autoRefreshToken:false}}) : null;
-const CONSENT_VERSION = "2026-11-02"; // 동의 문구를 바꾸면 날짜도 바꿔요 (명단에 어느 문구로 동의했는지 남아요)
+const CONSENT_VERSION = "2026-11-02b"; // 동의 문구를 바꾸면 날짜도 바꿔요 (명단에 어느 문구로 동의했는지 남아요)
 const ss = { get:k=>{try{return sessionStorage.getItem(k);}catch(e){return null;}}, set:(k,v)=>{try{sessionStorage.setItem(k,v);}catch(e){}} };
 // 처음 들어온 링크의 utm_… 값과 이전 페이지를 기억해 둬요 (질문을 다시 해도 유지)
 const SRC = (()=>{
