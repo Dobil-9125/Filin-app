@@ -268,17 +268,21 @@ const szText = s=> s<1 ? `${Math.round(s*1000)}g` : `${s}kg`;
 /* ---------- 고민 질문과 브랜드별 소구점 (통합브랜드관 계획 2026-11-02) ----------
    "이 고민이면 이 브랜드"를 하나씩 정해 상세페이지·인스타·블로그·추천에서 같은 말을 반복해요.
    질병 진단·치료가 아니라 제품 정보(원료·설계)로 고르는 기준이에요. 효능을 약속하는 말은 쓰지 않아요.
-   ※ 초안이에요. 케이님과 확정되면 POINT의 brand·line만 고치면 추천과 화면 문구가 같이 바뀌어요. */
+   ※ 초안이에요. 확정되면 POINT의 brand·line만 고치면 추천과 화면 문구가 같이 바뀌어요. */
 const CONCERNS = [["picky","입이 짧아요 (기호성)"],["tear","눈물 자국이 신경 쓰여요"],["stool","변 상태가 고민이에요"],["allergy","알러지가 걱정돼요"]];
 const POINT = {
   picky:  {brand:"tow", line:"기호성 고민엔 토우 · 야생 단백질과 훈제 향으로 입 짧은 아이들이 많이 찾는 브랜드"},
   tear:   {brand:"pv",  line:"눈물 고민엔 퓨어비타 · 동물성 단백질 하나 + 그레인프리라 원재료표가 짧아요"},
   stool:  {brand:"ns",  line:"변 고민엔 뉴트리소스 · 소화와 영양소 흡수를 고려한 Good 4 Life 설계"},
-  allergy:{brand:"bf",  line:"알러지 고민엔 벨포아 · 닭·소 대신 곤충 단백질"},
+  allergy:{brand:["pv","bf"], line:"알러지 고민엔 퓨어비타와 벨포아 · 동물성 단백질 하나(퓨어비타), 닭·소 대신 곤충 단백질(벨포아)",
+           by:{pv:"알러지 고민엔 퓨어비타 · 동물성 단백질이 하나라 원재료표가 짧아요", bf:"알러지 고민엔 벨포아 · 닭·소 대신 곤충 단백질"}},
   daily:  {brand:"ch",  line:"특별한 고민이 없다면 초이스 · 매일 먹기 좋은 기본 데일리 영양"}
 };
 const CONCERN_SHORT = {picky:"기호성", tear:"눈물", stool:"변 상태", allergy:"알러지", daily:"기본 데일리"};
 const concernName = k=> CONCERN_SHORT[k]||k;
+/* 한 고민을 두 브랜드가 함께 맡을 수 있어요 (알러지: 퓨어비타·벨포아, 11-02 확정). by가 있으면 브랜드별 한 줄을 써요. */
+const ptBrands = c=> [].concat(POINT[c].brand);
+const ptLine = (c,b)=> (POINT[c].by && POINT[c].by[b]) || POINT[c].line;
 const ACTIVE = [["low","조용히 쉬는 편"],["normal","보통이에요"],["high","정말 많이 뛰어놀아요"]];
 function recommend(pt){
   const st=stageOf(pt), sz=sizeOf(pt), al=pt.allergies||[];
@@ -301,8 +305,8 @@ function recommend(pt){
     if(pt.active==="high" && p.tags.includes("active")){s+=3; why.push("활동량 많은 아이용");}
     if(sz==="large" && p.large){s+=3; why.push("대형견용 레시피");}
     if(sz==="small" && p.small){s+=2; why.push("소형견용 작은 알갱이");}
-    const pts=cn.filter(c=>POINT[c] && POINT[c].brand===p.b);
-    if(pts.length){s+=4*pts.length; why.unshift(...pts.map(c=>POINT[c].line));}
+    const pts=cn.filter(c=>POINT[c] && ptBrands(c).includes(p.b));
+    if(pts.length){s+=4*pts.length; why.unshift(...pts.map(c=>ptLine(c,p.b)));}
     if(cn.includes("stool") && p.b==="pv"){s+=2; why.push("퓨어비타도 Good 4 Life 설계 (뉴트리소스와 같은 제조사)");}
     if(p.hot){s+=1.5; why.push("필린에서 많이 찾는 제품");}
     return {p,s,why,caution};
@@ -527,7 +531,7 @@ document.addEventListener("input", e=>{
 function perKg(p){ let best=null; for(const s of (p.sizes||[])){ const pr=priceOf(p,s); if(pr && !soldOut(p,s)){ const v=pr[0]/s; if(best===null||v<best) best=v; } } return best; }
 function compareTable(recs){
   const row=(label,f)=>`<tr><th scope="row">${label}</th>${recs.map(r=>`<td>${f(r.p,r)}</td>`).join("")}</tr>`;
-  const pt=p=>{ const k=Object.keys(POINT).find(c=>POINT[c].brand===p.b); return k?esc(concernName(k)):"-"; };
+  const pt=p=>{ const ks=Object.keys(POINT).filter(c=>ptBrands(c).includes(p.b)); return ks.length?esc(ks.map(concernName).join(", ")):"-"; };
   return `<section class="compare"><h3>한눈에 비교</h3><div class="cmp-wrap"><table><col class="lab">${recs.map(()=>"<col>").join("")}
     <thead><tr><th></th>${recs.map((r,i)=>`<th scope="col">${i+1}순위<br><span>${esc(BRANDS[r.p.b].name)}</span><br>${esc(r.p.n)}</th>`).join("")}</tr></thead>
     <tbody>
