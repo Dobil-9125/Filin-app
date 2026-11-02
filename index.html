@@ -1200,7 +1200,7 @@ function vGuide(){
 
 /* ---------- AI 수의 봇 ---------- */
 // Supabase에 올린 AI 봇 함수 이름
-const VET_BOT_FN = "vet-bot";
+const VET_BOT_FN = "quick-responder";
 let ask = {petId:null, msgs:[], busy:false, err:"", draft:""};
 const ASK_EX = ["사료를 바꾸고 변이 묽어졌어요","하루에 물을 얼마나 마셔야 정상인가요?","간식은 하루에 얼마나 줘도 되나요?"];
 function askFmt(t){ return esc(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/\n/g,"<br>"); }
