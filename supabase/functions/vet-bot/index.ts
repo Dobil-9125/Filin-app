@@ -40,7 +40,7 @@ const RULES = `너는 FILIN(필린) 앱의 반려동물 건강 안내 도우미�
 
 `;
 
-// 수의 지식 자료 rev 88 (FILIN 수의 지식 자료 문서에서 그대로 옮김)
+// 수의 지식 자료 rev 130 (FILIN 수의 지식 자료 문서에서 그대로 옮김)
 const KNOWLEDGE = `
 # FILIN 수의 지식 자료 (AI 봇용)
 
@@ -111,7 +111,7 @@ Merck·코넬 자료로 확인함. 갑작스러운 사료 변화나 스트레스
 
 ## 피부·알러지
 
-음식 알러지 부분은 논문으로 확인함. 가려움의 원인은 벼룩 같은 기생충, 환경 알러지(아토피), 음식 알러지 순으로 흔하고, 음식 알러지는 제거식 후 다시 먹여 보는 시험(8주 이상)이 표준 진단법이에요.
+음식 알러지 부분은 논문으로 확인함. 가려움의 흔한 원인은 벼룩 같은 기생충, 세균·효모 감염, 알러지(벌레 물림, 음식, 꽃가루·집먼지 같은 환경)예요 (Merck). 그중 음식 알러지는 제거식 후 다시 먹여 보는 시험(8주 이상)이 표준 진단법이에요.
 
 **흔한 원인**
 
@@ -133,7 +133,7 @@ Merck·코넬 자료로 확인함. 갑작스러운 사료 변화나 스트레스
 
 **봇 답변 원칙**: "이 사료로 바꾸면 알러지가 낫는다"고 말하지 않아요. 원인 확인은 수의사 진료로 안내하고, 알러지 재료가 등록돼 있으면 그 재료를 뺀 제품만 언급해요.
 
-출처: [제거식 기간 (Olivry 외, BMC Vet Res 2015)](https://pubmed.ncbi.nlm.nih.gov/26310322/): 개 5주·고양이 6주면 80% 넘게, 8주면 90% 넘게 증상이 없어짐 · [흔한 알레르기 원인 음식 (Mueller 외, 2016)](https://pubmed.ncbi.nlm.nih.gov/26753610/) · [음식 알러지 유병률 (Olivry 외, 2017)](https://pubmed.ncbi.nlm.nih.gov/28202060/): 가려운 개의 9\\~40%, 가려운 고양이의 12\\~21%. 벼룩·아토피 내용은 아직 원문 확인 전이에요.
+출처: [제거식 기간 (Olivry 외, BMC Vet Res 2015)](https://pubmed.ncbi.nlm.nih.gov/26310322/): 개 5주·고양이 6주면 80% 넘게, 8주면 90% 넘게 증상이 없어짐 · [흔한 알레르기 원인 음식 (Mueller 외, 2016)](https://pubmed.ncbi.nlm.nih.gov/26753610/) · [음식 알러지 유병률 (Olivry 외, 2017)](https://pubmed.ncbi.nlm.nih.gov/28202060/): 가려운 개의 9\\~40%, 가려운 고양이의 12\\~21% · [Merck 보호자용: 개의 가려움](https://www.merckvetmanual.com/dog-owners/skin-disorders-of-dogs/itching-pruritus-in-dogs) (기생충·감염·알러지, 벼룩부터 확인, 알러지는 벌레 물림·음식·환경).
 
 ## 비만·체중 관리
 
@@ -156,7 +156,7 @@ WSAVA 자료로 확인함. 체중은 몸무게 숫자보다 \\*\\*체형점수(B
 
 - 사료는 계량컵이 아니라 **저울로 무게**를 재서 줘요. 눈대중은 쉽게 10\\~20% 틀어져요.
 - 간식은 하루 열량의 10% 미만으로, 그만큼 사료를 줄여요 (WSAVA). 익히거나 날것인 뼈, 녹용·발굽처럼 너무 단단한 간식은 피해요.
-- 한 달에 한 번 체중을 재고 기록해요. 감량 속도는 보통 주당 체중의 1\\~2% 안쪽을 권해요.
+- 한 달에 한 번 체중을 재고 기록해요. 감량 속도는 강아지는 주당 체중의 1\\~2%, 고양이는 0.5\\~2% 정도가 목표예요. 고양이는 너무 빨리 빼면 지방간이 생길 수 있어요 (AAHA).
 - 놀이·산책을 조금씩 늘려요. 고양이는 낡싯장난감·퍼즐 급식기가 도움이 돼요.
 
 **병원에 가야 할 신호**
@@ -169,7 +169,7 @@ WSAVA 자료로 확인함. 체중은 몸무게 숫자보다 \\*\\*체형점수(B
 
 **봇 답변 원칙**: 목표 체중과 감량 속도는 수의사와 정하도록 안내하고, 고양이에게 굶기기를 권하지 않아요.
 
-출처: [WSAVA 개 체형점수표](https://wsava.org/wp-content/uploads/2025/06/WSAVA_BCSCat_BCSDog_Nutrition_250612.pdf) · [WSAVA 고양이 체형점수표](https://wsava.org/wp-content/uploads/2025/06/WSAVA_BCSCat_BCSCat_Nutrition_250612.pdf) · [WSAVA 개 간식 가이드](https://wsava.org/wp-content/uploads/2025/11/WSAVA_GuidetoTreats_Dogs_251107.pdf) · [WSAVA 성견 하루 열량 범위](https://wsava.org/wp-content/uploads/2020/07/Calorie-Needs-for-Healthy-Adult-Dogs-updated-July-2020.pdf). 감량 속도(주당 1\\~2%)는 아직 원문 확인 전이에요.
+출처: [WSAVA 개 체형점수표](https://wsava.org/wp-content/uploads/2025/06/WSAVA_BCSCat_BCSDog_Nutrition_250612.pdf) · [WSAVA 고양이 체형점수표](https://wsava.org/wp-content/uploads/2025/06/WSAVA_BCSCat_BCSCat_Nutrition_250612.pdf) · [WSAVA 개 간식 가이드](https://wsava.org/wp-content/uploads/2025/11/WSAVA_GuidetoTreats_Dogs_251107.pdf) · [WSAVA 성견 하루 열량 범위](https://wsava.org/wp-content/uploads/2020/07/Calorie-Needs-for-Healthy-Adult-Dogs-updated-July-2020.pdf) · [AAHA: 비만 반려동물 감량](https://www.aaha.org/resources/2021-aaha-nutrition-and-weight-management-guidelines/weight-reduction-in-the-obese-pet/) · [AAHA: 고양이 감량](https://www.aaha.org/resources/feline-fitness-how-to-help-your-cat-lose-weight/) (강아지 주당 1\\~2%, 고양이 0.5\\~2%, 고양이는 급한 감량 시 지방간 위험. AAHA 두 페이지는 검색 요약으로 확인).
 
 ## 사료 바꾸는 법
 
@@ -264,7 +264,7 @@ FDA 원문으로 확인함. 미국 FDA가 2018년부터 그레인프리(특히 �
 
 **봇 답변 원칙**: 신장병 진단을 받은 아이에게는 FILIN 일반 사료를 추천하지 않고 수의사 처방식을 이어가도록 안내해요. 프로필의 ‘약·지병’에 신장이 있으면 추천 화면에서도 이 안내를 띄우는 게 좋아요.
 
-출처: [코넬 고양이 건강센터: 만성 신장병](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/chronic-kidney-disease). 강아지 신장병과 IRIS 단계 세부 내용은 아직 원문 확인 전이에요.
+출처: [코넬 고양이 건강센터: 만성 신장병](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/chronic-kidney-disease) · [Merck 보호자용: 개 만성 신장병](https://www.merckvetmanual.com/dog-owners/kidney-and-urinary-tract-disorders-of-dogs/chronic-kidney-disease-in-dogs) (1\\~4단계, 신장 기능·소변 단백·혈압으로 단계, 초기 신호는 물·소변 증가, 신장 사료·인 줄이기) · [Merck: 만성 신장병 단계 표](https://www.merckvetmanual.com/multimedia/table/chronic-kidney-disease-stages) (IRIS 기준, 크레아티닌·SDMA. 이 표는 검색 요약으로 확인).
 
 ## 치아·입 건강
 
@@ -273,9 +273,9 @@ AVDC(미국 수의치과학회) 자료로 일부 확인함. 치주질환은 성�
 **알아두면 좋은 것**
 
 - 입 냄새는 "당연한 것"이 아니라 치석·잇몸염의 신호일 수 있어요.
-- 소형견은 이가 촘촘해서 더 일찍, 더 심하게 생겨요. 고양이는 치아흡수성 병변(이가 녹는 병)이 흔해요.
+- 소형견은 이가 촘촘해서 더 일찍, 더 심하게 생겨요. 고양이는 치아흡수성 병변(이가 녹는 병)이 흔해요. 고양이의 20\\~60%, 5살 이상은 4마리 중 3마리 가까이 생겨요 (코넬).
 - 양치질은 반려동물 전용 치약으로 해요. 사람 치약은 삼키면 안 되는 성분이 있어요 (자일리톨은 강아지에게 위험).
-- 너무 단단한 것(뼈, 녹용, 딱딱한 나일론 장난감)은 이가 부러질 수 있어요. 손톱으로 눌렀을 때 자국이 남을 정도가 대략적인 기준이에요.
+- 너무 단단한 것(뼈, 녹용, 딱딱한 나일론 장난감)은 이가 부러질 수 있어요.
 - 이미 생긴 치석은 양치질로 안 빠져서, 마취하고 하는 스케일링이 필요해요. 잇몸 아래는 마취 없이 볼 수 없기 때문이에요.
 - 치아 건강에 도움이 된다고 표시한 제품은 미국 수의치과협회(VOHC) 인증이 있는지 확인해 보세요.
 
@@ -288,7 +288,7 @@ AVDC(미국 수의치과학회) 자료로 일부 확인함. 치주질환은 성�
 
 **봇 답변 원칙**: 양치질 방법과 정기 구강 검진을 안내하고, 무마취 스케일링은 권하지 않아요.
 
-출처: [AVDC 입장문 (무마취 스케일링·가정 구강 관리)](https://avdc.org/about/) · [AVDC 보호자 자료](https://avdc.org/animal-owner-resources/) · [WSAVA 개 간식 가이드](https://wsava.org/wp-content/uploads/2025/11/WSAVA_GuidetoTreats_Dogs_251107.pdf) (녹용·발굽 등 너무 단단한 간식 피하기). 손톱 기준과 고양이 치아흡수성 병변 내용은 아직 원문 확인 전이에요.
+출처: [AVDC 입장문 (무마취 스케일링·가정 구강 관리)](https://avdc.org/about/) · [AVDC 보호자 자료](https://avdc.org/animal-owner-resources/) · [WSAVA 개 간식 가이드](https://wsava.org/wp-content/uploads/2025/11/WSAVA_GuidetoTreats_Dogs_251107.pdf) (녹용·발굽 등 너무 단단한 간식 피하기) · [코넬: 고양이 치아 흡수](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/tooth-resorption) (고양이의 20\\~60%, 5살 이상은 약 4분의 3) · [Merck 보호자용: 고양이 치아 질환](https://www.merckvetmanual.com/cat-owners/digestive-disorders-of-cats/dental-disorders-of-cats) (고양이에게 가장 흔한 치아 이상).
 
 ## 관절
 
@@ -298,7 +298,7 @@ AVDC(미국 수의치과학회) 자료로 일부 확인함. 치주질환은 성�
 
 - 일어날 때 느리고, 계단·점프를 싫어하고, 산책이 짧아져요. 고양이는 높은 곳에 안 올라가거나 그루밍을 덜 해서 털이 부스스해져요.
 - 고양이 관절염은 생각보다 흔하지만 잘 드러나지 않아서 "나이 들어서"로 넘기기 쉬워요.
-- 오메가3 지방산(EPA·DHA)은 관절염 강아지에게 도움이 된다는 근거가 있는 편이고, 글루코사민·코드로이틼은 연구 결과가 엇갈려요.
+- 오메가3 지방산(특히 EPA)은 관절염 강아지의 걸음·움직임을 좋게 하고 진통제를 줄이는 데 도움이 된다는 근거가 있어요. 글루코사민·콘드로이틴은 통증에 도움이 된다는 근거가 부족해요 (Merck).
 - 미끄럽지 않은 바닥(매트), 낮은 계단·경사로, 짧고 자주 하는 산책이 도움이 돼요.
 - 사람 진통제(이부프로펜, 아세트아미노펜 등)는 강아지·고양이에게 위험해요. 특히 아세트아미노펜은 고양이에게 치명적이에요.
 
@@ -317,15 +317,15 @@ AVDC(미국 수의치과학회) 자료로 일부 확인함. 치주질환은 성�
 
 **봇 답변 원칙**: 영양제가 치료를 대신한다고 말하지 않고, 사람 진통제는 절대 권하지 않아요. 대형견 자견에게는 대형견 자견용 사료(칼슘 조절)를 안내해요.
 
-출처: [Merck: 개·고양이 슬개골 탈구](https://www.merckvetmanual.com/musculoskeletal-system/arthropathies-and-related-disorders-in-small-animals/patellar-luxation-in-dogs-and-cats). 골관절염·오메가3·글루코사민 내용은 아직 원문 확인 전이에요.
+출처: [Merck: 개·고양이 슬개골 탈구](https://www.merckvetmanual.com/musculoskeletal-system/arthropathies-and-related-disorders-in-small-animals/patellar-luxation-in-dogs-and-cats) · [Merck: 개·고양이 골관절염](https://www.merckvetmanual.com/musculoskeletal-system/osteoarthritis-in-dogs-and-cats/osteoarthritis-in-dogs-and-cats) (EPA 보충·EPA 많은 사료가 걸음·움직임 개선·진통제 줄임, 글루코사민·콘드로이틴은 통증 관리 근거 없음).
 
 ## 눈물 자국
 
-일부 확인함(Merck, FDA). 눈물 자국의 갈색·붉은색은 눈물 속 **포르피린** 색소가 털에 묻어서 생겨요. 눈물이 많거나 잘 빠지지 않는 원인을 찾는 게 먼저이고, 사료만 바꿔서 없어진다는 근거는 약해요.
+일부 확인함(Merck, FDA). 눈물 자국은 넘친 눈물이 털을 오래 적셔서 생겨요. 눈물이 많거나 잘 빠지지 않는 원인을 찾는 게 먼저이고, 사료만 바꿔서 없어진다는 근거는 약해요.
 
 **흔한 원인**
 
-- **얼굴 구조**: 말티즈, 푸들, 시추, 페르시안처럼 코가 짧거나 눈이 큰 아이는 눈물이 코로 빠지는 길이 좋거나 눈 주변 털이 눈물을 적셔요.
+- **얼굴 구조**: 눈물이 코로 빠지는 길(눈물길)이 막히거나 눈물주머니에 염증이 있으면 눈물이 넘쳐요 (Merck). 눈 주변 털이 길면 눈물을 더 적셔요.
 - **눈물길(비루관) 막힘**
 - **눈을 자극하는 것**: 눈을 찌르는 털·속눈썹, 결막염, 알러지.
 - 자국이 촉촉한 상태가 오래가면 세균·효모균이 자라 더 진해지고 냄새가 나기도 해요.
@@ -346,7 +346,7 @@ AVDC(미국 수의치과학회) 자료로 일부 확인함. 치주질환은 성�
 
 **봇 답변 원칙**: "이 사료를 먹으면 눈물 자국이 없어진다"고 말하지 않아요. 한쪽 눈만 그러거나 눈을 가늘게 뜨면 진료를 먼저 안내해요.
 
-출처: [Merck 보호자용: 개의 눈물길 질환](https://www.merckvetmanual.com/dog-owners/eye-disorders-of-dogs/disorders-of-the-nasal-cavity-and-tear-ducts-in-dogs) (눈물주머니 염증·눈물길 막힘이 눈물을 흘리게 함) · [FDA 경고장: Ocubright (2017)](https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/ocubright-tear-stain-remover-inc-523344-05162017). 포르피린과 품종별 얼굴 구조 내용은 아직 원문 확인 전이에요.
+출처: [Merck 보호자용: 개의 눈물길 질환](https://www.merckvetmanual.com/dog-owners/eye-disorders-of-dogs/disorders-of-the-nasal-cavity-and-tear-ducts-in-dogs) (눈물주머니 염증·눈물길 막힘이 눈물을 흘리게 함) · [FDA 경고장: Ocubright (2017)](https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/ocubright-tear-stain-remover-inc-523344-05162017).
 
 ## 먹으면 안 되는 음식·중독
 
@@ -502,7 +502,7 @@ Merck·코넬 자료로 확인함. 행동이 갑자기 바뀌면 **먼저 몸의
 
 **스트레스 신호와 줄이기**
 
-- 숨기, 식욕 변화, 과도한 핥기·그루밍, 고양이의 스프레이(오줄 뿌리기), 울음이 늘어남.
+- 숨거나 피하기, 몸을 낮게 웅크리고 귀를 눕히기, 소리 내며 울기, 고양이의 스프레이(오줌 뿌리기), 과도한 핥기·그루밍 (Merck·코넬).
 - 이사·새 가족·사료 변화는 천천히, 숨을 곳과 높은 곳, 매일 놀이 시간을 마련해요. 고양이 스트레스는 방광염과도 관련이 커서 '고양이 하부요로기계' 항목을 함께 봐요.
 - 나이 든 강아지가 밤에 안 자고 헤매거나 배변 실수가 생기면 인지 기능 저하일 수 있어요. 몸과 머리를 쓰는 활동이 진행을 늦출 수 있고, 약·처방식도 있어요 (Merck).
 
@@ -515,7 +515,7 @@ Merck·코넬 자료로 확인함. 행동이 갑자기 바뀌면 **먼저 몸의
 
 **봇 답변 원칙**: 벌주기, 전기 충격 목줄, 혼내기를 권하지 않고 칭찬 위주 방법을 안내해요. 갑자기 생긴 행동 변화와 공격성은 진료부터 권해요. 행동 치료용 약 이름이나 용량은 말하지 않아요.
 
-출처: [Merck 보호자용: 개의 행동 문제](https://www.merckvetmanual.com/dog-owners/behavior-of-dogs/behavior-problems-in-dogs) (분리불안 15\\~30분, 둔감화·역조건화, 관심 끄기 짖음, 배변 습관 8\\~9주, 벌은 도움 안 됨, 전기 충격 목줄, 공격성은 바로 수의사, 인지 기능 저하) · [코넬: 고양이 배변 문제](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-behavior-problems-house-soiling) (병 먼저, 고양이 수+1, 모래·위치, 암모니아·식초 세제 피하기, 벌은 역효과). 스트레스 신호 목록은 일반적인 내용으로, 아직 따로 원문 확인 전이에요.
+출처: [Merck 보호자용: 개의 행동 문제](https://www.merckvetmanual.com/dog-owners/behavior-of-dogs/behavior-problems-in-dogs) (분리불안 15\\~30분, 둔감화·역조건화, 관심 끄기 짖음, 배변 습관 8\\~9주, 벌은 도움 안 됨, 전기 충격 목줄, 공격성은 바로 수의사, 인지 기능 저하) · [코넬: 고양이 배변 문제](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-behavior-problems-house-soiling) (병 먼저, 고양이 수+1, 모래·위치, 암모니아·식초 세제 피하기, 벌은 역효과) · [Merck: 고양이 행동 문제](https://www.merckvetmanual.com/behavior/behavior-of-cats/behavior-problems-of-cats) (두려움 신호: 피하기·숨기, 웅크린 자세, 귀 눕히기, 소리 내기, 스프레이) · [코넬: 너무 많이 핥는 고양이](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/cats-lick-too-much) (이사·다른 동물·일정 변화가 스트레스, 과도한 핥기).
 
 ## 중성화 후 관리·더위·추위
 
@@ -523,9 +523,9 @@ Merck·코넬 자료로 확인함. 행동이 갑자기 바뀌면 **먼저 몸의
 
 **중성화 수술 뒤**
 
-- 고양이는 보통 3\\~6개월에, 암컷은 첫 발정 전에 하는 것을 권해요 (코넬). 강아지는 크기·품종에 따라 알맞은 시기가 달라서 수의사와 정해요.
+- 고양이는 보통 3\\~6개월에, 암컷은 첫 발정 전에 하는 것을 권해요 (코넬). 강아지는 보통 암컷 약 6개월(첫 발정 전), 수컷 5\\~10개월에 하지만, 20kg(45파운드)이 넘는 대형견은 뼈·관절 문제를 줄이려고 12\\~24개월까지 미루기도 해요 (Merck). 알맞은 시기는 수의사와 정해요.
 - 집에 오면 **약 일주일은 뛰거나 점프하지 않게** 조용히 있게 해요. 배 수술 부위가 터지는 것을 막기 위해서예요. 보통 2주 무렵이면 평소처럼 돌아와요 (코넬).
-- 수술 부위를 핥거나 물지 않게 해요. 병원에서 준 넥카라·환자복을 쓰고, 실밥 풀기 전까지는 목욕을 하지 않아요. 기간은 병원 안내를 따라요.
+- 수술 부위를 핥거나 물지 않게 해요. 병원에서 준 넥카라·환자복을 첫 일주일은 늘 하고, 수술 뒤 10일쯤은 목욕·수영을 하지 않는 것이 보통이에요 (Tufts 동물병원 안내). 기간은 수술한 병원 안내를 따라요.
 - 사람 진통제(아스피린, 이부프로펜 등)는 주지 않아요. 고양이에게 독성이 있어요 (코넬).
 - **중성화 뒤에는 살이 찌기 쉬워요.** 고양이 연구에서는 필요한 열량이 최대 30% 줄고 식욕은 최대 50% 늘 수 있다고 보고됐어요. 수술 뒤에는 체중과 체형점수를 보며 급여량을 다시 정해요 ('비만·체중 관리' 참고).
 
@@ -544,11 +544,11 @@ Merck·코넬 자료로 확인함. 행동이 갑자기 바뀌면 **먼저 몸의
 - 저체온은 떨지 않을 수도 있어요. 힘이 없고, 멍하고, 숨이 얕고 느려지거나 쓰러지면 바로 병원에 가요. 젖었으면 먼저 말리고, 뜨겁지 않은 따뜻한 물병으로 감싸요 (Merck).
 - 동상은 귀·발·꼬리에 잘 생겨요. 문지르거나 눈을 대지 말고 미지근한 물로 천천히 딕혀요 (Merck).
 - 얼지 않게 하는 **부동액(에틸렌글리콜)은 단맛이 나고 적은 양도 치명적**이에요 (강아지 3\\~4티스푼, 고양이 1\\~2티스푼). 흘린 것은 바로 닦고, 먹었을 수 있으면 즉시 병원에 가요 (Merck).
-- 겨울 산책 뒤에는 발을 닦아 염화칼슘 같은 제설제를 없애요. 바깥에서 지내는 개는 바람을 막는 집, 얼지 않는 물, 조금 더 많은 밥이 필요해요.
+- 겨울 산책 뒤에는 발을 닦아 염화칼슘 같은 제설제를 없애요. 핥아 먹으면 몇 시간 안에 토하고, 심하면 기운 없음·설사·떨림·경련까지 올 수 있어요 (Merck). 반려동물에게 안전한 제설제를 쓰면 좋아요 (코넬). 바깥에서 지내는 개는 바람을 막는 집, 얼지 않는 물, 조금 더 많은 밥이 필요해요.
 
 **봇 답변 원칙**: 열사병·저체온·부동액 섭취가 의심되면 응급 처치 한두 줄과 함께 바로 병원 안내부터 해요. 중성화 시기·방법은 담당 수의사와 정하도록 안내하고, 수술 뒤 급여량을 다시 보도록 알려 줘요.
 
-출처: [코넬 고양이 건강센터: 중성화](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/spaying-and-neutering) (3\\~6개월, 약 일주일 조용히, 2주 회복, 사람 진통제 금지) · [고양이 비만 예방 리뷰 (PMC, 2024)](https://pmc.ncbi.nlm.nih.gov/articles/PMC10911305/) (중성화 뒤 열량 최대 30% 감소·섭취 최대 50% 증가) · [Merck: 여름 반려동물 보호](https://www.merckvetmanual.com/news/editorial/2025/05/28/17/27/protecting-pets-during-hot-summer-months) (위험군, 신호, 차갑지 않은 물, 차 안 온도, 발바닥 화상) · [Merck: 겨울 반려동물 안전](https://www.merckvetmanual.com/news/editorial/2025/01/15/15/23/keeping-pets-safe-during-cold-winter-months) · [Merck: 개·고양이 응급 상황](https://www.merckvetmanual.com/special-pet-topics/emergencies/what-to-do-in-a-dog-or-cat-emergency) (저체온·동상 처치) · [Merck: 부동액 중독](https://www.merckvetmanual.com/special-pet-topics/poisoning/ethylene-glycol-antifreeze-poisoning). 강아지 중성화 시기, 넥카라·목욕 기간, 제설제 내용은 일반적인 안내로, 아직 원문 확인 전이에요.
+출처: [코넬 고양이 건강센터: 중성화](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/spaying-and-neutering) (3\\~6개월, 약 일주일 조용히, 2주 회복, 사람 진통제 금지) · [고양이 비만 예방 리뷰 (PMC, 2024)](https://pmc.ncbi.nlm.nih.gov/articles/PMC10911305/) (중성화 뒤 열량 최대 30% 감소·섭취 최대 50% 증가) · [Merck: 여름 반려동물 보호](https://www.merckvetmanual.com/news/editorial/2025/05/28/17/27/protecting-pets-during-hot-summer-months) (위험군, 신호, 차갑지 않은 물, 차 안 온도, 발바닥 화상) · [Merck: 겨울 반려동물 안전](https://www.merckvetmanual.com/news/editorial/2025/01/15/15/23/keeping-pets-safe-during-cold-winter-months) · [Merck: 개·고양이 응급 상황](https://www.merckvetmanual.com/special-pet-topics/emergencies/what-to-do-in-a-dog-or-cat-emergency) (저체온·동상 처치) · [Merck: 부동액 중독](https://www.merckvetmanual.com/special-pet-topics/poisoning/ethylene-glycol-antifreeze-poisoning) · [Merck 보호자용: 개 정기 건강 관리](https://www.merckvetmanual.com/dog-owners/routine-care-of-dogs/routine-health-care-of-dogs) (암컷 약 6개월·첫 발정 전, 20kg 넘는 대형견 12\\~24개월, 수컷 5\\~10개월) · [코넬 Riney 개 건강센터: 겨울 안전](https://www.vet.cornell.edu/departments-centers-and-institutes/riney-canine-health-center/canine-health-information/winter-safety-tips) (발·다리·배 닦기, 안전한 제설제, 먹으면 입·소화관 자극) · [Tufts 동물병원: 수술 뒤 관리](https://vet.tufts.edu/luke-and-lily-lerner-clinic/appointments-client-info/aftercare) (넥카라 첫 일주일, 10일 목욕·수영 금지. 이 페이지는 검색 요약으로 확인).
 
 ## 사료 라벨 읽는 법
 
@@ -571,7 +571,7 @@ FDA·WSAVA 자료로 확인함. 포장에서 가장 먼저 볼 것은 사진이�
 
 **봇 답변 원칙**: "원재료 첫째가 고기면 좋은 사료"처럼 단정하지 않고, 완전·균형 표시와 연령을 먼저 안내해요. 다른 브랜드를 헐뜨리지 않아요.
 
-출처: [FDA: "완전·균형" 사료](https://www.fda.gov/animal-veterinary/animal-health-literacy/complete-and-balanced-pet-food) (주식 여부, AAFCO 기준·급여 시험, 두 가지 연령 기준, 건물 기준 계산, 인증 마크는 영양 보증이 아님) · [WSAVA: 사료 고르는 가이드라인 (2021)](https://wsava.org/wp-content/uploads/2021/04/Selecting-a-pet-food-for-your-pet-updated-2021_WSAVA-Global-Nutrition-Toolkit.pdf) (마케팅 문구, 보조 급여용 10% 이하, 전 연령용, 열량, 제조사에 물을 것). 원재료를 무게 순서로 적는 규칙은 FDA·AAFCO 자료 검색 요약으로만 확인했고, 국내 사료관리법 표시 기준은 아직 확인 전이에요.
+출처: [FDA: "완전·균형" 사료](https://www.fda.gov/animal-veterinary/animal-health-literacy/complete-and-balanced-pet-food) (주식 여부, AAFCO 기준·급여 시험, 두 가지 연령 기준, 건물 기준 계산, 인증 마크는 영양 보증이 아님) · [WSAVA: 사료 고르는 가이드라인 (2021)](https://wsava.org/wp-content/uploads/2021/04/Selecting-a-pet-food-for-your-pet-updated-2021_WSAVA-Global-Nutrition-Toolkit.pdf) (마케팅 문구, 보조 급여용 10% 이하, 전 연령용, 열량, 제조사에 물을 것) · [FDA: 반려동물 사료](https://www.fda.gov/animal-veterinary/animal-foods-feeds/pet-food) (원재료는 무게가 많은 것부터 순서대로). 국내 사료관리법 표시 기준은 아직 원문 확인 전이에요.
 
 ## 건식·습식·생식
 
@@ -598,7 +598,7 @@ FDA·WSAVA 자료로 확인함. 포장에서 가장 먼저 볼 것은 사진이�
 
 **봇 답변 원칙**: 건식과 습식 중 하나가 무조건 좋다고 하지 않고, 아이의 상황(물 마시기, 요로·신장, 체중, 기호성)에 맞춰 설명해요. 생식을 권하지 않고, 물어보면 위 위생 수칙을 알려줘요. 벨포아 콜드프레스드 제품이 어떤 온도로 만들어지는지(생식에 해당하는지)는 제품 자료로 확인해 두면 좋아요.
 
-출처: [코넬: 고양이 급여](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feeding-your-cat) (건식 6\\~10%·습식 75% 이상 수분, 가격·기호성·보관, 집밥, 생식 비권장, 간식 10\\~15%) · [코넬: 나이 든 고양이](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/loving-care-older-cats) (습식 섞어 수분) · [FDA: 생식은 반려동물과 사람에게 위험할 수 있어요](https://www.fda.gov/animal-veterinary/animal-health-literacy/get-facts-raw-pet-food-diets-can-be-dangerous-you-and-your-pet) · [FDA: 사료·간식 안전하게 다루기](https://www.fda.gov/animal-veterinary/animal-health-literacy/tips-safe-handling-pet-food-and-treats) (가장 좋은 방법은 생식을 주지 않는 것, 냉동 보관, 냉장고·전자레인지 해동, 남은 것 처리, 얼굴 핥기). 강아지 건식·습식 비교와 벨포아 제법은 아직 원문 확인 전이에요.
+출처: [코넬: 고양이 급여](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feeding-your-cat) (건식 6\\~10%·습식 75% 이상 수분, 가격·기호성·보관, 집밥, 생식 비권장, 간식 10\\~15%) · [코넬: 나이 든 고양이](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/loving-care-older-cats) (습식 섞어 수분) · [FDA: 생식은 반려동물과 사람에게 위험할 수 있어요](https://www.fda.gov/animal-veterinary/animal-health-literacy/get-facts-raw-pet-food-diets-can-be-dangerous-you-and-your-pet) · [FDA: 사료·간식 안전하게 다루기](https://www.fda.gov/animal-veterinary/animal-health-literacy/tips-safe-handling-pet-food-and-treats) (가장 좋은 방법은 생식을 주지 않는 것, 냉동 보관, 냉장고·전자레인지 해동, 남은 것 처리, 얼굴 핥기). 벨포아 콜드프레스드 제법은 제품 자료로 따로 확인해야 해요.
 
 ## 간식·영양제
 
@@ -614,7 +614,7 @@ WSAVA·코넬·FDA 자료로 확인함. 완전·균형 사료를 먹는 건강�
 **영양제에 대해 알아두면 좋은 것**
 
 - 미국에는 반려동물용 "건강기능식품·영양제"라는 별도 분류가 없어요. 제품은 사료 아니면 동물용 의약품으로 봐요. "병을 치료·예방한다"고 광고하는 제품은 의약품 허가가 필요한데, 대부분의 영양제는 그런 검증을 받지 않았어요 (FDA).
-- \\*\\*오메가3(EPA·DHA)\\*\\*는 관절염 강아지에게 근거가 있는 편이고, 글루코사민·코드로이틴은 연구 결과가 엇갈려요 ('관절' 참고).
+- 오메가3(특히 EPA)는 관절염 강아지에게 근거가 있고, 글루코사민·콘드로이틴은 근거가 부족해요 ('관절' 참고).
 - **칼슘·비타민 D** 등을 완전 사료에 더하면 오히려 너무 많아질 수 있어요. 특히 대형견 자견에게는 칼슘을 더하지 않아요 ('시기별 급여' 참고).
 - 사람용 영양제·껌 비타민에는 자일리톨이 들어 있을 수 있어요 (FDA).
 - 유산균은 장 질환·설사에 쓸 때 가장 근거가 있고, 건강한 아이에게 도움이 된다는 근거는 아직 없어요. 효과는 균주마다 달라서 수의사가 권하는 제품을 써요. 한 조사에서는 제품 15개 중 2개만 라벨과 내용이 맞았고, 유산균을 넣은 건사료나 요거트는 효과가 증명되지 않았어요 (Tufts).
@@ -634,18 +634,18 @@ Merck·코넬 자료로 일부 확인함. 건강한 아이는 물을 충분히 �
 
 - 습식을 섞어 주어요 (코넬).
 - 물그릇을 여러 곳에 두고, 밥그릇·화장실과 떨어진 곳에 놓아요.
-- 흐르는 급수기, 넓고 얕은 그릇을 좋아하는 고양이도 있어요.
+- 흐르는 급수기를 두면 더 마시는 고양이도 있지만, 좋아하는 정도는 고양이마다 달라요 (코넬).
 - 나이 든 고양이는 계단을 오르지 않아도 되는 곳에 물을 두어요 (코넬).
 
 **병원에 가야 할 신호**
 
-- 평소보다 물을 눈에 띄게 많이 마시고 소변도 많아져요 (신장병, 당뇨, 고양이 갑상선 항진증, 자궁축농증 등 가능). 중성화 안 한 암컷이 발정 뒤 물을 많이 마시고 기운이 없으면 응급이에요.
+- 평소보다 물을 눈에 띄게 많이 마시고 소변도 많아져요 (신장병, 당뇨, 고양이 갑상선 항진증, 자궁축농증 등 가능). 중성화 안 한 암컷이 발정 4\\~6주 뒤 물을 많이 마시고 기운·식욕이 없거나 토하면 자궁축농증일 수 있어 응급이에요 (Merck).
 - 하루 넘게 물을 거의 안 마시거나, 물을 마시면 바로 토해요.
 - 잇몸이 끈적하고 말랐거나, 눈이 평소보다 팩 들어갔어요 (탈수).
 
 **봇 답변 원칙**: "물을 많이 마신다"는 질문에는 먼저 나이, 중성화 여부, 소변·식욕·체중 변화를 물어보고 검사를 권해요. 물을 줄여 보라고 권하지 않아요.
 
-출처: [Merck: 소동물 영양 요구량](https://www.merckvetmanual.com/management-and-nutrition/nutrition-small-animals/nutritional-requirements-of-small-animals) (체중 1kg당 약 44\\~66ml, 건강한 동물은 스스로 조절, 물을 제한하지 않기) · [코넬: 나이 든 고양이](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/loving-care-older-cats) · [코넬: 만성 신장병](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/chronic-kidney-disease). "물을 많이 마신다"의 수치 기준, 흐르는 급수기, 자궁축농증 내용은 아직 원문 확인 전이에요.
+출처: [Merck: 소동물 영양 요구량](https://www.merckvetmanual.com/management-and-nutrition/nutrition-small-animals/nutritional-requirements-of-small-animals) (체중 1kg당 약 44\\~66ml, 건강한 동물은 스스로 조절, 물을 제한하지 않기) · [코넬: 나이 든 고양이](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/loving-care-older-cats) · [코넬: 만성 신장병](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/chronic-kidney-disease) · [Merck 보호자용: 암컷 개의 생식기 질환](https://www.merckvetmanual.com/dog-owners/reproductive-disorders-of-dogs/reproductive-disorders-of-female-dogs) (자궁축농증: 주로 5살 넘은 중성화 안 한 암컷, 발정 4\\~6주 뒤, 물·소변 증가, 기운·식욕 없음, 구토) · [코넬: 고양이 수분 섭취](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/hydration) (급수기로 더 마시는 고양이도 있지만 취향은 다름, 습식·물 더하기).
 
 ## 귀 염증
 
@@ -653,7 +653,7 @@ Merck 자료로 확인함. 귀를 긁거나 머리를 자주 흔들고 냄새가
 
 **흔한 신호**: 머리 흔들기, 긁기, 고약한 냄새, 귀 안이 빨갛고 부음, 분비물, 각질. 한쪽 또는 양쪽 귀에 생겨요.
 
-**흔한 원인**: 알러지(환경·음식), 귀진드기 같은 기생충, 풀씨 같은 이물, 세균·효모균(말라세지아) 감염. 귀가 덮인 모양이나 귀길 구조 때문에 더 잘 생기는 아이도 있어요. 귀 염증이 자꼬 재발하면 알러지를 의심해 '피부·알러지' 항목을 함께 봐요.
+**흔한 원인**: 알러지(환경·음식), 귀진드기 같은 기생충, 풀씨 같은 이물, 세균·효모균(말라세지아) 감염. 귀가 덮인 모양이나 귀길 구조 때문에 더 잘 생기는 아이도 있어요. 귀 염증이 자꾸 재발하면 알러지를 의심해 '피부·알러지' 항목을 함께 봐요.
 
 **집에서 할 수 있는 것** (수의사 안내를 따라서)
 
@@ -661,18 +661,18 @@ Merck 자료로 확인함. 귀를 긁거나 머리를 자주 흔들고 냄새가
 - 식초를 섞은 민간요법은 염증을 더 나빠지게 할 수 있어요.
 - 세정 뒤 몇 분 기다렸다가 처방받은 약을 넣어요.
 - 수영·목욕 뒤에는 귀를 보송하게 말려요.
-- 세균·효모균 감염은 보통 2\\~4주동안 재검진이 필요하고, 오래된 경우 몇 달 걸리기도 해요.
+- 세균·효모균 감염은 보통 2\\~4주 뒤 재검진이 필요하고, 오래된 경우 몇 달 걸리기도 해요.
 
 **병원에 가야 할 신호**
 
 - 귀를 만지면 매우 아파하거나, 귀가 뜨겁고 붓고 고름·피가 나와요.
 - 고개를 한쪽으로 기울이거나, 빙빙 돌거나, 비틀거려요 (중이·내이 문제일 수 있어 빨리 진료).
-- 귀 염증이 자꼬 재발해요. 재발하는 외이염이 있는 개의 절반 넘게서 중이염이 발견돼요 (Merck).
-- 귀간 내부가 갑자기 부풀어 올랐어요 (귀 혈종).
+- 귀 염증이 자꾸 재발해요. 오래된 외이염이 있는 개에게는 중이염이 흔하고, 중이염을 치료하지 않으면 외이염이 계속 돌아올 수 있어요 (Merck).
+- 귓바퀴 안쪽이 갑자기 물풍선처럼 부풀어 올랐어요 (귀 혈종, 머리를 흔들거나 긁다가 생겨요).
 
 **봇 답변 원칙**: 귀약·항생제 이름을 권하지 않고, 진료로 원인(세균·효모균·진드기)을 확인하도록 안내해요. "사료를 바꾸면 귀 염증이 낫는다"고 말하지 않아요.
 
-출처: [Merck 보호자용: 개의 귀 감염·외이염](https://www.merckvetmanual.com/dog-owners/ear-disorders-of-dogs/ear-infections-and-otitis-externa-in-dogs) (신호, 원인, 치료 끝까지, 면봉·식초 피하기, 2\\~4주 재검진) · [Merck: 중이염·내이염](https://www.merckvetmanual.com/ear-disorders/otitis-media-and-interna/otitis-media-and-interna-in-animals) (재발 외이염 개의 절반 넘게 중이염, 검색 요약으로 확인). 고개 기울임·귀 혈종과 고양이 귀 염증 내용은 아직 원문 확인 전이에요.
+출처: [Merck 보호자용: 개의 귀 감염·외이염](https://www.merckvetmanual.com/dog-owners/ear-disorders-of-dogs/ear-infections-and-otitis-externa-in-dogs) (신호, 원인, 치료 끝까지, 면봉·식초 피하기, 2\\~4주 재검진) · [Merck: 중이염·내이염](https://www.merckvetmanual.com/ear-disorders/otitis-media-and-interna/otitis-media-and-interna-in-animals) (오래된 외이염인 개에게 중이염이 흔함, 내이염은 고개 기울임·눈 떨림) · [Merck 보호자용: 개의 바깥귀 질환](https://www.merckvetmanual.com/dog-owners/ear-disorders-of-dogs/disorders-of-the-outer-ear-in-dogs) (귀 혈종: 귓바퀴 안쪽의 물풍선 같은 부기, 머리 흔들기·긁기로 생김, 수의사가 치료) · [Merck 보호자용: 고양이 외이염](https://www.merckvetmanual.com/cat-owners/ear-disorders-of-cats/otitis-externa-external-ear-infection-in-cats) (고양이 귀길에 가장 흔한 병, 머리 흔들기·냄새·붉음·붓기·긁기·분비물, 귀진드기는 구충제로 치료).
 
 ## 벼룩·진드기
 
@@ -707,7 +707,7 @@ Merck·코넬 자료로 확인함. 벼룩은 심한 가려움과 벼룩 알러�
 
 Merck 자료로 확인함. 대부분은 원인을 알 수 없지만, **쓰레기를 뒤지거나 사람 음식을 많이 먹는 것**이 강아지의 흔한 위험 요인으로 여겨져요 (Merck). 심하면 입원 치료가 필요해요.
 
-**흔한 신호**: 식욕 없음, 구토, 기운 없음, 배 통증(엉덩이를 들고 엎드리는 자세를 하기도 해요), 탈수, 설사. 가벼우면 밥을 조금 덜 먹거나 처지기만 해서 놓치기 쉬워요.
+**흔한 신호**: 식욕 없음, 구토, 기운 없음, 배 통증, 탈수, 설사. 가벼우면 밥을 조금 덜 먹거나 처지기만 해서 놓치기 쉬워요.
 
 **위험을 높이는 것**: 쓰레기·기름진 사람 음식, 혈중 중성지방이 높음, 부신 기능 항진증, 일부 약, 큰 수술·외상. 미니어처 슈나우저에게 더 많아요 (Merck).
 
@@ -728,7 +728,7 @@ Merck 자료로 확인함. 대부분은 원인을 알 수 없지만, **쓰레기
 
 **봇 답변 원칙**: 구토와 배 통증이 같이 있으면 췌장염을 진단하지 말고 바로 병원 안내를 해요. 췌장염 이력이 있는 아이에게는 지방이 많은 제품·간식을 권하지 않아요.
 
-출처: [Merck 보호자용: 개의 췌장염·췌장 질환](https://www.merckvetmanual.com/dog-owners/digestive-disorders-of-dogs/pancreatitis-and-other-disorders-of-the-pancreas-in-dogs) (쓰레기·사람 음식, 중성지방, 미니어처 슈나우저, 신호, 저지방 사료, 당뇨·췌장 기능 저하) · [Merck 보호자용: 고양이 췌장 질환](https://www.merckvetmanual.com/cat-owners/digestive-disorders-of-cats/disorders-of-the-pancreas-in-cats) (기운 없음, 식욕 저하, 탈수, 체중 감소, 체온 저하, 구토, 황달, 열, 통증, 신호가 없을 수도 있음). '기도 자세' 내용은 아직 원문 확인 전이에요.
+출처: [Merck 보호자용: 개의 췌장염·췌장 질환](https://www.merckvetmanual.com/dog-owners/digestive-disorders-of-dogs/pancreatitis-and-other-disorders-of-the-pancreas-in-dogs) (쓰레기·사람 음식, 중성지방, 미니어처 슈나우저, 신호, 저지방 사료, 당뇨·췌장 기능 저하) · [Merck 보호자용: 고양이 췌장 질환](https://www.merckvetmanual.com/cat-owners/digestive-disorders-of-cats/disorders-of-the-pancreas-in-cats) (기운 없음, 식욕 저하, 탈수, 체중 감소, 체온 저하, 구토, 황달, 열, 통증, 신호가 없을 수도 있음).
 
 ## 당뇨·고양이 갑상선 항진증
 
@@ -790,7 +790,7 @@ Merck 자료로 확인함. 대부분은 원인을 알 수 없지만, **쓰레기
 
 **봇 답변 원칙**: 얼마나 자주 토하는지, 밥을 먹는지, 헹헹거리기만 하는지를 먼저 물어봐요. 변비약·사람용 제품을 권하지 않아요.
 
-출처: [코넬 고양이 건강센터: 헤어볼의 위험](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/danger-hairballs) (1\\~2주에 한 번, 막힘 신호, 매일 빗질, 변비약 금지, 천식 혼동) · [코넬: 너무 많이 핥는 고양이](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/cats-lick-too-much) (꼬리 뿌리 핥기는 벼룩, 털 빠짐·헤어볼 과다는 비정상, 검색 요약으로 확인) · [코넬: 고양이 갑상선 항진증](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/hyperthyroidism-cats). 강아지 털갈이와 피부 사상균 내용은 아직 원문 확인 전이에요.
+출처: [코넬 고양이 건강센터: 헤어볼의 위험](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/danger-hairballs) (1\\~2주에 한 번, 막힘 신호, 매일 빗질, 변비약 금지, 천식 혼동) · [코넬: 너무 많이 핥는 고양이](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/cats-lick-too-much) (꼬리 뿌리 핥기는 벼룩, 알러지·스트레스도 원인) · [코넬: 고양이 갑상선 항진증](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/hyperthyroidism-cats) · [코넬: 고양이 피부 사상균](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/ringworm-serious-readily-treatable-affliction) (동그란 털 빠짐, 끊어진 털, 각질·딱지, 과도한 그루밍, 접촉으로 옮음) · [Merck 보호자용: 개의 털 빠짐](https://www.merckvetmanual.com/dog-owners/skin-disorders-of-dogs/hair-loss-alopecia-in-dogs) (봄·가을에 더 빠짐, 대머리 부위가 없으면 정상 털갈이. 검색 요약으로 확인).
 
 ## 응급 상황 한눈에 보기
 
@@ -844,7 +844,7 @@ Merck 자료로 확인함. 아래 상황은 **바로 동물병원(가까운 24�
 
 - 처음에는 방을 따로 쓰고, 문 너머로 냄새에 익숙해지게 해요. 며칠 뒤부터 하루 30분쯤 서로의 공간을 바꿔 지내게 하는 것을 며칠 반복해요 (코넬).
 - 밥을 문 양쪽에 두고 점점 가까이 옮겨서, 상대 냄새와 좋은 일을 연결해요.
-- 다음에는 방묘문·안전문 너머로 짧게 보게 하고, 편안해하면 지켜보는 가운데 같은 공간에 둔어요.
+- 다음에는 지켜보는 가운데 짧게 만나게 하고, 매일 조금씩 더 가까이 두어요. 문을 한꺼번에 열어 합치지 않아요 (ASPCA).
 - 하악거림·으르렁거림이 보이면 이전 단계로 돌아가요. 벌주거나 억지로 만나게 하지 않아요.
 - 밥그릇·물·화장실·높은 자리·숨을 곳을 여러 군데 두어 서로 다투지 않게 해요.
 - 몇 주에서 몇 달이 걸릴 수 있어요. 서두르지 않는 것이 가장 중요해요.
@@ -862,7 +862,7 @@ Merck 자료로 확인함. 아래 상황은 **바로 동물병원(가까운 24�
 
 **봇 답변 원칙**: 합사 기간을 "며칠이면 된다"고 단정하지 않고, 싸움이 심하면 수의사나 행동 전문가 상담을 안내해요.
 
-출처: [코넬: 새 고양이 고르기와 돌보기](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/choosing-and-caring-your-new-cat) (빨리 검진, FeLV·FIV 검사, 검진 전 따로, 화장실 수+1, 스크래처) · [Merck 보호자용: 강아지 돌보기](https://www.merckvetmanual.com/dog-owners/routine-care-of-dogs/puppy-care) · [Merck 보호자용: 개의 행동 문제](https://www.merckvetmanual.com/dog-owners/behavior-of-dogs/behavior-problems-in-dogs) (배변 습관 8\\~9주) · [코넬: 고양이 공격성](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-behavior-problems-aggression) (따로 방, 하루 30분쯤 공간 바꾸기, 이동장·하네스로 멀리서 함께 밥, 몇 주에서 몇 달) · [ASPCA: 집 안 고양이끼리 공격성](https://www.aspca.org/pet-care/cat-care/common-cat-behavior-issues/aggression-between-cats-your-household) (자원 따로, 문 조금씩 열기, 매일 지켜보는 만남). 방묘문 사용과 강아지·고양이 합사는 일반적인 방법으로, 아직 원문 확인 전이에요.
+출처: [코넬: 새 고양이 고르기와 돌보기](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/choosing-and-caring-your-new-cat) (빨리 검진, FeLV·FIV 검사, 검진 전 따로, 화장실 수+1, 스크래처) · [Merck 보호자용: 강아지 돌보기](https://www.merckvetmanual.com/dog-owners/routine-care-of-dogs/puppy-care) · [Merck 보호자용: 개의 행동 문제](https://www.merckvetmanual.com/dog-owners/behavior-of-dogs/behavior-problems-in-dogs) (배변 습관 8\\~9주) · [코넬: 고양이 공격성](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-behavior-problems-aggression) (따로 방, 하루 30분쯤 공간 바꾸기, 이동장·하네스로 멀리서 함께 밥, 몇 주에서 몇 달) · [ASPCA: 집 안 고양이끼리 공격성](https://www.aspca.org/pet-care/cat-care/common-cat-behavior-issues/aggression-between-cats-your-household) (자원 따로, 문 조금씩 열기, 매일 지켜보는 만남). 강아지·고양이 합사는 아직 원문 확인 전이에요.
 
 ## 임신·수유 중 급여
 
@@ -888,14 +888,14 @@ Merck 자료로 확인함. 임신하거나 수유 중인 엄마는 **성장기�
 
 - 수유 중인 엄마가 떨고, 비틀거리고, 심하게 헐떡이거나, 경련해요 (혈중 칼슘 저하 가능, 20kg 미만 개에게 흔함, 응급).
 - 출산 준비(안절부절, 헐떡임, 둥지 만들기)가 24시간 넘게 이어지거나, 힘주기 시작하고 12\\~24시간이 지나도 새끼가 없거나, 새끼 사이 간격이 1\\~4시간을 넘어요 (개 기준, Merck). 출산 뒤 며칠간 나오는 검붉은 분비물은 정상이에요.
-- 젖이 빨갛고 뜨겁고 붓거나 엄마가 열이 나고 기운이 없어요 (유선염).
+- 젖이 뜨겁고 아파하거나 젖 색·질감이 이상하고, 엄마가 열이 나고 기운·식욕이 없거나 새끼를 돌보지 않아요 (유선염, Merck).
 - 엄마가 하루 넘게 안 먹거나 새끼를 돌보지 않아요.
 
 **FILIN 제품과 연결**: 전 연령용·퍼피·키튼 제품은 포장에 "임신·수유 포함"이라고 적혀 있는지 확인한 뒤 보여주면 좋아요.
 
 **봇 답변 원칙**: 임신·출산 관리는 수의사 진료를 먼저 안내해요. 칼슘 영양제를 권하지 않고, 급여량은 위 범위를 출발점으로 엄마 체형을 보며 조절하도록 알려줘요.
 
-출처: [Merck: 소동물 급여 방법](https://www.merckvetmanual.com/management-and-nutrition/nutrition-small-animals/feeding-practices-in-small-animals) (개: 임신 초 성장기용, 앞 2/3는 유지량, 마지막 1/3에 20\\~30% 더, 수유 2\\~4배·자유 급식, 대형견 엄마도 일반 성장기용, 칼슘 추가는 드물게 필요하고 금기일 수 있음) · [Merck 보호자용: 고양이 번식 관리](https://www.merckvetmanual.com/cat-owners/reproductive-disorders-of-cats/management-of-reproduction-of-cats) (키튼용, 마지막 3주 25% 더, 수유 2\\~3배, 칼슘 금지, 60\\~65일) · [Merck 보호자용: 개 번식 관리](https://www.merckvetmanual.com/dog-owners/reproductive-disorders-of-dogs/management-of-reproduction-in-dogs) (임신 62\\~64일, 난산 신호, 산후 검붉은 분비물 정상, 20kg 미만 저칼슘, 칼슘·옥시토신은 수의사 지시로만). 유선염 내용은 아직 원문 확인 전이에요.
+출처: [Merck: 소동물 급여 방법](https://www.merckvetmanual.com/management-and-nutrition/nutrition-small-animals/feeding-practices-in-small-animals) (개: 임신 초 성장기용, 앞 2/3는 유지량, 마지막 1/3에 20\\~30% 더, 수유 2\\~4배·자유 급식, 대형견 엄마도 일반 성장기용, 칼슘 추가는 드물게 필요하고 금기일 수 있음) · [Merck 보호자용: 고양이 번식 관리](https://www.merckvetmanual.com/cat-owners/reproductive-disorders-of-cats/management-of-reproduction-of-cats) (키튼용, 마지막 3주 25% 더, 수유 2\\~3배, 칼슘 금지, 60\\~65일) · [Merck 보호자용: 개 번식 관리](https://www.merckvetmanual.com/dog-owners/reproductive-disorders-of-dogs/management-of-reproduction-in-dogs) (임신 62\\~64일, 난산 신호, 산후 검붉은 분비물 정상, 20kg 미만 저칼슘, 칼슘·옥시토신은 수의사 지시로만) · [Merck 보호자용: 암컷 개의 생식기 질환](https://www.merckvetmanual.com/dog-owners/reproductive-disorders-of-dogs/reproductive-disorders-of-female-dogs) (유선염: 젖이 뜨겁고 아픔, 젖 색·질감 이상, 열·기운 없음·식욕 저하, 새끼를 돌보지 않음).
 
 `;
 
