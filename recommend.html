@@ -116,6 +116,7 @@ dl.spec dd{margin:0}
 .save .agree .link{margin-left:4px}
 .save .err{font-size:13px;color:var(--coral)}
 .save .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.savebar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:15;border:0;border-radius:999px;padding:12px 20px;background:var(--slate);color:var(--slate-ink);font:inherit;font-weight:700;font-size:15px;box-shadow:0 6px 18px rgba(23,51,107,.28);cursor:pointer;white-space:nowrap}
 .save.done{background:var(--amber-soft);border-color:var(--amber-soft)}
 .terms{font-size:13.5px;display:flex;flex-direction:column;gap:10px}
 .terms table{border-collapse:collapse;width:100%}
@@ -143,6 +144,7 @@ dl.spec dd{margin:0}
 <div class="foot"><img src="img/filin-badge.png" alt="FILIN 올리와 세리"><p>작은 감정까지, 소중하게.</p><p class="small">토우 · 퓨어비타 · 뉴트리소스 · 초이스 · 벨포아는 (주)히즈윌이 공식 수입해요.</p></div>
 </div>
 <div class="toast" id="toast" hidden></div>
+<button class="savebar" type="button" data-tosave hidden>이 결과 저장하기 ↓</button>
 <div class="sheet-bg" id="sheetBg" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"></div></div>
 <script src="vendor/supabase-js-2.117.3.js"></script>
 <script>
@@ -420,12 +422,12 @@ function vResult(){
   let h = bubble("oli", recs.length ? `올리예요! 답해 준 내용으로 맞는 사료 ${recs.length}가지를 골랐어요. 눌러서 원료와 가격을 확인해 보세요.` : `조건에 딱 맞는 사료를 못 찾았어요. 답을 하나 바꿔 볼까요?`) + `</div>`;
   h += chatNav();
   h += `<section class="stack" id="recEnd">${recs.map(recCard).join("")}</section>`;
+  if(recs.length) h += vSave(); // 추천 카드 바로 아래에 둬서 놓치지 않게 해요
   if(recs.length>1) h += compareTable(recs);
   if(out.length) h += `<p class="note">피해야 할 재료(${ans.allergies.map(allergenName).join("·")})가 주 원료인 제품 ${out.length}가지는 추천에서 뺐어요.</p>`;
   if(recs.length) h += `<section class="cta"><h3>마음에 드는 사료를 찾았나요?</h3><p class="small">1순위 추천 <b>${esc(BRANDS[recs[0].p.b].name+" "+recs[0].p.n)}</b>, 네이버 스토어에서 바로 살 수 있어요. 다른 추천 사료도 카드를 눌러 구매 버튼을 찾을 수 있어요.</p>
       <div class="row"><a class="btn primary" href="${storeUrl(recs[0].p)}" target="_blank" rel="noopener">네이버 스토어에서 구매하기</a><button class="btn ghost" type="button" data-share>결과 링크 복사</button></div>
       <a class="link" href="./">필린 앱에서 정기배송 알아보기</a></section>`;
-  if(recs.length) h += vSave();
   h += `<p class="note">추천은 참고용이에요. 사료 전환은 7~10일에 걸쳐 천천히, 알러지나 건강 고민은 수의사 선생님과 먼저 상담해 주세요. 가격은 스마트스토어 기준(2026-10-30)이라 바뀔 수 있어요.</p>
     <button class="btn ghost block" type="button" data-restart>처음부터 다시</button>`;
   return h;
@@ -488,7 +490,7 @@ function openTerms(k){
   $("#sheetBg").hidden=false; document.body.style.overflow="hidden"; $("#sheet").scrollTop=0;
   $("#sheet [data-close]").focus();
 }
-function rerenderSave(){ const box=$("#saveBox"); if(box) box.outerHTML=vSave(); }
+function rerenderSave(){ const box=$("#saveBox"); if(box) box.outerHTML=vSave(); watchSave(); }
 async function submitSave(form){
   const fd=new FormData(form);
   const keep=()=>{ const f=$("#saveForm"); if(!f) return; f.pet.value=fd.get("pet")||""; f.phone.value=fd.get("phone")||""; f.age14.checked=!!fd.get("age14"); f.privacy.checked=!!fd.get("privacy"); f.marketing.checked=!!fd.get("marketing"); };
@@ -553,6 +555,17 @@ function render(){
   $("#view").innerHTML = step<0 ? vStart() : vChat();
   const done = step>=0 && step>=qs().length;
   history.replaceState(null,"",done?toHash():location.pathname+location.search);
+  watchSave();
+}
+// 결과 화면에서 저장 칸이 화면에 안 보이면 아래에 '이 결과 저장하기' 버튼을 띄워요 (저장하면 사라져요)
+let saveIO=null;
+function watchSave(){
+  const bar=$(".savebar"), box=$("#saveBox"); if(saveIO){ saveIO.disconnect(); saveIO=null; }
+  bar.hidden=true;
+  if(!box || saveState==="done" || !("IntersectionObserver" in window)) return;
+  saveIO=new IntersectionObserver(es=>{ const cur=$("#saveBox"); const vis=es.some(x=>x.isIntersecting);
+    bar.hidden = vis || saveState==="done" || !cur || !cur.isConnected; });
+  saveIO.observe(box);
 }
 function scrollTo(sel){ requestAnimationFrame(()=>{ const t=document.querySelector(sel); if(t) t.scrollIntoView({block:"center",behavior:"smooth"}); }); }
 function advance(){ step++; render(); scrollTo("#recEnd, .chat .answer"); }
@@ -585,6 +598,7 @@ function closeSheet(){ $("#sheetBg").hidden=true; document.body.style.overflow="
 document.addEventListener("click", e=>{
   if(e.target===$("#sheetBg")) return closeSheet();
   const t=e.target.closest("button"); if(!t) return; const d=t.dataset;
+  if("tosave" in d){ const b=$("#saveBox"); if(b){ b.scrollIntoView({block:"start",behavior:"smooth"}); setTimeout(()=>{ const i=$("#saveForm [name=phone]"); if(i) i.focus({preventScroll:true}); },450); } return; }
   if("begin" in d){ step=0; render(); scrollTo(".chat .answer"); }
   else if(d.ans!==undefined){
     const q=qs()[step];
