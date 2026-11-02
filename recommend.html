@@ -277,13 +277,12 @@ const POINT = {
   picky:  {brand:"tow", line:"기호성 고민엔 토우 · 야생 단백질과 훈제 향으로 입 짧은 아이들이 많이 찾는 브랜드"},
   tear:   {brand:"pv",  line:"눈물 고민엔 퓨어비타 · 동물성 단백질 하나 + 그레인프리라 원재료표가 짧아요"},
   stool:  {brand:"ns",  line:"변 고민엔 뉴트리소스 · 소화와 영양소 흡수를 고려한 Good 4 Life 설계"},
-  allergy:{brand:["pv","bf"], line:"알러지 고민엔 퓨어비타와 벨포아 · 동물성 단백질 하나(퓨어비타), 닭·소 대신 곤충 단백질(벨포아)",
-           by:{pv:"알러지 고민엔 퓨어비타 · 동물성 단백질이 하나라 원재료표가 짧아요", bf:"알러지 고민엔 벨포아 · 닭·소 대신 곤충 단백질"}},
+  allergy:{brand:"bf",  line:"알러지 고민엔 벨포아 · 닭·소 대신 곤충 단백질"},
   daily:  {brand:"ch",  line:"특별한 고민이 없다면 초이스 · 매일 먹기 좋은 기본 데일리 영양"}
 };
 const CONCERN_SHORT = {picky:"기호성", tear:"눈물", stool:"변 상태", allergy:"알러지", daily:"기본 데일리"};
 const concernName = k=> CONCERN_SHORT[k]||k;
-/* 한 고민을 두 브랜드가 함께 맡을 수 있어요 (알러지: 퓨어비타·벨포아, 11-02 확정). by가 있으면 브랜드별 한 줄을 써요. */
+/* brand는 배열로 써서 한 고민을 여러 브랜드가 맡게 할 수도 있어요. by가 있으면 브랜드별 한 줄을 써요. */
 const ptBrands = c=> [].concat(POINT[c].brand);
 const ptLine = (c,b)=> (POINT[c].by && POINT[c].by[b]) || POINT[c].line;
 const ACTIVE = [["low","조용히 쉬는 편"],["normal","보통이에요"],["high","정말 많이 뛰어놀아요"]];
