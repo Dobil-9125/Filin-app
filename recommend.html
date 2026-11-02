@@ -399,8 +399,8 @@ function vResult(){
 /* ---------- 결과 저장 (고객 명단) ----------
    추천 결과 아래에서 휴대폰 번호와 동의를 받아 Supabase leads 표에 넣어요 (supabase/leads.sql).
    웹에서는 넣기만 되고 읽을 수 없어요. 명단은 Supabase 대시보드 Table Editor에서 봐요. */
-const SUPABASE_URL = "https://jafmexguhgvlokbnidof.supabase.co";
-const SUPABASE_KEY = "sb_publishable_N90l5kBICxa5yO0RQrQu3Q_PNhq6d_j";
+const SUPABASE_URL = "https://eiojasxqcgfhypzvgdzp.supabase.co";
+const SUPABASE_KEY = "sb_publishable_IzblR7JHCcBhHfRniZG0Vw_Q3wl3wEJ";
 const sb = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {auth:{persistSession:false, autoRefreshToken:false}}) : null;
 const CONSENT_VERSION = "2026-11-02"; // 동의 문구를 바꾸면 날짜도 바꿔요 (명단에 어느 문구로 동의했는지 남아요)
 const ss = { get:k=>{try{return sessionStorage.getItem(k);}catch(e){return null;}}, set:(k,v)=>{try{sessionStorage.setItem(k,v);}catch(e){}} };
