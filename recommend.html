@@ -139,7 +139,7 @@ dl.spec dd{margin:0}
 </style>
 </head>
 <body>
-<header class="top"><div class="in"><a class="logo" href="./">FILIN<i>♥</i><small>맞춤 사료 추천</small></a><a class="link" href="./">필린 앱 열기</a></div></header>
+<header class="top"><div class="in"><a class="logo" href="recommend.html" data-home title="처음 화면으로">FILIN<i>♥</i><small>맞춤 사료 추천</small></a><a class="link" href="./">필린 앱 열기</a></div></header>
 <div class="page"><main id="view"></main>
 <div class="foot"><img src="img/filin-badge.png" alt="FILIN 올리와 세리"><p>작은 감정까지, 소중하게.</p><p class="small">토우 · 퓨어비타 · 뉴트리소스 · 초이스 · 벨포아는 (주)히즈윌이 공식 수입해요.</p></div>
 </div>
@@ -596,6 +596,8 @@ function openProduct(id){
 function closeSheet(){ $("#sheetBg").hidden=true; document.body.style.overflow=""; }
 
 document.addEventListener("click", e=>{
+  const home=e.target.closest("[data-home]");
+  if(home){ e.preventDefault(); closeSheet(); ans=fresh(); step=-1; render(); document.scrollingElement.scrollTop=0; return; } // 왼쪽 위 FILIN: 처음 시작 화면으로
   if(e.target===$("#sheetBg")) return closeSheet();
   const t=e.target.closest("button"); if(!t) return; const d=t.dataset;
   if("tosave" in d){ const b=$("#saveBox"); if(b){ b.scrollIntoView({block:"start",behavior:"smooth"}); setTimeout(()=>{ const i=$("#saveForm [name=phone]"); if(i) i.focus({preventScroll:true}); },450); } return; }
@@ -616,7 +618,7 @@ document.addEventListener("click", e=>{
   else if("none" in d){ ans[qs()[step].key]=[]; advance(); }
   else if(d.redo!==undefined){ step=+d.redo; render(); scrollTo(".chat .answer"); }
   else if("back" in d){ step=Math.max(0,step-1); render(); scrollTo(".chat .answer"); }
-  else if("restart" in d){ ans=fresh(); step=0; render(); window.scrollTo({top:0}); toast("처음 질문부터 다시 시작해요."); }
+  else if("restart" in d){ ans=fresh(); step=0; render(); document.scrollingElement.scrollTop=0; toast("처음 질문부터 다시 시작해요."); }
   else if(d.open){ openProduct(d.open); }
   else if("close" in d){ closeSheet(); }
   else if(d.terms){ openTerms(d.terms); }
