@@ -1096,31 +1096,41 @@ const ARTICLES = [
    signs:["일주일에 한 번보다 자주 토할 때","토한 것에 피가 섞여 있을 때","기운이 없거나, 밥을 잘 안 먹거나, 설사를 함께 할 때","물을 평소보다 많이 마시거나 소변 양이 달라졌을 때","끈이나 작은 물건을 삼켰을 것 같을 때"]}
 ];
 /* 건강 체크 기록 → AI 상담: 최근 기록을 글로 정리해서 AI에게 보내요 */
-const HEALTH_DAYS = 7;
-function realLogs(pt){ // 예시 기록은 빼고, 최근 7일 실제 기록만
+const HEALTH_DAYS = [7, 30]; // 고객이 고르는 기간 (최근 7일 / 최근 30일)
+function realLogs(pt, days=7, from=0){ // 예시 기록은 빼고, from일 전부터 days일 동안의 실제 기록
   const mine=logs[pt.id]||{};
-  return [...Array(HEALTH_DAYS)].map((_,i)=>addDays(today(),-i)).map(d=>({d, e:mine[ymd(d)]})).filter(x=>x.e && !x.e.example);
+  return [...Array(days)].map((_,i)=>addDays(today(),-(from+i))).map(d=>({d, e:mine[ymd(d)]})).filter(x=>x.e && !x.e.example);
 }
-function healthSummary(pt){ // 서버가 메시지를 1000자까지만 받아서, 안내를 앞에 두고 길면 메모를 줄여요
+const chkText = (c,v)=> (c.opts.find(o=>o[0]===v)||[])[1];
+function healthSummary(pt, days){ // 서버가 메시지를 1000자까지만 받아서, 안내를 앞에 두고 길면 메모를 줄여요
   const req=`이 건강 체크 기록으로 ${pt.name}의 지금 상태를 살펴봐 주세요. 진단 말고 보호자용 안내로 부탁해요. 병원에 가야 할 신호가 있으면 가장 먼저 말해 주고, 눈에 띄는 변화나 흐름, 집에서 지켜볼 것, 다음에 더 적어 두면 좋을 것을 알려 주세요.`;
-  const recs=realLogs(pt).reverse();
-  const build=memo=>`${req}\n\n[건강 체크 기록] 최근 ${HEALTH_DAYS}일 중 ${recs.length}일 기록 (식욕·기운·변·구토·물, 적힌 것 말고는 평소처럼)\n`+recs.map(({d,e})=>{
-    const odd=CHECKS.filter(c=>e[c.key] && e[c.key]!=="ok").map(c=>`${c.label} ${(c.opts.find(o=>o[0]===e[c.key])||[])[1]}`);
+  const recs=realLogs(pt,7).reverse();
+  // 30일: 최근 7일은 날짜별로, 그 앞 기간은 항목별로 '평소와 달랐던 날 수'만
+  let older="";
+  if(days>7){
+    const old=realLogs(pt,days-7,7), cnt=[];
+    CHECKS.forEach(c=>c.opts.forEach(([v])=>{ if(v==="ok") return; const n=old.filter(x=>x.e[c.key]===v).length; if(n) cnt.push(`${c.label} ${chkText(c,v)} ${n}일`); }));
+    older=`\n\n[그 전 ${days-7}일 요약] 기록 ${old.length}일 중 ${cnt.length?cnt.join(", "):"모두 평소처럼"}`;
+  }
+  const build=memo=>`${req}\n\n[건강 체크 기록] 최근 7일 중 ${recs.length}일 기록 (식욕·기운·변·구토·물, 적힌 것 말고는 평소처럼)\n`+recs.map(({d,e})=>{
+    const odd=CHECKS.filter(c=>e[c.key] && e[c.key]!=="ok").map(c=>`${c.label} ${chkText(c,e[c.key])}`);
     const m=e.memo&&memo?` · 메모: ${String(e.memo).slice(0,memo)}`:"";
     return `- ${d.getMonth()+1}/${d.getDate()}(${"일월화수목금토"[d.getDay()]}): ${odd.length?odd.join(", "):"모두 평소처럼"}${m}`;
-  }).join("\n");
+  }).join("\n")+older;
   return [80,40,20,0].map(build).find(t=>t.length<=990) || build(0).slice(0,990);
 }
 function healthAiCard(pt){
-  const n=realLogs(pt).length;
-  return `<div class="card aicheck"><div><b>AI에게 지금 상태 물어보기</b><p class="small muted">${n?`최근 ${HEALTH_DAYS}일 기록 ${n}일치를 AI가 살펴보고 정리해 드려요.`:"오늘 기록을 먼저 저장하면 AI가 기록을 보고 정리해 드려요."} 진단은 아니에요.</p></div>
-    <button class="btn dark block" type="button" data-askhealth ${n?"":"disabled"}>기록으로 상태 살펴보기</button></div>`;
+  const n7=realLogs(pt,7).length, n30=realLogs(pt,30).length;
+  return `<div class="card aicheck"><div><b>AI에게 지금 상태 물어보기</b><p class="small muted">${n30?`기간을 고르면 그동안의 기록을 AI가 살펴보고 정리해 드려요. (기록: 최근 7일 중 ${n7}일, 30일 중 ${n30}일)`:"오늘 기록을 먼저 저장하면 AI가 기록을 보고 정리해 드려요."} 진단은 아니에요.</p></div>
+    <div class="two">${HEALTH_DAYS.map(d=>`<button class="btn ${d===7?"dark":"ghost"}" type="button" data-askhealth="${d}" ${n30?"":"disabled"}>최근 ${d}일로 보기</button>`).join("")}</div>
+    <p class="small muted">7일은 구토·설사·식욕처럼 갑자기 생긴 변화를, 30일은 물 마시기·입맛처럼 천천히 바뀌는 흐름을 보기 좋아요.</p></div>`;
 }
-function askHealth(){
-  const pt=cur(); if(!realLogs(pt).length){ toast("오늘 기록을 먼저 저장해 주세요."); go("health"); return; }
+function askHealth(days){
+  days = HEALTH_DAYS.includes(days)?days:7;
+  const pt=cur(); if(!realLogs(pt,days).length){ toast("건강 체크 기록을 먼저 저장해 주세요."); go("health"); return; }
   if(ask.petId!==pt.id) ask={petId:pt.id, msgs:[], busy:false, err:"", draft:""};
   go("ask");
-  if(sb && user) sendAsk(healthSummary(pt), `최근 ${HEALTH_DAYS}일 건강 체크 기록으로 ${pt.name} 상태를 살펴봐 주세요`);
+  if(sb && user) sendAsk(healthSummary(pt, days), `최근 ${days}일 건강 체크 기록으로 ${pt.name} 상태를 살펴봐 주세요`);
 }
 function vHealth(){
   const pt=cur(), mine=logs[pt.id]||{}, key=ymd(today());
@@ -1243,7 +1253,7 @@ function vAsk(){
   const list=ask.msgs.map(m=>`<div class="bub ${m.role==="user"?"me":"ai"}">${m.show?`<span class="small">📋</span> ${esc(m.show)}`:askFmt(m.content)}</div>`).join("");
   const hasHealth=ask.msgs.some(m=>m.show) && !ask.busy && ask.msgs[ask.msgs.length-1]?.role==="assistant";
   return head+`<div class="chat" id="chat">
-      ${ask.msgs.length?"":`<div class="bub ai">${esc(pt.name)}에 대해 궁금한 걸 물어보세요.</div><div class="chips"><button class="chip" type="button" data-askhealth>📋 건강 체크 기록으로 상태 보기</button>${ASK_EX.map((q,i)=>`<button class="chip" type="button" data-askex="${i}">${q}</button>`).join("")}</div>`}
+      ${ask.msgs.length?"":`<div class="bub ai">${esc(pt.name)}에 대해 궁금한 걸 물어보세요.</div><div class="chips">${HEALTH_DAYS.map(d=>`<button class="chip" type="button" data-askhealth="${d}">📋 최근 ${d}일 건강 기록으로 상태 보기</button>`).join("")}${ASK_EX.map((q,i)=>`<button class="chip" type="button" data-askex="${i}">${q}</button>`).join("")}</div>`}
       ${list}
       ${ask.busy?`<div class="bub ai wait">답을 쓰고 있어요…</div>`:""}
       ${ask.err?`<div class="bub err">${ask.err}</div>`:""}
@@ -1680,7 +1690,7 @@ document.addEventListener("click",e=>{
   else if(d.vhow){ vetForm.how=d.vhow; render(false); }
   else if(d.vtopic){ vetForm.topic=d.vtopic; render(false); }
   else if(d.askex!==undefined){ sendAsk(ASK_EX[+d.askex]); }
-  else if("askhealth" in d){ askHealth(); }
+  else if("askhealth" in d){ askHealth(+d.askhealth); }
   else if("guidehome" in d){ guideState={id:null, flags:[]}; go("guide"); }
   else if(d.guide){ guideState={id:d.guide, flags:[]}; go("guide"); }
   else if(d.gflag!==undefined){ const i=+d.gflag, f=new Set(guideState.flags); f.has(i)?f.delete(i):f.add(i); const had=guideState.flags.length>0; guideState.flags=[...f].sort(); render(false); const al=document.querySelector(".alert"); if(al&&!had) al.scrollIntoView({behavior:"smooth",block:"center"}); }
