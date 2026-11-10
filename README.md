@@ -25,17 +25,20 @@ FILIN(필린) 고객용 앱의 첫 시제품이에요. 휴대폰 화면에 맞�
 
 | 파일 | 하는 일 |
 | --- | --- |
-| `index.html` | 앱 전체 (화면 디자인, 제품 데이터, 추천 규칙이 모두 이 파일 안에 있어요) |
+| `index.html` | 앱 화면 전체 (화면 디자인, 질문, 급여량 계산 등) |
+| `js/catalog.js` | **제품·가격·스토어 주소·추천 규칙** (앱과 맞춤 추천 웹이 함께 써요) |
+| `tools/build.py` | 한 파일 버전(`*-onefile.html`)을 자동으로 다시 만드는 스크립트 |
 | `img/` | 제품 사진과 올리·세리 그림 |
 | `vendor/` | 로그인·데이터베이스 연결에 쓰는 Supabase 라이브러리 (버전 고정) |
 | `supabase/setup.sql` | 데이터베이스 표와 잠금장치(RLS)를 만드는 SQL. Supabase SQL Editor에서 한 번 실행 |
 
-`index.html` 안에서 자주 고칠 곳은 다음과 같아요.
+자주 고칠 곳은 다음과 같아요.
 
-- 제품을 더하거나 고치기: `const P = [` 로 시작하는 목록
-- 추천 규칙 바꾸기: `function recommend(` 부분
-- 세리 질문 바꾸기: `const QUESTIONS = [` 부분
-- 알러지·품종 목록: `const ALLERGENS`, `const BREEDS`
+- 제품·가격·품절·스토어 주소 고치기: `js/catalog.js`의 `const P = [`, `PRICE`, `SOLDOUT`, `STORE_URL` (한 번 고치면 앱과 웹에 같이 바뀌어요)
+- 추천 규칙·브랜드별 소구점 바꾸기: `js/catalog.js`의 `function recommend(`, `POINT`
+- 알러지 목록: `js/catalog.js`의 `const ALLERGENS`
+- 세리 질문 바꾸기: `index.html`의 `const QUESTIONS = [` 부분
+- 품종 목록: `index.html`의 `const BREEDS`
 - 급여량 계산식 바꾸기: `function feeding(` 부분
 - 색 바꾸기: 맨 위 `:root{` 안의 `--slate`, `--amber` 같은 값
 
@@ -44,7 +47,7 @@ FILIN(필린) 고객용 앱의 첫 시제품이에요. 휴대폰 화면에 맞�
 - `filin-app-onefile.html`: 사진까지 파일 하나에 다 들어 있어요. 이 파일만 받아서 크롬이나 사파리로 열면 사진이 깨지지 않고 보여요. 카톡이나 메일로 보내기에도 이 파일이 편해요.
 - `index.html`: 고쳐 쓰는 원본이에요. `img/` 폴더와 같은 곳에 있어야 사진이 보여요. 저장소 전체를 받거나(Code → Download ZIP) GitHub Pages로 열면 돼요.
 
-`index.html`을 고친 뒤에는 `filin-app-onefile.html`도 다시 만들어야 같은 화면이 돼요. (첫 화면 사진은 통합 브랜드관 기획안 PDF에서 뽑은 올리·세리와 브랜드 이미지예요.)
+`index.html`, `recommend.html`, `js/catalog.js`, 사진을 고친 뒤에는 저장소 폴더에서 `python3 tools/build.py`를 실행하면 `filin-app-onefile.html`과 `recommend-onefile.html`이 다시 만들어져요. (`python3 tools/build.py --check`는 다시 만들 필요가 있는지만 알려 줘요.) (첫 화면 사진은 통합 브랜드관 기획안 PDF에서 뽑은 올리·세리와 브랜드 이미지예요.)
 
 ## 맞춤 추천 웹 버전
 
@@ -56,12 +59,12 @@ FILIN(필린) 고객용 앱의 첫 시제품이에요. 휴대폰 화면에 맞�
 | `recommend-onefile.html` | 사진까지 파일 하나에 담은 버전. 카톡·메일로 보내거나 다른 곳에 올리기 좋아요 |
 
 - 질문: **고민(기호성·눈물·변 상태·알러지, 중복 가능)** → 강아지/고양이 → 나이 → 몸무게(강아지만) → 피할 재료 → 활동량. 통합브랜드관 계획(2026-11-02)의 '우리 아이 사료 찾기' 방식이에요. 앱은 나이·체중을 프로필에서 가져오니 웹에서는 질문으로 받아요.
-- **브랜드별 소구점**(`recommend.html`의 `POINT`): 기호성 → 토우, 눈물 → 퓨어비타, 변 상태 → 뉴트리소스, 알러지 → 퓨어비타·벨포아(둘이 함께), 고민 없음 → 초이스. 고민에 맞는 브랜드 제품에 점수를 더하고, 그 한 줄을 추천 이유 맨 위에 보여 줘요. **초안**이라 확정되면 `POINT`의 `brand`·`line`만 고치면 돼요. 한 고민을 여러 브랜드가 맡으면 `brand`를 배열로 쓰고 `by`에 브랜드별 한 줄을 적어요. 효능을 약속하지 않고 원료·설계로만 설명해요.
+- **브랜드별 소구점**(`js/catalog.js`의 `POINT`): 기호성 → 토우, 눈물 → 퓨어비타, 변 상태 → 뉴트리소스, 알러지 → 퓨어비타·벨포아(둘이 함께), 고민 없음 → 초이스. 고민에 맞는 브랜드 제품에 점수를 더하고, 그 한 줄을 추천 이유 맨 위에 보여 줘요. **초안**이라 확정되면 `POINT`의 `brand`·`line`만 고치면 돼요. 한 고민을 여러 브랜드가 맡으면 `brand`를 배열로 쓰고 `by`에 브랜드별 한 줄을 적어요. 효능을 약속하지 않고 원료·설계로만 설명해요.
 - 브랜드는 5개예요. 뉴트리소스 초이스 6종은 '초이스' 브랜드(`ch`)로 따로 보여요. 결과 아래 '한눈에 비교' 표(고민, 주 단백질, 동물성 단백질 수, 곡물, 열량, 1kg당 가격)와 '히즈윌 공식 수입' 표시가 있어요.
 - 결과 저장 때 고민 답은 leads 표의 `prefs` 칸에 들어가요(picky·tear·stool·allergy). 예전 '찾는 밥' 질문은 없앴어요.
-- 제품 데이터(`P`, `PRICE`, `SOLDOUT`), 알러지 목록, `function recommend(` 는 `index.html`에서 복사한 뒤 웹에 고민·소구점 규칙을 더했어요(앱은 아직 예전 규칙). 앱에서 제품·가격·추천 규칙을 고치면 `recommend.html`에도 같은 부분을 붙여 넣고 `recommend-onefile.html`을 다시 만들어 주세요.
+- 제품 데이터(`P`, `PRICE`, `SOLDOUT`), 알러지 목록, `function recommend(` 는 앱과 함께 `js/catalog.js` 하나를 써요. 고민·소구점 규칙은 고민 질문을 받은 웹에서만 켜지고, 앱(프로필에 고민 칸이 아직 없어요)은 예전과 같은 결과가 나와요. 앱은 아직 초이스를 뉴트리소스 안에 "초이스 ○○"로 보여 줘요.
 - 결과는 '함께 든 원료' 주의 문구(예: 주 단백질은 곤충이지만 닭고기지방이 들어 있어요)와 용량별 가격·정가·정기배송가·일시품절을 보여 줘요.
-- '네이버 스토어에서 구매하기' 버튼은 개밥왕 스마트스토어로 가요. 24개 제품 모두 `recommend.html`의 `STORE_URL`에 상품 주소가 들어 있어요(2026-10-30). 주소가 없는 제품은 스토어 안 검색 결과(`STORE_Q`의 검색어)로 보내요. 상품이 바뀌거나 새로 생기면 `recommend.html`의 `STORE_URL`에 `"제품id": "https://smartstore.naver.com/gaebabking/products/번호"`처럼 넣으면 그 상품으로 바로 가요.
+- '네이버 스토어에서 구매하기' 버튼은 개밥왕 스마트스토어로 가요. 24개 제품 모두 `js/catalog.js`의 `STORE_URL`에 상품 주소가 들어 있어요(2026-10-30). 주소가 없는 제품은 스토어 안 검색 결과(`STORE_Q`의 검색어)로 보내요. 상품이 바뀌거나 새로 생기면 `js/catalog.js`의 `STORE_URL`에 `"제품id": "https://smartstore.naver.com/gaebabking/products/번호"`처럼 넣으면 그 상품으로 바로 가요.
 - 답은 주소 끝(`#sp=dog&st=adult&...`)에 담겨서 '결과 링크 복사'로 같은 결과를 공유할 수 있어요.
 
 ### 결과 저장 (고객 명단 모으기)
