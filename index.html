@@ -37,6 +37,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 
 header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);color:var(--slate);border-bottom:1px solid var(--line);padding-block:12px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+button.logo{background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:left;-webkit-tap-highlight-color:transparent}
 .logo{font-family:var(--body);font-weight:800;font-size:22px;letter-spacing:.06em;color:var(--navy)}
 .logo i{color:var(--coral);font-style:normal;font-size:12px;vertical-align:top;margin-left:1px}
 .logo small{font-family:var(--body);font-weight:400;font-size:11px;letter-spacing:.02em;color:var(--muted);margin-left:6px}
@@ -357,7 +358,7 @@ form.card .link{align-self:center}
 
 <aside class="side" aria-label="FILIN 소개">
   <div class="side-in">
-    <div class="logo side-logo">FILIN<i>♥</i></div>
+    <button class="logo side-logo" type="button" data-go="home" aria-label="FILIN 홈으로">FILIN<i>♥</i></button>
     <p class="side-copy">공식 수입원이 직접 보내는<br><b>우리 아이 맞춤 사료</b></p>
     <form class="side-search" id="sideSearch" role="search">
       <input id="sideQ" type="search" placeholder="사료 이름, 브랜드, 단백질로 찾아보세요" aria-label="제품 검색">
@@ -373,7 +374,7 @@ form.card .link{align-self:center}
 
 <div class="app">
   <header class="top wrap">
-    <div class="logo">FILIN<i>♥</i><small>작은 감정까지, 소중하게.</small></div>
+    <button class="logo" type="button" data-go="home" aria-label="FILIN 홈으로">FILIN<i>♥</i><small>작은 감정까지, 소중하게.</small></button>
     <div class="hdr-r"><button class="pet-chip" id="petChip" type="button"></button><button class="acct-btn" id="acctBtn" type="button" data-go="account" aria-label="내 계정"></button></div>
   </header>
   <div class="ptr" id="ptr" aria-hidden="true"><span>↻</span></div>
