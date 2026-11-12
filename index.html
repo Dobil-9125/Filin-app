@@ -1632,9 +1632,21 @@ document.addEventListener("change",e=>{
 document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeSheet(); });
 render();
 
-// 휴대폰 홈 화면에 앱으로 설치할 수 있게 해 주는 파일(sw.js)을 켜요.
-if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
+// 스토어 앱(안드로이드) 안에서 열렸는지. 앱은 화면 파일을 이미 품고 있어서 sw.js가 필요 없어요.
+const NATIVE = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+// 휴대폰 홈 화면에 앱으로 설치할 수 있게 해 주는 파일(sw.js)을 켜요. (웹에서만)
+if (!NATIVE && "serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
   navigator.serviceWorker.register("sw.js").catch(() => {});
+}
+// 안드로이드 뒤로 가기 버튼: 열린 창(제품 상세 등)을 먼저 닫고, 그다음 이전 화면으로, 홈에서는 앱을 내려요.
+if (NATIVE && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
+  const App = window.Capacitor.Plugins.App;
+  App.addListener("backButton", ({canGoBack}) => {
+    if ($("#sheetRoot").children.length) closeSheet();
+    else if (current() !== "home" && canGoBack) history.back();
+    else if (current() !== "home") go("home");
+    else App.minimizeApp();
+  });
 }
 </script>
 </body>
