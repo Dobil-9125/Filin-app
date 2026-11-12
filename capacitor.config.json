@@ -1,0 +1,8 @@
+{
+  "appId": "kr.filin.app",
+  "appName": "필린",
+  "webDir": "www",
+  "android": {
+    "backgroundColor": "#ffffff"
+  }
+}
