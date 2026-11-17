@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <!-- 시험용 설치 파일은 이름을 다르게 해서 정식 앱과 구분해요. -->
+    <string name="app_name">필린 시험판</string>
+    <string name="title_activity_main">필린 시험판</string>
+</resources>

@@ -1,0 +1,19 @@
+{
+  "name": "filin-app",
+  "private": true,
+  "version": "0.1.0",
+  "description": "FILIN 필린 앱 (웹 화면을 안드로이드 앱으로 감싸요)",
+  "scripts": {
+    "www": "python3 tools/www.py",
+    "android:sync": "python3 tools/www.py && cap sync android",
+    "android:apk": "npm run android:sync && cd android && ./gradlew assembleDebug"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.6.0",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/core": "^8.6.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.6.0"
+  }
+}

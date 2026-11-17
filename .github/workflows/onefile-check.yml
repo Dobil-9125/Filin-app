@@ -1,0 +1,12 @@
+# 한 파일 버전(*-onefile.html)을 다시 만들지 않고 올리면 알려 줘요.
+name: 한 파일 버전 확인
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 tools/build.py --check

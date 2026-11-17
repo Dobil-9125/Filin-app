@@ -37,6 +37,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 
 header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);color:var(--slate);border-bottom:1px solid var(--line);padding-block:12px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+button.logo{background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:left;-webkit-tap-highlight-color:transparent}
 .logo{font-family:var(--body);font-weight:800;font-size:22px;letter-spacing:.06em;color:var(--navy)}
 .logo i{color:var(--coral);font-style:normal;font-size:12px;vertical-align:top;margin-left:1px}
 .logo small{font-family:var(--body);font-weight:400;font-size:11px;letter-spacing:.02em;color:var(--muted);margin-left:6px}
@@ -267,6 +268,7 @@ textarea{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);borde
 .day i,.dot{display:inline-block;width:14px;height:14px;border-radius:50%;background:var(--line)}
 .dot{width:10px;height:10px;vertical-align:middle;margin-left:6px}
 .day.ok i,.dot.ok{background:#4fbf7f}.day.mid i,.dot.mid{background:var(--amber)}.day.bad i,.dot.bad{background:var(--coral)}
+.aicheck{display:flex;flex-direction:column;gap:10px}
 .alert{background:#ffe4e0;border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:8px;color:var(--ink)}
 .alert b{color:#b3261e}
 .chat{display:flex;flex-direction:column;gap:10px}
@@ -356,7 +358,7 @@ form.card .link{align-self:center}
 
 <aside class="side" aria-label="FILIN 소개">
   <div class="side-in">
-    <div class="logo side-logo">FILIN<i>♥</i></div>
+    <button class="logo side-logo" type="button" data-go="home" aria-label="FILIN 홈으로">FILIN<i>♥</i></button>
     <p class="side-copy">공식 수입원이 직접 보내는<br><b>우리 아이 맞춤 사료</b></p>
     <form class="side-search" id="sideSearch" role="search">
       <input id="sideQ" type="search" placeholder="사료 이름, 브랜드, 단백질로 찾아보세요" aria-label="제품 검색">
@@ -372,7 +374,7 @@ form.card .link{align-self:center}
 
 <div class="app">
   <header class="top wrap">
-    <div class="logo">FILIN<i>♥</i><small>작은 감정까지, 소중하게.</small></div>
+    <button class="logo" type="button" data-go="home" aria-label="FILIN 홈으로">FILIN<i>♥</i><small>작은 감정까지, 소중하게.</small></button>
     <div class="hdr-r"><button class="pet-chip" id="petChip" type="button"></button><button class="acct-btn" id="acctBtn" type="button" data-go="account" aria-label="내 계정"></button></div>
   </header>
   <div class="ptr" id="ptr" aria-hidden="true"><span>↻</span></div>
@@ -384,107 +386,12 @@ form.card .link{align-self:center}
 <div class="toast" id="toast" hidden></div>
 
 <script src="vendor/supabase-js-2.117.3.js"></script>
+<script src="js/catalog.js"></script>
 <script>
-/* ---------- 제품 데이터 (개밥왕 스마트스토어 상세페이지 기준, 2026-10-30) ---------- */
-const BRANDS = {
-  tow:{name:"토우", en:"Taste of the Wild", line:"미국 · 야생에서 영감받은 동물성 단백질 중심"},
-  pv:{name:"퓨어비타", en:"PureVita", line:"미국 · 한 레시피에 동물성 단백질 하나"},
-  ns:{name:"뉴트리소스", en:"NutriSource", line:"미국 · 퍼피부터 시니어까지 데일리 균형 영양"},
-  bf:{name:"벨포아", en:"Bellfor", line:"독일 · 곤충 단백질과 저온압착"}
-};
-// sp: dog/cat · st: 대상 단계 · prot: 주 단백질 키 · gf: 그레인프리 · ltd: 동물성 단백질 하나 · also: 주 단백질 말고 들어 있는 알러지 원료 {키:"어디에"} · kcal: kcal/kg (컵 표기만 있으면 g으로 나눈 값)
-const P = [
- {id:"tow-pacific-stream-dog",b:"tow",n:"훈제연어 & 고구마",sp:"dog",st:["adult"],prot:"fish",pl:"연어 · 청어",gf:1,ltd:0,also:{chicken:"천연 향미제(닭)"},hot:1,kcal:3600,sizes:[2,4.5,5.6,12.2,18.14],pt:"토우 대표 그레인프리 레시피(퍼시픽 스트림). 동물성 단백질은 연어와 생선에서 얻어요.",tags:["picky","fish"]},
- {id:"tow-pacific-stream-puppy",b:"tow",n:"훈제연어 & 고구마 퍼피",sp:"dog",st:["puppy"],prot:"fish",pl:"연어 · 청어",gf:1,ltd:0,also:{chicken:"천연 향미제(닭)"},kcal:3661,sizes:[2,5.6,12.2],pt:"성장기 강아지를 위한 그레인프리 레시피예요.",tags:["fish"]},
- {id:"tow-prey-trout-dog",b:"tow",n:"PREY 송어",sp:"dog",st:["adult","senior"],prot:"fish",pl:"송어",gf:1,ltd:0,also:{chicken:"닭 분말"},kcal:3592,sizes:[3.63,11.34],pt:"송어가 주 단백질인 제한 원료 레시피예요. 닭 분말과 연어 오일도 들어 있어요.",tags:["fish","novel"]},
- {id:"tow-prey-turkey-dog",b:"tow",n:"PREY 칠면조",sp:"dog",st:["adult","senior"],prot:"turkey",pl:"칠면조",gf:1,ltd:0,also:{chicken:"닭 분말",fish:"연어오일"},kcal:3670,sizes:[3.63,11.34],pt:"칠면조가 주 단백질인 제한 원료 레시피예요. 닭 분말과 연어오일도 들어 있어요.",tags:[]},
- {id:"tow-canyon-river-cat",b:"tow",n:"송어 & 훈제연어 (고양이)",sp:"cat",st:["kitten","adult","senior"],prot:"fish",pl:"송어 · 연어",gf:1,ltd:0,also:{chicken:"천연 향미제(닭)"},hot:1,kcal:3741,sizes:[1.36,2,4.5,6.6],pt:"생선파 고양이를 위한 그레인프리 레시피(캐니언 리버)예요.",tags:["picky","fish"]},
- {id:"tow-prey-turkey-cat",b:"tow",n:"PREY 칠면조 (고양이)",sp:"cat",st:["kitten","adult","senior"],prot:"turkey",pl:"칠면조",gf:1,ltd:0,also:{chicken:"닭 분말",fish:"연어오일"},kcal:3689,sizes:[2.72],pt:"칠면조가 주 단백질인 고양이용 제한 원료 레시피예요. 닭 분말도 들어 있어요.",tags:[]},
- {id:"pv-dog-salmon-peas",b:"pv",n:"연어 & 완두",sp:"dog",st:["puppy","adult","senior"],prot:"fish",pl:"연어",gf:1,ltd:1,also:{},kcal:3945,sizes:[1.81,5.44,11.3],pt:"동물성 원료가 연어 하나인 그레인프리 전연령 레시피예요.",tags:["fish"]},
- {id:"pv-dog-pork-blueberry",b:"pv",n:"포크 & 블루베리",sp:"dog",st:["puppy","adult","senior"],prot:"pork",pl:"돼지고기",gf:1,ltd:0,also:{fish:"연어오일"},kcal:3848,sizes:[1.81,5.44,11.3],pt:"닭·소 말고 다른 단백질을 찾을 때 고르는 그레인프리 전연령 레시피예요.",tags:["novel"]},
- {id:"pv-dog-turkey-sweetpotato",b:"pv",n:"칠면조 & 고구마",sp:"dog",st:["puppy","adult","senior"],prot:"turkey",pl:"칠면조",gf:1,ltd:0,also:{fish:"연어유"},sizes:[1.81,5.44,11.3],pt:"칠면조고기와 고구마로 만든 그레인프리 전연령 레시피예요.",tags:[]},
- {id:"pv-dog-chicken-brownrice",b:"pv",n:"치킨 & 현미",sp:"dog",st:["puppy","adult","senior"],prot:"chicken",pl:"닭고기",gf:0,ltd:0,also:{fish:"연어오일"},kcal:3786,sizes:[1.81,5.44,11.3],pt:"현미·귀리·보리를 담은 전연령 레시피예요.",tags:[]},
- {id:"pv-cat-salmon-peas",b:"pv",n:"캣 연어 & 완두",sp:"cat",st:["adult","senior"],prot:"fish",pl:"연어",gf:1,ltd:1,also:{},sizes:[1.81,5.44],pt:"예민한 고양이를 위한 그레인프리 단일 단백질이에요.",tags:["fish"]},
- {id:"pv-cat-chicken-peas",b:"pv",n:"캣 치킨 & 완두",sp:"cat",st:["kitten","adult","senior"],prot:"chicken",pl:"닭고기",gf:1,ltd:1,also:{},hot:1,sizes:[1.81,5.44],pt:"고양이용 그레인프리. 필린에서 많이 찾는 고양이 사료예요.",tags:["picky"]},
- {id:"ns-choice-chicken-barley",b:"ns",n:"초이스 치킨 & 보리",sp:"dog",st:["adult"],prot:"chicken",pl:"닭고기",gf:0,ltd:0,also:{turkey:"천연 향미제(칠면조)"},kcal:3474,sizes:[2.27,18.14],pt:"닭고기 분말과 보리·수수로 만든 기본 데일리 사료예요. 글루코사민·콘드로이틴이 들어 있어요.",tags:[]},
- {id:"ns-choice-turkey-barley",b:"ns",n:"초이스 칠면조 & 보리",sp:"dog",st:["adult"],prot:"turkey",pl:"칠면조",gf:0,ltd:0,also:{chicken:"닭지방·천연 향미제(닭)"},kcal:3492,sizes:[18.14],pt:"칠면조 분말이 주 단백질인 데일리 사료예요. 닭지방과 닭 향미제도 들어 있어요.",tags:[]},
- {id:"ns-choice-whitefish-rice",b:"ns",n:"초이스 화이트피쉬 & 라이스",sp:"dog",st:["adult"],prot:"fish",pl:"대구",gf:0,ltd:1,also:{},kcal:3492,sizes:[2.27,18.14],pt:"대구 어분이 유일한 동물성 원료인 데일리 사료예요. 현미·오트밀·보리가 들어가요.",tags:["fish"]},
- {id:"ns-choice-large-breed",b:"ns",n:"초이스 라지브리드",sp:"dog",st:["adult"],prot:"chicken",pl:"닭고기",gf:0,ltd:0,also:{turkey:"천연 향미제(칠면조)",fish:"청어 어분"},large:1,kcal:3756,sizes:[18.14],pt:"큰 아이들을 위한 레시피예요. 글루코사민·콘드로이틴이 들어 있어요.",tags:["large"]},
- {id:"ns-choice-performance",b:"ns",n:"초이스 퍼포먼스",sp:"dog",st:["adult"],prot:"chicken",pl:"닭고기",gf:0,ltd:0,also:{turkey:"천연 향미제(칠면조)"},kcal:3746,sizes:[18.14],pt:"조단백 30%, 조지방 20%로 운동량 많은 아이를 위한 레시피예요.",tags:["active"]},
- {id:"ns-choice-puppy",b:"ns",n:"초이스 퍼피",sp:"dog",st:["puppy"],prot:"chicken",pl:"닭고기",gf:0,ltd:0,also:{turkey:"천연 향미제(칠면조)",fish:"연어 어유"},kcal:3756,sizes:[2.27],pt:"처음 밥을 고를 때 시작하기 좋은 퍼피 레시피예요. 연어 어유로 DHA를 더했어요.",tags:[]},
- {id:"ns-gf-senior",b:"ns",n:"그레인프리 시니어 칠면조",sp:"dog",st:["senior"],prot:"turkey",pl:"칠면조",gf:1,ltd:0,also:{chicken:"천연 향미제(닭)",fish:"청어 어분"},kcal:3600,sizes:[1.81,5.44,11.79],pt:"7살 이상 아이를 위한 그레인프리 레시피예요. 칠면조가 주 단백질이고 렌틸콩·병아리콩이 들어가요.",tags:[]},
- {id:"ns-gf-chicken-peas",b:"ns",n:"그레인프리 치킨 & 완두",sp:"dog",st:["adult"],prot:"chicken",pl:"닭고기",gf:1,ltd:0,also:{turkey:"천연 향미제(칠면조)",fish:"연어 분말"},kcal:3991,sizes:[1.81,5.44,11.79],pt:"곡물을 빼고 싶을 때 고르는 데일리 레시피예요. 조단백 28%, 조지방 18%예요.",tags:[]},
- {id:"ns-cat-kitten-country",b:"ns",n:"캣 & 키튼 컨트리 셀렉트",sp:"cat",st:["kitten","adult"],prot:"chicken",pl:"닭고기 · 오리",gf:1,ltd:0,also:{turkey:"칠면조 분말",fish:"천연 향미제(어류)·연어유"},kcal:4165,sizes:[1.81,5.44],pt:"키튼부터 성묘까지 먹일 수 있는 그레인프리 레시피예요. 조단백 36%예요.",tags:[]},
- {id:"bellfor-naturgut-coldpressed",b:"bf",n:"네이처굿 슈마우스 콜드프레스",sp:"dog",st:["adult","senior"],prot:"insect",pl:"곤충 (건조 곤충 23%)",gf:1,ltd:0,also:{chicken:"가금류 지방(종류 표기 없음)",fish:"연어 오일"},kcal:3538,sizes:[4],pt:"저온압착으로 만든 8mm 원통형 알갱이예요. 콘드로이틴·글루코사민이 들어 있어요.",tags:["novel"]},
- {id:"bellfor-landgut",b:"bf",n:"란트굿 슈마우스 라지바이트",sp:"dog",st:["adult","senior"],prot:"insect",pl:"곤충 (건조 곤충 26%)",gf:1,ltd:0,also:{chicken:"닭고기 지방",fish:"연어 오일"},large:1,kcal:3395,sizes:[7.5],pt:"16.5mm 큰 알갱이로 만든 곤충 단백질 사료예요.",tags:["novel","large"]},
- {id:"bellfor-landgut-mini",b:"bf",n:"란트굿 슈마우스 미니",sp:"dog",st:["adult","senior"],prot:"insect",pl:"곤충 (동애등에)",gf:1,ltd:0,also:{chicken:"닭고기지방",fish:"연어오일"},small:1,kcal:3450,sizes:[1.2,2.5,7.5],pt:"하이포알러지 눈물사료로 알려진 8mm 작은 알갱이예요. 조단백 28%, 조지방 18%예요.",tags:["novel","small"]}
-];
-const byId = Object.fromEntries(P.map(p=>[p.id,p]));
-// 용량별 가격 [판매가, 정가(할인 전, 없으면 생략)] · 개밥왕 스마트스토어 목록 기준 (2026-10-30)
-const PRICE = {
- "tow-pacific-stream-dog":{2:[30000],4.5:[63000],5.6:[75000],12.2:[129000],18.14:[169000]},
- "tow-pacific-stream-puppy":{2:[30000],5.6:[69000],12.2:[119000]},
- "tow-prey-trout-dog":{3.63:[37100,53000],11.34:[139000]},
- "tow-prey-turkey-dog":{3.63:[37100,53000],11.34:[139000]},
- "tow-canyon-river-cat":{1.36:[24000],2:[31000],4.5:[63000],6.6:[88000]},
- "tow-prey-turkey-cat":{2.72:[40000]},
- "pv-dog-salmon-peas":{1.81:[16000,25000],5.44:[43000,65000],11.3:[79000,119000]},
- "pv-dog-pork-blueberry":{1.81:[16000,27000],5.44:[43000,65000],11.3:[79000,129000]},
- "pv-dog-turkey-sweetpotato":{1.81:[16000,23000],5.44:[43000,59000],11.3:[79000,109000]},
- "pv-dog-chicken-brownrice":{1.81:[16000,23000],5.44:[43000,59000],11.3:[79000,105000]},
- "pv-cat-salmon-peas":{1.81:[24000],5.44:[43000,63000]},
- "pv-cat-chicken-peas":{1.81:[10700,22000],5.44:[31000,53000]},
- "ns-choice-chicken-barley":{2.27:[25000],18.14:[129000]},
- "ns-choice-turkey-barley":{18.14:[139000]},
- "ns-choice-whitefish-rice":{2.27:[30000],18.14:[149000]},
- "ns-choice-large-breed":{18.14:[139000]},
- "ns-choice-performance":{18.14:[139000]},
- "ns-choice-puppy":{2.27:[25000]},
- "ns-gf-senior":{1.81:[25000],5.44:[65000],11.79:[119000]},
- "ns-gf-chicken-peas":{1.81:[25000],5.44:[65000],11.79:[119000]},
- "ns-cat-kitten-country":{1.81:[16000,23000],5.44:[43000,63000]},
- "bellfor-naturgut-coldpressed":{4:[68000]},
- "bellfor-landgut":{7.5:[145000]},
- "bellfor-landgut-mini":{1.2:[29900],2.5:[55000],7.5:[145000]}
-};
-const SOLDOUT = {"tow-canyon-river-cat":[6.6]}; // 스토어에서 일시품절
-// 개밥왕 스마트스토어 상품 주소 (요셉님이 준 목록). 구매는 스토어에서 해요.
-const STORE = "https://smartstore.naver.com/gaebabking";
-const STORE_URL = {
- "ns-cat-kitten-country":"https://smartstore.naver.com/gaebabking/products/13680020906",
- "tow-pacific-stream-puppy":"https://smartstore.naver.com/gaebabking/products/12765059059",
- "tow-prey-turkey-cat":"https://smartstore.naver.com/gaebabking/products/13585785169",
- "tow-pacific-stream-dog":"https://smartstore.naver.com/gaebabking/products/13586433442",
- "tow-prey-trout-dog":"https://smartstore.naver.com/gaebabking/products/13753838331",
- "tow-prey-turkey-dog":"https://smartstore.naver.com/gaebabking/products/13753838333",
- "tow-canyon-river-cat":"https://smartstore.naver.com/gaebabking/products/13585785168",
- "bellfor-landgut-mini":"https://smartstore.naver.com/gaebabking/products/5419779306",
- "bellfor-landgut":"https://smartstore.naver.com/gaebabking/products/13820687796",
- "bellfor-naturgut-coldpressed":"https://smartstore.naver.com/gaebabking/products/13820790245",
- "pv-cat-salmon-peas":"https://smartstore.naver.com/gaebabking/products/11586228961",
- "pv-cat-chicken-peas":"https://smartstore.naver.com/gaebabking/products/13393753468",
- "pv-dog-turkey-sweetpotato":"https://smartstore.naver.com/gaebabking/products/13679768191",
- "pv-dog-pork-blueberry":"https://smartstore.naver.com/gaebabking/products/13679849300",
- "pv-dog-salmon-peas":"https://smartstore.naver.com/gaebabking/products/13679849302",
- "pv-dog-chicken-brownrice":"https://smartstore.naver.com/gaebabking/products/13679849304",
- "ns-gf-chicken-peas":"https://smartstore.naver.com/gaebabking/products/13676893110",
- "ns-gf-senior":"https://smartstore.naver.com/gaebabking/products/13676893113",
- "ns-choice-whitefish-rice":"https://smartstore.naver.com/gaebabking/products/13676893115",
- "ns-choice-puppy":"https://smartstore.naver.com/gaebabking/products/13676893116",
- "ns-choice-performance":"https://smartstore.naver.com/gaebabking/products/13676893117",
- "ns-choice-turkey-barley":"https://smartstore.naver.com/gaebabking/products/13676893118",
- "ns-choice-chicken-barley":"https://smartstore.naver.com/gaebabking/products/13676893120",
- "ns-choice-large-breed":"https://smartstore.naver.com/gaebabking/products/13676893121"
-};
-const won = n=> n.toLocaleString("ko-KR")+"원";
-const priceOf = (p,size)=> (PRICE[p.id]||{})[size] || null;
-const soldOut = (p,size)=> (SOLDOUT[p.id]||[]).includes(size);
-const fromPrice = p=> { const v=Object.values(PRICE[p.id]||{}).map(x=>x[0]); return v.length?Math.min(...v):null; };
-const AUTO_OFF = 0.07;
-const autoPrice = n=> Math.round(n*(1-AUTO_OFF)/100)*100;
-
-const STAGE = {puppy:"퍼피",kitten:"키튼",adult:"성견·성묘",senior:"시니어"};
-const stageName = (st,sp)=> st==="adult" ? (sp==="cat"?"성묘":"성견") : STAGE[st];
+/* 제품 데이터·가격·추천 규칙은 js/catalog.js 에 있어요 (맞춤 추천 웹과 같이 써요).
+   웹은 초이스를 5번째 브랜드로 따로 보여 주지만, 앱은 아직 뉴트리소스 안에 "초이스 ○○"로 보여요. */
+P.forEach(p=>{ if(p.b==="ch"){ p.b="ns"; p.n="초이스 "+p.n; } });
+delete BRANDS.ch;
 
 /* ---------- 저장 (이 브라우저에만) ---------- */
 function rawSet(k,v){try{localStorage.setItem("filin:"+k,JSON.stringify(v))}catch(e){}}
@@ -494,19 +401,15 @@ const store = {
 };
 
 /* ---------- 반려동물 프로필 ---------- */
-const ALLERGENS = [["chicken","닭고기"],["beef","소고기"],["fish","생선"],["turkey","칠면조"],["pork","돼지고기"],["grain","곡물 (밀·보리 등)"]];
-const allergenName = k=> k==="grain" ? "곡물" : (ALLERGENS.find(a=>a[0]===k)||[k,k])[1];
 const PREFS = {
   dog:[["simple","원재료가 단순했으면"],["picky","입이 짧아요"],["novel","새로운 단백질을 찾아요"],["fish","생선을 좋아해요"],["gf","곡물 없는 사료가 좋아요"]],
   cat:[["simple","원재료가 단순했으면"],["picky","입이 짧아요"],["fish","생선을 좋아해요"],["gf","곡물 없는 사료가 좋아요"]]
 };
-const ACTIVE = [["low","조용히 쉬는 편"],["normal","보통이에요"],["high","정말 많이 뛰어놀아요"]];
 const BREEDS = {
   dog:["말티즈","푸들","포메라니안","비숑 프리제","시츄","치와와","웰시코기","프렌치불독","진돗개","골든 리트리버","래브라도 리트리버","믹스"],
   cat:["코리안 숏헤어","러시안 블루","브리티시 숏헤어","페르시안","스코티시 폴드","먼치킨","랙돌","샴","믹스"]
 };
 const LARGE_BREEDS = ["골든 리트리버","래브라도 리트리버","진돗개"];
-const spName = sp=> sp==="dog"?"강아지":"고양이";
 const avatar = sp=> sp==="dog"?"img/oli-hi.png":"img/seri-hi.png";
 const petImg = pt=> pt.photo || avatar(pt.sp);
 
@@ -558,28 +461,6 @@ function ageText(p){ const m=ageMonths(p); return m<12?`${m}개월`:`${Math.floo
 function stageOf(p){ const a=ageMonths(p)/12; if(p.sp==="dog") return a<1?"puppy":a>=7?"senior":"adult"; return a<1?"kitten":a>=10?"senior":"adult"; }
 function sizeOf(p){ return (LARGE_BREEDS.includes(p.breed)||p.weight>=25)?"large":p.weight<10?"small":"medium"; }
 
-function recommend(pt){
-  const st=stageOf(pt), sz=sizeOf(pt), al=pt.allergies||[], pr=pt.prefs||[];
-  return P.filter(p=>p.sp===pt.sp).map(p=>{
-    if(al.includes(p.prot) || (al.includes("grain") && !p.gf)) return null;
-    let s=0; const why=[]; let caution=null;
-    if(p.st.includes(st)){s+=4; why.push(`${stageName(st,pt.sp)} 단계에 맞는 레시피`);}
-    else if(st!=="adult"){s-=6;}
-    const hit=al.filter(a=>p.also && p.also[a]);
-    if(hit.length){s-=1; caution=`주 단백질은 ${p.pl}이지만 ${hit.map(a=>`${allergenName(a)}(${p.also[a]})`).join(", ")}도 들어 있어요. 엄격히 피해야 하면 확인이 필요해요.`;}
-    else if(al.includes("chicken")){s+=3; why.push(`닭고기 없이 ${p.pl} 단백질`);}
-    if((pr.includes("gf")||al.includes("grain")) && p.gf){s+=2; why.push("곡물을 뺀 그레인프리");}
-    if(pr.includes("simple") && p.ltd){s+=3; why.push("동물성 단백질이 하나라 원재료표가 짧아요");}
-    if(pr.includes("picky") && p.tags.includes("picky")){s+=2; why.push("향이 뚜렷해 입 짧은 아이들이 많이 찾는 레시피");}
-    if(pr.includes("novel") && p.tags.includes("novel")){s+=3; why.push(`닭·소와 다른 새로운 단백질 (${p.pl})`);}
-    if(pr.includes("fish") && p.prot==="fish"){s+=2; why.push("생선 단백질");}
-    if(pt.active==="high" && p.tags.includes("active")){s+=3; why.push("활동량 많은 아이용");}
-    if(sz==="large" && p.large){s+=3; why.push("대형견용 레시피");}
-    if(sz==="small" && p.small){s+=2; why.push("소형견용 작은 알갱이");}
-    if(p.hot){s+=1.5; why.push("필린에서 많이 찾는 제품");}
-    return {p,s,why,caution};
-  }).filter(r=>r && r.s>0).sort((a,b)=>b.s-a.s).slice(0,3);
-}
 
 function feeding(pt, kcalPerKg){
   const w=Math.max(0.5,+pt.weight||1); const st=stageOf(pt);
@@ -592,7 +473,6 @@ function feeding(pt, kcalPerKg){
 }
 const DEFAULT_KCAL = 3600;
 const sizesOf = p=> p.sizes || [2,5,10];
-const szText = s=> s<1 ? `${Math.round(s*1000)}g` : `${s}kg`;
 function bagDays(pt,p,size){ return Math.floor(size*1000/feeding(pt,p.kcal||DEFAULT_KCAL).grams); }
 function suggestWeeks(pt,p,size){ return Math.max(1,Math.min(12,Math.floor(bagDays(pt,p,size)/7))); }
 
@@ -1094,6 +974,43 @@ const ARTICLES = [
    points:["너무 빨리 먹거나, 사료를 갑자기 바꿨을 때도 토할 수 있어요.","끈·실·고무줄, 백합, 사람 약이나 양파·초콜릿은 고양이에게 위험해요.","기생충, 변비, 장 염증, 당뇨·신장병·갑상선 질환도 구토로 나타날 수 있어요."],
    signs:["일주일에 한 번보다 자주 토할 때","토한 것에 피가 섞여 있을 때","기운이 없거나, 밥을 잘 안 먹거나, 설사를 함께 할 때","물을 평소보다 많이 마시거나 소변 양이 달라졌을 때","끈이나 작은 물건을 삼켰을 것 같을 때"]}
 ];
+/* 건강 체크 기록 → AI 상담: 최근 기록을 글로 정리해서 AI에게 보내요 */
+const HEALTH_DAYS = [7, 30]; // 고객이 고르는 기간 (최근 7일 / 최근 30일)
+function realLogs(pt, days=7, from=0){ // 예시 기록은 빼고, from일 전부터 days일 동안의 실제 기록
+  const mine=logs[pt.id]||{};
+  return [...Array(days)].map((_,i)=>addDays(today(),-(from+i))).map(d=>({d, e:mine[ymd(d)]})).filter(x=>x.e && !x.e.example);
+}
+const chkText = (c,v)=> (c.opts.find(o=>o[0]===v)||[])[1];
+function healthSummary(pt, days){ // 서버가 메시지를 1000자까지만 받아서, 안내를 앞에 두고 길면 메모를 줄여요
+  const req=`이 건강 체크 기록으로 ${pt.name}의 지금 상태를 살펴봐 주세요. 진단 말고 보호자용 안내로 부탁해요. 병원에 가야 할 신호가 있으면 가장 먼저 말해 주고, 눈에 띄는 변화나 흐름, 집에서 지켜볼 것, 다음에 더 적어 두면 좋을 것을 알려 주세요.`;
+  const recs=realLogs(pt,7).reverse();
+  // 30일: 최근 7일은 날짜별로, 그 앞 기간은 항목별로 '평소와 달랐던 날 수'만
+  let older="";
+  if(days>7){
+    const old=realLogs(pt,days-7,7), cnt=[];
+    CHECKS.forEach(c=>c.opts.forEach(([v])=>{ if(v==="ok") return; const n=old.filter(x=>x.e[c.key]===v).length; if(n) cnt.push(`${c.label} ${chkText(c,v)} ${n}일`); }));
+    older=`\n\n[그 전 ${days-7}일 요약] 기록 ${old.length}일 중 ${cnt.length?cnt.join(", "):"모두 평소처럼"}`;
+  }
+  const build=memo=>`${req}\n\n[건강 체크 기록] 최근 7일 중 ${recs.length}일 기록 (식욕·기운·변·구토·물, 적힌 것 말고는 평소처럼)\n`+recs.map(({d,e})=>{
+    const odd=CHECKS.filter(c=>e[c.key] && e[c.key]!=="ok").map(c=>`${c.label} ${chkText(c,e[c.key])}`);
+    const m=e.memo&&memo?` · 메모: ${String(e.memo).slice(0,memo)}`:"";
+    return `- ${d.getMonth()+1}/${d.getDate()}(${"일월화수목금토"[d.getDay()]}): ${odd.length?odd.join(", "):"모두 평소처럼"}${m}`;
+  }).join("\n")+older;
+  return [80,40,20,0].map(build).find(t=>t.length<=990) || build(0).slice(0,990);
+}
+function healthAiCard(pt){
+  const n7=realLogs(pt,7).length, n30=realLogs(pt,30).length;
+  return `<div class="card aicheck"><div><b>AI에게 지금 상태 물어보기</b><p class="small muted">${n30?`기간을 고르면 그동안의 기록을 AI가 살펴보고 정리해 드려요. (기록: 최근 7일 중 ${n7}일, 30일 중 ${n30}일)`:"오늘 기록을 먼저 저장하면 AI가 기록을 보고 정리해 드려요."} 진단은 아니에요.</p></div>
+    <div class="two">${HEALTH_DAYS.map(d=>`<button class="btn ${d===7?"dark":"ghost"}" type="button" data-askhealth="${d}" ${n30?"":"disabled"}>최근 ${d}일로 보기</button>`).join("")}</div>
+    <p class="small muted">7일은 구토·설사·식욕처럼 갑자기 생긴 변화를, 30일은 물 마시기·입맛처럼 천천히 바뀌는 흐름을 보기 좋아요.</p></div>`;
+}
+function askHealth(days){
+  days = HEALTH_DAYS.includes(days)?days:7;
+  const pt=cur(); if(!realLogs(pt,days).length){ toast("건강 체크 기록을 먼저 저장해 주세요."); go("health"); return; }
+  if(ask.petId!==pt.id) ask={petId:pt.id, msgs:[], busy:false, err:"", draft:""};
+  go("ask");
+  if(sb && user) sendAsk(healthSummary(pt, days), `최근 ${days}일 건강 체크 기록으로 ${pt.name} 상태를 살펴봐 주세요`);
+}
 function vHealth(){
   const pt=cur(), mine=logs[pt.id]||{}, key=ymd(today());
   if(!todayLog || todayLog.pet!==pt.id) todayLog = {pet:pt.id, ...(mine[key]||{})};
@@ -1114,6 +1031,7 @@ function vHealth(){
       <label class="f">메모 (선택)<input id="h-memo" maxlength="80" value="${esc(todayLog.memo||"")}" placeholder="예: 산책 후 풀을 많이 먹었어요"></label>
       <button class="btn primary block" type="button" data-savelog ${CHECKS.every(c=>todayLog[c.key])?"":"disabled"}>오늘 기록 저장</button>
     </div>
+    ${healthAiCard(pt)}
     <section class="stack"><h2>알아 두면 좋은 이야기</h2>
       ${arts.map(a=>`<button class="article" type="button" data-article="${a.id}"><img src="${a.img}" alt=""><div><span class="small muted">${spName(a.sp)} · 필린 블로그</span><b>${a.title}</b></div></button>`).join("")}
     </section>
@@ -1143,21 +1061,21 @@ const GUIDE = [
   red:["변에 피가 많이 섞이거나, 검고 끈적한(타르 같은) 변이에요","구토, 기운 없음, 밥 안 먹음, 배 통증, 열이 같이 있어요","어린 아이(특히 예방접종 전 강아지), 나이 많은 아이, 지병이 있는 아이예요","하루이틀 넘게 이어지거나, 자주 재발하거나, 체중이 줄어요","이물이나 독성 물질을 먹었을 수 있어요"],urgent:[],
   home:["깨끗한 물을 항상 마실 수 있게 해요. 탈수가 가장 큰 위험이에요.","기름기 적고 소화가 쉬운 음식을 조금씩 자주 주고, 변이 굳으면 원래 사료로 천천히 돌아가요.","새로 바꾼 사료나 간식이 있으면 멈추고 기록해 두어요.","사람용 지사제는 주지 않아요."],
   src:"Merck 수의 매뉴얼, 코넬 고양이 건강센터"},
- {id:"skin",n:"가려움·피부",sum:"가려움은 벼룩 같은 기생충, 환경 알러지, 음식 알러지 순으로 흔해요.",
+ {id:"skin",n:"가려움·피부",sum:"가려움의 흔한 원인은 벼룩 같은 기생충, 세균·효모 감염, 알러지(벌레 물림, 음식, 꽃가루·집먼지 같은 환경)예요.",
   red:["피나 진물이 나는 상처, 털이 빠지고 빨간 부위가 퍼져요","잠을 못 자거나 계속 핥을 만큼 가려워해요","귀에서 냄새가 나거나 머리를 자주 흔들어요","얼굴이 갑자기 붓거나 두드러기가 생기고 숨쉬기 힘들어해요"],urgent:[3],
   home:["벼룩·기생충 예방이 잘 되고 있는지 먼저 확인해요.","음식 알러지가 의심되면 수의사와 함께 제거식 시험(8주 이상, 간식·영양제도 끊기)을 해요.","피해야 할 재료를 '내 아이'에 등록하면 맞춤 추천에서 빼고 보여 드려요."],
-  note:"어떤 사료로 바꾼다고 알러지가 낫는다고 말할 수는 없어요. 원인 확인은 진료가 필요해요.",src:"Olivry 외 2015·2017, Mueller 외 2016"},
+  note:"어떤 사료로 바꾼다고 알러지가 낫는다고 말할 수는 없어요. 원인 확인은 진료가 필요해요.",src:"Merck 수의 매뉴얼, Olivry 외 2015·2017, Mueller 외 2016"},
  {id:"weight",n:"살이 쪘어요",sum:"몸무게 숫자보다 체형점수(9점 만점에 4~5점이 적정)로 봐요. 갈비뼈가 얇은 지방 아래로 쉽게 만져지고, 위에서 보면 허리가 들어가면 적정이에요.",
   red:["고양이가 갑자기 여러 날 안 먹어요","많이 먹는데 살이 빠지거나, 물을 많이 마시고 소변이 많아요","먹는 양을 줄여도 살이 쪄요"],urgent:[],
-  home:["사료는 계량컵 대신 저울로 무게를 재서 줘요.","간식은 하루 열량의 10% 미만으로 하고, 그만큼 사료를 줄여요.","한 달에 한 번 체중을 재서 기록해요.","놀이·산책을 조금씩 늘려요. 고양이를 굶겨서 살을 빼면 안 돼요."],
-  src:"WSAVA 체형점수표·간식 가이드"},
+  home:["사료는 계량컵 대신 저울로 무게를 재서 줘요.","간식은 하루 열량의 10% 미만으로 하고, 그만큼 사료를 줄여요.","한 달에 한 번 체중을 재서 기록해요. 감량 목표는 강아지 주당 체중의 1~2%, 고양이 0.5~2% 정도예요. 고양이는 너무 빨리 빼면 지방간이 생길 수 있어요.","놀이·산책을 조금씩 늘려요. 고양이를 굶겨서 살을 빼면 안 돼요."],
+  src:"WSAVA 체형점수표·간식 가이드, AAHA"},
  {id:"switch",n:"사료 바꾸기",sum:"새 사료는 적어도 일주일에 걸쳐 조금씩 섞어서 바꿔요. 아이에 따라 더 오래 걸리기도 해요.",
   red:["바꾼 뒤 구토가 반복돼요","피가 섞인 변이나 물 같은 설사를 해요","기운이 없거나 아파해요","고양이가 하루 넘게 안 먹어요"],urgent:[],
   home:["1~2일 새 사료 25% → 3~4일 50% → 5~6일 75% → 7일부터 100%","변이 조금 묽으면 문제없던 비율에서 하루이틀 더 머문 뒤 이어가요.","같은 기간에 새 간식·영양제는 시작하지 않아요.","급여량은 새 사료의 열량(kcal/kg)으로 다시 계산해요.","고양이는 두 그릇을 나란히 두고 스스로 고르게 하는 방법도 있어요."],
   src:"Tufts 수의영양팀, 코넬 고양이 건강센터"},
  {id:"urine",n:"소변 문제",sp:"cat",sum:"화장실을 자주 들락거리며 조금씩 보거나 피가 비치면 방광·요도 문제예요.",
   red:["힘주는데 소변이 거의 또는 전혀 안 나와요 (특히 수컷)","울면서 소변을 보거나, 생식기를 계속 핥아요","구토, 기운 없음, 밥 안 먹음이 같이 있어요","소변에 피가 보이거나 화장실이 아닌 곳에 소변을 봐요"],urgent:[0],
-  home:["물을 더 마시게 해요: 습식 섞기, 물그릇 여러 개, 흐르는 급수기.","화장실은 고양이 수 + 1개, 매일 깨끗하게 치워요.","숨을 곳, 높은 곳, 매일 놀이 시간으로 스트레스를 줄여요.","결석 진단을 받았으면 수의사가 정한 처방식을 이어가요."],
+  home:["물을 더 마시게 해요: 습식 섞기, 물그릇 여러 개, 흐르는 급수기(좋아하는 정도는 고양이마다 달라요).","화장실은 고양이 수 + 1개, 매일 깨끗하게 치워요.","숨을 곳, 높은 곳, 매일 놀이 시간으로 스트레스를 줄여요.","결석 진단을 받았으면 수의사가 정한 처방식을 이어가요."],
   note:"수컷이 소변을 아예 못 보면 몇 시간 안에 생명이 위험할 수 있어요.",src:"코넬 고양이 건강센터"},
  {id:"thirst",n:"물을 많이 마셔요",sum:"나이 든 고양이에게 흔한 만성 신장병은 증상이 늦게 나타나서, 건강검진(혈액·소변 검사)으로 일찍 찾는 게 가장 중요해요.",
   red:["물을 평소보다 많이 마시고 소변 양이 늘어요","살이 빠지고 입맛이 없어요","구토, 입 냄새, 입안 궤양, 무기력이 있어요","갑자기 소변을 거의 안 봐요 (백합·포도·부동액을 먹었을 수 있어요)"],urgent:[3],
@@ -1166,15 +1084,43 @@ const GUIDE = [
  {id:"teeth",n:"입 냄새·치아",sum:"입 냄새는 당연한 게 아니라 치석·잇몸염 신호일 수 있어요. 예방의 기본은 매일 양치질이에요.",
   red:["한쪽으로만 씹거나, 사료를 떨어뜨리거나, 입을 만지면 싫어해요","잇몸이 빨갛고 피가 나거나 침을 많이 흘려요","이가 부러졌거나 흔들려요, 눈 아래가 붓거나 고름이 나와요","유치가 영구치가 난 뒤에도 남아 있어요"],urgent:[],
   home:["반려동물 전용 치약으로 매일 양치해요. 사람 치약은 쓰지 않아요.","뼈, 녹용, 딱딱한 장난감처럼 너무 단단한 건 이가 부러질 수 있어요.","이미 생긴 치석은 마취하고 하는 스케일링이 필요해요. 무마취 스케일링은 권하지 않아요."],
-  src:"AVDC 미국 수의치과학회, WSAVA"},
+  note:"고양이는 이가 녹는 치아흡수성 병변이 흔해요(고양이의 20~60%).",src:"AVDC 미국 수의치과학회, WSAVA, 코넬 고양이 건강센터"},
  {id:"limp",n:"다리를 절어요",sum:"관절 건강에 가장 도움이 되는 건 적정 체중이에요. 통증이 보이면 치료가 먼저예요.",
   red:["다리를 전혀 딛지 못하거나 갑자기 절어요","뒷다리에 힘이 없거나 끌어요","만지면 울거나, 관절이 붓고 뜨거워요","걷다가 깡충거리는 일이 점점 자주, 오래 이어져요"],urgent:[1],
   home:["미끄럽지 않은 바닥(매트), 낮은 계단·경사로를 써요.","짧고 자주 산책하고, 높은 곳에서 뛰어내리기를 줄여요.","사람 진통제는 절대 주지 않아요. 아세트아미노펜은 고양이에게 치명적이에요."],
   src:"Merck 수의 매뉴얼"},
- {id:"tear",n:"눈물 자국",sum:"갈색 자국은 눈물 속 색소가 털에 묻어서 생겨요. 사료만 바꿔서 없어진다는 근거는 약해요.",
+ {id:"tear",n:"눈물 자국",sum:"눈물 자국은 넘친 눈물이 털을 오래 적셔서 생겨요. 눈물길이 막혔는지 같은 원인을 찾는 게 먼저이고, 사료만 바꿔서 없어진다는 근거는 약해요.",
   red:["한쪽 눈에만 갑자기 눈물이 많아졌어요","눈을 가늘게 뜨거나 비비고, 눈이 빨갛거나 흐려졌어요","눈곱이 노랑·초록색이거나 냄새가 나요","눈 주변 피부가 짓무르거나 털이 빠져요"],urgent:[],
   home:["하루 1~2번 미지근한 물이나 전용 세정제로 닦고 보송하게 말려요.","눈 주변 털을 짧게 유지해요.","항생제가 든 눈물 자국 제거제는 수의사 처방 없이 쓰지 않아요."],
   src:"Merck 수의 매뉴얼, 미국 FDA"},
+ {id:"cough",n:"기침해요",sp:"dog",sum:"거칠고 마른 기침이 발작처럼 나오고 끝에 헛구역질을 하면 켄넬코프가 흔해요. 보통 가볍고 저절로 좋아지지만, 어린 강아지나 노견은 폐렴으로 갈 수 있어요.",
+  red:["숨쉬기 힘들어하거나 잇몸·혀가 파래요","열이 나거나, 고름 같은 콧물이 나오거나, 기운·식욕이 없어요 (특히 어린 강아지)","기침이 2~3주 넘게 이어지거나, 나이 든 개가 오래 기침해요"],urgent:[0],
+  home:["쉬게 하고, 따뜻하고 깨끗한 환경을 만들어 줘요.","전염이 잘 되니 다른 개와 만나지 않게 해요.","기침은 보통 처음 5일 동안 줄고, 병은 10~20일쯤 이어져요.","사람 기침약은 주지 않아요. 필요하면 수의사가 처방해요."],
+  note:"나이 든 소형견의 오랜 기침은 심장병 때문일 수도 있어요.",src:"Merck 수의 매뉴얼"},
+ {id:"catcold",n:"재채기·콧물",sp:"cat",sum:"고양이의 재채기, 콧물, 눈곱은 대부분 허피스·칼리시바이러스 같은 감염 때문이에요. 허피스는 스트레스를 받으면 다시 도질 수 있어요.",
+  red:["쉬고 있을 때 1분에 35번보다 많이 숨쉬거나, 입을 벌리고 숨쉬어요","하루 넘게 밥을 안 먹거나 물을 안 마셔요","눈이 뿌옇거나 눈을 못 떠요","입안이 헐어 침을 흘리거나, 얼굴·다리가 부어요","콧물에 피가 섞이거나 코·얼굴이 붓고 오래 낫지 않아요"],urgent:[0],
+  home:["잘 먹고 물을 충분히 마시게 하는 게 가장 중요해요. 코가 막히면 냄새를 못 맡아 안 먹을 수 있어요.","콧물·눈곱은 깨끗한 거즈와 식염수로 살살 닦아 줘요.","다른 고양이와 따로 지내게 하고, 이사·새 고양이 같은 스트레스를 줄여요.","사람 감기약이나 사람 안약은 쓰지 않아요."],
+  src:"코넬 고양이 건강센터"},
+ {id:"eye",n:"눈 충혈·눈곱",sum:"눈이 빨갛고 붓고 눈곱이 끼면 결막염일 수 있어요. 원인이 감염, 먼지, 알러지, 이물, 안구건조증 등 다양해서 눈만 보고는 알기 어려워요.",
+  red:["눈을 찡그리거나 못 뜨고, 눈이 뿌옇거나 모양이 달라 보여요","한쪽 눈만 그래요","노랗거나 고름 같은 눈곱이 나와요","흰자에 피가 고였어요 (다친 적이 없어도)"],urgent:[],
+  home:["눈곱은 깨끗한 거즈를 미지근한 물이나 식염수에 적셔 살살 닦아요.","눈을 비비거나 긁으면 넥카라로 막아요.","사람 안약이나 집에 남은 안약은 쓰지 않아요."],
+  src:"Merck 수의 매뉴얼, 코넬 고양이 건강센터"},
+ {id:"constip",n:"변을 못 봐요",sum:"딱딱하고 마른 변을 드물게, 힘들게 보면 변비예요. 고양이와 강아지 모두에게 흔하고, 오래 두면 대장이 늘어나는 병(거대결장)으로 갈 수 있어요.",
+  red:["수컷 고양이가 화장실에서 힘주는데 소변이 안 나와요 (변비가 아니라 응급일 수 있어요)","2~3일 넘게 변을 못 보거나, 화장실에서 계속 힘을 줘요","토하거나, 밥을 안 먹거나, 기운이 없어요","강아지 변이 리본처럼 가늘어요","변비가 자꾸 반복돼요"],urgent:[0],
+  home:["물을 충분히 마시게 해요. 습식 사료나 물을 더한 밥이 도움이 돼요.","체중 관리와 매일 빗질(헤어볼 줄이기)도 도움이 돼요.","강아지는 뼈처럼 단단한 걸 먹지 않게 하고, 변 볼 기회를 자주 줘요.","섬유질을 더할 때는 수의사와 양을 정해요. 너무 많으면 설사가 생겨요.","사람 변비약이나 관장약은 쓰지 않아요. 특히 고양이에게 아주 위험할 수 있어요."],
+  note:"화장실에서 힘을 줄 때는 먼저 소변인지 변인지 확인해 주세요.",src:"코넬 고양이 건강센터, Merck 수의 매뉴얼"},
+ {id:"scoot",n:"엉덩이를 끌어요",sp:"dog",sum:"엉덩이를 바닥에 끌거나 항문 쪽을 자꾸 핥으면 항문낭(항문 옆 작은 주머니) 문제가 흔해요. 기생충이나 알러지 때문일 수도 있어요.",
+  red:["항문 옆이 붓고, 빨갛거나 검붉게 변하고, 만지면 아파해요","항문 옆 피부에 구멍이 나고 피·고름이 나와요","변을 볼 때 아파하거나 힘들어해요","자꾸 재발해요"],urgent:[],
+  home:["집에서 억지로 짜지 말고, 병원에서 짜 주는 게 안전해요.","수의사가 권하면 섬유질을 더해 변을 단단하게 해요.","적정 체중을 유지해요."],
+  src:"Merck 수의 매뉴얼"},
+ {id:"lump",n:"혹·멍울이 생겼어요",sum:"지방종처럼 순한 혹도 많지만, 겉모양만으로는 순한 혹인지 암인지 알 수 없어요. 가는 바늘로 세포를 뽑아 보는 검사(세침흡인)로 확인해요.",
+  red:["새로 생긴 혹이에요 (크기와 상관없이 한 번은 진료)","빨리 커지거나, 모양·색이 변하거나, 피가 나거나 헐었어요","혹 때문에 가려워하거나, 토하거나 밥을 덜 먹어요","혹과 함께 살이 빠지거나 기운이 없어요"],urgent:[],
+  home:["빗질·목욕할 때 몸을 만져 보며 새 혹이 있는지 확인해요.","혹을 찾으면 위치, 크기(자로 재기), 날짜를 적고 사진을 찍어 두어요.","짜거나 터뜨리지 않아요."],
+  src:"Merck 수의 매뉴얼"},
+ {id:"disc",n:"허리·목을 아파해요",sp:"dog",sum:"디스크는 강아지 허리·목 통증의 흔한 원인이에요. 나이 든 개에게 많고, 닥스훈트처럼 잘 생기는 품종은 젊을 때도 생겨요.",
+  red:["뒷다리를 못 쓰거나, 소변·변을 못 가려요","뒷다리가 휘청이거나 끌어요","등을 구부리고 떨거나, 안으면 비명을 질러요","고개를 한쪽으로 돌리지 않거나, 밥그릇 앞에서 고개를 못 숙여요"],urgent:[0],
+  home:["계단, 소파·침대에서 뛰어내리기를 줄여요. 점프 놀이보다 산책이 안전해요.","적정 체중을 유지해요.","아파하면 순한 아이도 물 수 있어요. 조심해서 다뤄요.","사람 진통제는 절대 주지 않아요."],
+  note:"마비가 있으면 수술이 필요할 수 있고, 미룰수록 회복 가능성이 줄어요.",src:"코넬 수의대"},
 ];
 let guideState = {id:null, flags:[]};
 const EMERGENCY = ["숨쉬기 힘들어하거나, 잇몸·혀가 파랗거나 창백해요. 고양이가 입을 벌리고 숨쉬어요.","쓰러졌거나 의식이 없어요.","피가 많이 나거나 멈추지 않아요.","경련이 5분 넘게 이어지거나, 하루에 여러 번 반복돼요. 첫 경련도 당일 진료를 받아요.","중독 물질을 먹었거나 먹었을 수 있어요.","심하게 아파해요. 다리를 전혀 딛지 못하거나 뼈가 부러진 것 같아요.","눈을 다쳤어요.","토하려는데 안 나오고 배가 부풀어요(큰 개의 위 확장·염전).","수컷 고양이가 소변을 못 봐요.","심하게 헐떡이거나 비틀거리고 쓰러져요(열사병).","차에 치였거나 높은 곳에서 떨어졌어요. 겉으로 멀쩡해 보여도 속을 다쳤을 수 있어요.","출산 중 오래 힘주는데 아기가 안 나오거나, 수유 중인 엄마가 떨고 비틀거려요."];
@@ -1199,8 +1145,8 @@ function vGuide(){
 }
 
 /* ---------- AI 수의 봇 ---------- */
-// Supabase에 올린 AI 봇 함수 이름 (편집기에서 자동으로 정해진 이름)
-const VET_BOT_FN = "bright-responder";
+// Supabase에 올린 AI 봇 함수 이름
+const VET_BOT_FN = "quick-responder";
 let ask = {petId:null, msgs:[], busy:false, err:"", draft:""};
 const ASK_EX = ["사료를 바꾸고 변이 묽어졌어요","하루에 물을 얼마나 마셔야 정상인가요?","간식은 하루에 얼마나 줘도 되나요?"];
 function askFmt(t){ return esc(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/\n/g,"<br>"); }
@@ -1211,12 +1157,14 @@ function vAsk(){
   const foot=`<p class="proto">일반 안내예요. 진단·처방을 대신하지 않아요. 응급이면 바로 동물병원으로 가 주세요.</p>`;
   if(!sb) return head+`<div class="card"><b>온라인 앱에서만 쓸 수 있어요</b><p class="small muted">인터넷 주소로 연 FILIN 앱에서 로그인하면 물어볼 수 있어요.</p></div>`+foot;
   if(!user) return head+`<div class="card"><b>로그인하면 물어볼 수 있어요</b><p class="small muted">AI 상담은 회원만 쓸 수 있어요. 로그인한 뒤 이 화면으로 돌아와 주세요.</p><button class="btn primary block" type="button" data-go="account">로그인하기</button></div>`+foot;
-  const list=ask.msgs.map(m=>`<div class="bub ${m.role==="user"?"me":"ai"}">${askFmt(m.content)}</div>`).join("");
+  const list=ask.msgs.map(m=>`<div class="bub ${m.role==="user"?"me":"ai"}">${m.show?`<span class="small">📋</span> ${esc(m.show)}`:askFmt(m.content)}</div>`).join("");
+  const hasHealth=ask.msgs.some(m=>m.show) && !ask.busy && ask.msgs[ask.msgs.length-1]?.role==="assistant";
   return head+`<div class="chat" id="chat">
-      ${ask.msgs.length?"":`<div class="bub ai">${esc(pt.name)}에 대해 궁금한 걸 물어보세요.</div><div class="chips">${ASK_EX.map((q,i)=>`<button class="chip" type="button" data-askex="${i}">${q}</button>`).join("")}</div>`}
+      ${ask.msgs.length?"":`<div class="bub ai">${esc(pt.name)}에 대해 궁금한 걸 물어보세요.</div><div class="chips">${HEALTH_DAYS.map(d=>`<button class="chip" type="button" data-askhealth="${d}">📋 최근 ${d}일 건강 기록으로 상태 보기</button>`).join("")}${ASK_EX.map((q,i)=>`<button class="chip" type="button" data-askex="${i}">${q}</button>`).join("")}</div>`}
       ${list}
       ${ask.busy?`<div class="bub ai wait">답을 쓰고 있어요…</div>`:""}
       ${ask.err?`<div class="bub err">${ask.err}</div>`:""}
+      ${hasHealth?`<div class="two"><button class="btn ghost" type="button" data-go="vetform">수의사 상담 신청</button><button class="btn ghost" type="button" data-go="guide">증상 길잡이</button></div>`:""}
     </div>
     <form class="askbox" id="askForm"><textarea id="ask-text" maxlength="1000" rows="1" placeholder="예: 3일째 밥을 반만 먹어요">${esc(ask.draft)}</textarea><button class="btn primary" type="submit" ${ask.busy?"disabled":""}>보내기</button></form>`+foot;
 }
@@ -1227,15 +1175,15 @@ const ASK_ERR = {
   notready:"AI 상담을 준비하고 있어요. 곧 쓸 수 있어요.",
   net:"인터넷 연결을 확인하고 다시 보내 주세요."
 };
-async function sendAsk(q){
+async function sendAsk(q, show){
   q=(q||"").trim(); if(!q||ask.busy) return;
   const pt=cur();
-  ask.msgs.push({role:"user", content:q}); ask.draft=""; ask.busy=true; ask.err=""; render(false); askScroll();
+  ask.msgs.push(show?{role:"user", content:q, show}:{role:"user", content:q}); ask.draft=""; ask.busy=true; ask.err=""; render(false); askScroll();
   const pet={name:pt.name, species:spName(pt.sp), age:ageText(pt), weight:pt.weight, breed:pt.breed||"",
     avoid:(pt.allergies||[]).map(allergenName), conditions:pt.note||""};
   let err="", why="";
   try{
-    const {data,error}=await sb.functions.invoke(VET_BOT_FN,{body:{messages:ask.msgs, pet}});
+    const {data,error}=await sb.functions.invoke(VET_BOT_FN,{body:{messages:ask.msgs.map(m=>({role:m.role, content:m.content})), pet}});
     if(error){
       const r=error.context; let code="";
       if(r && typeof r.json==="function"){ try{ const j=await r.clone().json(); code=j.error||""; why=j.code||j.message||""; }catch(_){ try{ why=(await r.text()).slice(0,60); }catch(_){} } }
@@ -1245,7 +1193,7 @@ async function sendAsk(q){
     } else if(data && data.answer){ ask.msgs.push({role:"assistant", content:data.answer}); }
     else err="net";
   }catch(_){ err="net"; }
-  if(err){ ask.err=ASK_ERR[err]+(why?` <span class="small">(${esc(String(why))})</span>`:""); ask.msgs.pop(); ask.draft=q; }
+  if(err){ ask.err=ASK_ERR[err]+(why?` <span class="small">(${esc(String(why))})</span>`:""); ask.msgs.pop(); if(!show) ask.draft=q; }
   ask.busy=false; if(location.hash.slice(1)==="ask"){ render(false); askScroll(); }
 }
 function askScroll(){ const c=document.getElementById("chat"); if(c) c.lastElementChild?.scrollIntoView({behavior:"smooth",block:"end"}); }
@@ -1374,8 +1322,8 @@ function qnaTab(p){
 
 /* ---------- 회원가입 · 로그인 (Supabase) ---------- */
 // 공개 키(publishable)는 앱에 넣어도 되는 키예요. 데이터는 데이터베이스의 잠금장치(RLS)로 회원 본인만 볼 수 있어요.
-const SUPABASE_URL = "https://jafmexguhgvlokbnidof.supabase.co";
-const SUPABASE_KEY = "sb_publishable_N90l5kBICxa5yO0RQrQu3Q_PNhq6d_j";
+const SUPABASE_URL = "https://eiojasxqcgfhypzvgdzp.supabase.co";
+const SUPABASE_KEY = "sb_publishable_IzblR7JHCcBhHfRniZG0Vw_Q3wl3wEJ";
 const sb = (window.supabase && location.protocol.startsWith("http")) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 let user = null, syncMsg = "", syncTimer = null, loadingAccount = false;
 let acct = {mode:"login", email:"", msg:"", ok:"", busy:false, delArm:false};
@@ -1649,6 +1597,7 @@ document.addEventListener("click",e=>{
   else if(d.vhow){ vetForm.how=d.vhow; render(false); }
   else if(d.vtopic){ vetForm.topic=d.vtopic; render(false); }
   else if(d.askex!==undefined){ sendAsk(ASK_EX[+d.askex]); }
+  else if("askhealth" in d){ askHealth(+d.askhealth); }
   else if("guidehome" in d){ guideState={id:null, flags:[]}; go("guide"); }
   else if(d.guide){ guideState={id:d.guide, flags:[]}; go("guide"); }
   else if(d.gflag!==undefined){ const i=+d.gflag, f=new Set(guideState.flags); f.has(i)?f.delete(i):f.add(i); const had=guideState.flags.length>0; guideState.flags=[...f].sort(); render(false); const al=document.querySelector(".alert"); if(al&&!had) al.scrollIntoView({behavior:"smooth",block:"center"}); }
@@ -1711,9 +1660,21 @@ document.addEventListener("change",e=>{
 document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeSheet(); });
 render();
 
-// 휴대폰 홈 화면에 앱으로 설치할 수 있게 해 주는 파일(sw.js)을 켜요.
-if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
+// 스토어 앱(안드로이드) 안에서 열렸는지. 앱은 화면 파일을 이미 품고 있어서 sw.js가 필요 없어요.
+const NATIVE = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+// 휴대폰 홈 화면에 앱으로 설치할 수 있게 해 주는 파일(sw.js)을 켜요. (웹에서만)
+if (!NATIVE && "serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
   navigator.serviceWorker.register("sw.js").catch(() => {});
+}
+// 안드로이드 뒤로 가기 버튼: 열린 창(제품 상세 등)을 먼저 닫고, 그다음 이전 화면으로, 홈에서는 앱을 내려요.
+if (NATIVE && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
+  const App = window.Capacitor.Plugins.App;
+  App.addListener("backButton", ({canGoBack}) => {
+    if ($("#sheetRoot").children.length) closeSheet();
+    else if (current() !== "home" && canGoBack) history.back();
+    else if (current() !== "home") go("home");
+    else App.minimizeApp();
+  });
 }
 </script>
 </body>
