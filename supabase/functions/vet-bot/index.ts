@@ -40,7 +40,7 @@ const RULES = `너는 FILIN(필린) 앱의 반려동물 건강 안내 도우미�
 
 `;
 
-// 수의 지식 자료 rev 166 (FILIN 수의 지식 자료 문서에서 그대로 옮김)
+// 수의 지식 자료 rev 168 (FILIN 수의 지식 자료 문서에서 그대로 옮김)
 const KNOWLEDGE = `
 # FILIN 수의 지식 자료 (AI 봇용)
 
@@ -624,6 +624,7 @@ WSAVA·코넬·FDA 자료로 확인함. 완전·균형 사료를 먹는 건강�
 **영양제에 대해 알아두면 좋은 것**
 
 - 미국에는 반려동물용 "건강기능식품·영양제"라는 별도 분류가 없어요. 제품은 사료 아니면 동물용 의약품으로 봐요. "병을 치료·예방한다"고 광고하는 제품은 의약품 허가가 필요한데, 대부분의 영양제는 그런 검증을 받지 않았어요 (FDA).
+- 국내에서는 영양 보조용 비타민제, 애완용 구강청량제·탈취제 같은 제품이 "동물용의약외품"으로 팔리기도 하고, 이런 제품은 포장에 "동물용의약외품"이라고 적혀 있어요. "애완용 동물용의약품"이라고 적힌 제품은 약이고, "처방대상" 표시가 있으면 수의사 처방전 없이 살 수 없어요 (동물용 의약품등 취급규칙).
 - 오메가3(특히 EPA)는 관절염 강아지에게 근거가 있고, 글루코사민·콘드로이틴은 근거가 부족해요 ('관절' 참고).
 - **칼슘·비타민 D** 등을 완전 사료에 더하면 오히려 너무 많아질 수 있어요. 특히 대형견 자견에게는 칼슘을 더하지 않아요 ('시기별 급여' 참고).
 - 사람용 영양제·껌 비타민에는 자일리톨이 들어 있을 수 있어요 (FDA).
@@ -632,7 +633,7 @@ WSAVA·코넬·FDA 자료로 확인함. 완전·균형 사료를 먹는 건강�
 
 **봇 답변 원칙**: 영양제가 병을 고치거나 막는다고 말하지 않아요. 영양제 제품명·용량을 정해 주지 않고, 간식은 10% 규칙과 열량 조절을 안내해요.
 
-출처: [WSAVA 개 간식 가이드](https://wsava.org/wp-content/uploads/2025/11/WSAVA_GuidetoTreats_Dogs_251107.pdf) (간식 10% 미만, 단단한 간식) · [코넬: 고양이 급여](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feeding-your-cat) (간식 10\\~15%, 우유) · [FDA: 완전·균형 사료](https://www.fda.gov/animal-veterinary/animal-health-literacy/complete-and-balanced-pet-food) · [FDA: 동물 영양제 규정 안내 (철회된 CPG 690.100 페이지)](https://www.fda.gov/regulatory-information/search-fda-guidance-documents/cpg-sec-690100-nutritional-supplements-companion-animals-withdrawn-2202020) (검색 요약으로 확인) · [FDA: 자일리톨](https://www.fda.gov/consumers/consumer-updates/paws-xylitol-its-dangerous-dogs) · [Tufts: 유산균](https://sites.tufts.edu/petfoodology/2017/06/12/probiotics/) (장 질환·설사, 건강한 아이는 근거 없음, 균주마다 다름, 15개 중 2개만 라벨과 일치, 건사료·요거트). · 농림축산식품부 고시 「사료 등의 기준 및 규격」 제2024-27호 (국내에서 사료로 파는 영양제는 별표 2의 보조사료 범위에 있는 물질이어야 하고, 범위에 없는 물질은 사료로 팔거나 원료로 쓸 수 없음, 제5조·제5조의2. 요셉님이 올려 준 PDF로 확인). 동물용 의약품·의약외품으로 파는 제품의 규정은 아직 원문 확인 전이에요.
+출처: [WSAVA 개 간식 가이드](https://wsava.org/wp-content/uploads/2025/11/WSAVA_GuidetoTreats_Dogs_251107.pdf) (간식 10% 미만, 단단한 간식) · [코넬: 고양이 급여](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feeding-your-cat) (간식 10\\~15%, 우유) · [FDA: 완전·균형 사료](https://www.fda.gov/animal-veterinary/animal-health-literacy/complete-and-balanced-pet-food) · [FDA: 동물 영양제 규정 안내 (철회된 CPG 690.100 페이지)](https://www.fda.gov/regulatory-information/search-fda-guidance-documents/cpg-sec-690100-nutritional-supplements-companion-animals-withdrawn-2202020) (검색 요약으로 확인) · [FDA: 자일리톨](https://www.fda.gov/consumers/consumer-updates/paws-xylitol-its-dangerous-dogs) · [Tufts: 유산균](https://sites.tufts.edu/petfoodology/2017/06/12/probiotics/) (장 질환·설사, 건강한 아이는 근거 없음, 균주마다 다름, 15개 중 2개만 라벨과 일치, 건사료·요거트). · 농림축산식품부 고시 「사료 등의 기준 및 규격」 제2024-27호 (국내에서 사료로 파는 영양제는 별표 2의 보조사료 범위에 있는 물질이어야 하고, 범위에 없는 물질은 사료로 팔거나 원료로 쓸 수 없음, 제5조·제5조의2. 요셉님이 올려 준 PDF로 확인). · 「동물용 의약품등 취급규칙」 (농림축산식품부령 제741호, 2025. 10. 31. 시행. 제2조: 애완용 구강청량제·세척제·탈취제, 해충 구제제, 영양 보조용 비타민제처럼 작용이 가벼운 것은 검역본부장이 고시하는 동물용의약외품, 처방대상 동물용의약품은 수의사 처방전 없이 팔 수 없음. 제42조: 포장에 "애완용 동물용의약품"·"동물용의약외품"을 다른 글자와 구별되게 표시하고 처방대상은 따로 표시. 별표 7: 허가받은 효능 밖의 광고, 수의사가 추천한다는 광고, 다른 제품보다 낫다는 광고 금지. 요셉님이 올려 준 PDF로 확인).
 
 ## 물 마시기
 
