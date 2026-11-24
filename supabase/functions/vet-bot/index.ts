@@ -40,7 +40,7 @@ const RULES = `너는 FILIN(필린) 앱의 반려동물 건강 안내 도우미�
 
 `;
 
-// 수의 지식 자료 rev 148 (FILIN 수의 지식 자료 문서에서 그대로 옮김)
+// 수의 지식 자료 rev 160 (FILIN 수의 지식 자료 문서에서 그대로 옮김)
 const KNOWLEDGE = `
 # FILIN 수의 지식 자료 (AI 봇용)
 
@@ -473,9 +473,9 @@ WSAVA 2024 접종 가이드라인·Merck 자료로 확인함. 접종과 구충 �
 - 기침, 쉽게 지침, 숨이 가빨라짐, 쓰러짐 (심장사상충 가능).
 - 변에 벌레가 보이거나, 어린 아이의 배가 볼록하고 잇몸이 창백해요.
 
-**봇 답변 원칙**: 접종·구충·심장사상충 약의 이름·용량·날짜를 정해 주지 않고, "다니는 병원에서 일정을 정해요"라고 안내해요. "실내에만 있으니 안 해도 된다"고 말하지 않아요. 반려견의 광견병 접종은 국내 법상 의무가 있을 수 있어 담당 수의사·지자체에 확인하도록 안내해요.
+**봇 답변 원칙**: 접종·구충·심장사상충 약의 이름·용량·날짜를 정해 주지 않고, "다니는 병원에서 일정을 정해요"라고 안내해요. "실내에만 있으니 안 해도 된다"고 말하지 않아요. 국내에서는 시장·군수·구청장이 광견병 예방주사를 명령할 수 있고, 주사를 맞지 않은 개·고양이는 공고 뒤 억류 같은 조치를 받을 수 있어요 (가축전염병 예방법 시행규칙). 접종 시기·대상은 지자체 공고마다 다르니 담당 수의사·지자체에 확인하도록 안내해요.
 
-출처: [WSAVA 2024 개·고양이 접종 가이드라인 요약](https://wsava.org/wp-content/uploads/2024/05/2024-Guidelines-for-the-Vaccination-of-Dogs-and-Cats.pdf) (기본 접종, 2\\~4주 간격·16주 이후 마지막, 26주 추가, 성묘·성견은 필요 이상 자주 접종하지 않기, 연간 건강검진, 선택 접종 효과 약 1년) · [Merck 보호자용: 개 심장사상충](https://www.merckvetmanual.com/dog-owners/heart-and-blood-vessel-disorders-of-dogs/heartworm-disease-in-dogs) (모기, 6\\~8주 시작, 1년 내내, 매년 검사) · [Merck 보호자용: 개 장 기생충](https://www.merckvetmanual.com/dog-owners/digestive-disorders-of-dogs/gastrointestinal-parasites-of-dogs) (2주부터 구충, 사람 감염 주의) · [Merck 보호자용: 강아지 돌보기](https://www.merckvetmanual.com/dog-owners/routine-care-of-dogs/puppy-care) · [미국 심장사상충학회: 심장사상충 기초](https://www.heartwormsociety.org/pet-owner-resources/heartworm-basics) (고양이는 승인된 치료약이 없어 예방이 유일한 보호, 실내 고양이도 위험, 12개월마다 검사·12개월 내내 예방, 고양이 신호는 기침·천식 같은 발작·구토·갑작스러운 쓰러짐). 국내 광견병 접종 의무는 아직 원문 확인 전이에요.
+출처: [WSAVA 2024 개·고양이 접종 가이드라인 요약](https://wsava.org/wp-content/uploads/2024/05/2024-Guidelines-for-the-Vaccination-of-Dogs-and-Cats.pdf) (기본 접종, 2\\~4주 간격·16주 이후 마지막, 26주 추가, 성묘·성견은 필요 이상 자주 접종하지 않기, 연간 건강검진, 선택 접종 효과 약 1년) · [Merck 보호자용: 개 심장사상충](https://www.merckvetmanual.com/dog-owners/heart-and-blood-vessel-disorders-of-dogs/heartworm-disease-in-dogs) (모기, 6\\~8주 시작, 1년 내내, 매년 검사) · [Merck 보호자용: 개 장 기생충](https://www.merckvetmanual.com/dog-owners/digestive-disorders-of-dogs/gastrointestinal-parasites-of-dogs) (2주부터 구충, 사람 감염 주의) · [Merck 보호자용: 강아지 돌보기](https://www.merckvetmanual.com/dog-owners/routine-care-of-dogs/puppy-care) · [미국 심장사상충학회: 심장사상충 기초](https://www.heartwormsociety.org/pet-owner-resources/heartworm-basics) (고양이는 승인된 치료약이 없어 예방이 유일한 보호, 실내 고양이도 위험, 12개월마다 검사·12개월 내내 예방, 고양이 신호는 기침·천식 같은 발작·구토·갑작스러운 쓰러짐) · [가축전염병 예방법 시행규칙 (농림축산식품부령 제793호, 2026. 10. 1. 시행)](https://www.law.go.kr/법령/가축전염병예방법시행규칙) (제18조 광견병 예방주사 공동 실시, 제19조 광견병 예방접종 표시, 제20조제5항 예방주사를 맞지 않은 개·고양이 억류 등 조치 10일 전 공고. 요셉님이 올려 준 PDF로 확인).
 
 ## 행동 (분리불안·짖음·화장실 실수·스트레스)
 
@@ -571,7 +571,7 @@ FDA·WSAVA 자료로 확인함. 포장에서 가장 먼저 볼 것은 사진이�
 
 **봇 답변 원칙**: "원재료 첫째가 고기면 좋은 사료"처럼 단정하지 않고, 완전·균형 표시와 연령을 먼저 안내해요. 다른 브랜드를 헐뜨리지 않아요.
 
-출처: [FDA: "완전·균형" 사료](https://www.fda.gov/animal-veterinary/animal-health-literacy/complete-and-balanced-pet-food) (주식 여부, AAFCO 기준·급여 시험, 두 가지 연령 기준, 건물 기준 계산, 인증 마크는 영양 보증이 아님) · [WSAVA: 사료 고르는 가이드라인 (2021)](https://wsava.org/wp-content/uploads/2021/04/Selecting-a-pet-food-for-your-pet-updated-2021_WSAVA-Global-Nutrition-Toolkit.pdf) (마케팅 문구, 보조 급여용 10% 이하, 전 연령용, 열량, 제조사에 물을 것) · [FDA: 반려동물 사료](https://www.fda.gov/animal-veterinary/animal-foods-feeds/pet-food) (원재료는 무게가 많은 것부터 순서대로). 국내 사료관리법 표시 기준은 아직 원문 확인 전이에요.
+출처: [FDA: "완전·균형" 사료](https://www.fda.gov/animal-veterinary/animal-health-literacy/complete-and-balanced-pet-food) (주식 여부, AAFCO 기준·급여 시험, 두 가지 연령 기준, 건물 기준 계산, 인증 마크는 영양 보증이 아님) · [WSAVA: 사료 고르는 가이드라인 (2021)](https://wsava.org/wp-content/uploads/2021/04/Selecting-a-pet-food-for-your-pet-updated-2021_WSAVA-Global-Nutrition-Toolkit.pdf) (마케팅 문구, 보조 급여용 10% 이하, 전 연령용, 열량, 제조사에 물을 것) · [FDA: 반려동물 사료](https://www.fda.gov/animal-veterinary/animal-foods-feeds/pet-food) (원재료는 무게가 많은 것부터 순서대로). · 농림축산식품부 고시 「사료 등의 기준 및 규격」 제2024-27호 (반려동물·개·고양이 사료도 사료관리법 적용 대상, 성분등록과 표시는 고시에서 정한 명칭을 써야 함, 기타 표시사항은 별표 15) · 같은 고시 제2025-93호 (2028년 9월 3일부터 개·고양이 사료 전용 표시 기준 별표 15의2 시행). 두 고시는 요셉님이 올려 준 PDF로 확인했고, 별표 15의 세부 표시 항목은 아직 원문 확인 전이에요.
 
 ## 건식·습식·생식
 
@@ -622,7 +622,7 @@ WSAVA·코넬·FDA 자료로 확인함. 완전·균형 사료를 먹는 건강�
 
 **봇 답변 원칙**: 영양제가 병을 고치거나 막는다고 말하지 않아요. 영양제 제품명·용량을 정해 주지 않고, 간식은 10% 규칙과 열량 조절을 안내해요.
 
-출처: [WSAVA 개 간식 가이드](https://wsava.org/wp-content/uploads/2025/11/WSAVA_GuidetoTreats_Dogs_251107.pdf) (간식 10% 미만, 단단한 간식) · [코넬: 고양이 급여](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feeding-your-cat) (간식 10\\~15%, 우유) · [FDA: 완전·균형 사료](https://www.fda.gov/animal-veterinary/animal-health-literacy/complete-and-balanced-pet-food) · [FDA: 동물 영양제 규정 안내 (철회된 CPG 690.100 페이지)](https://www.fda.gov/regulatory-information/search-fda-guidance-documents/cpg-sec-690100-nutritional-supplements-companion-animals-withdrawn-2202020) (검색 요약으로 확인) · [FDA: 자일리톨](https://www.fda.gov/consumers/consumer-updates/paws-xylitol-its-dangerous-dogs) · [Tufts: 유산균](https://sites.tufts.edu/petfoodology/2017/06/12/probiotics/) (장 질환·설사, 건강한 아이는 근거 없음, 균주마다 다름, 15개 중 2개만 라벨과 일치, 건사료·요거트). 국내 반려동물 영양제 규정은 아직 원문 확인 전이에요.
+출처: [WSAVA 개 간식 가이드](https://wsava.org/wp-content/uploads/2025/11/WSAVA_GuidetoTreats_Dogs_251107.pdf) (간식 10% 미만, 단단한 간식) · [코넬: 고양이 급여](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feeding-your-cat) (간식 10\\~15%, 우유) · [FDA: 완전·균형 사료](https://www.fda.gov/animal-veterinary/animal-health-literacy/complete-and-balanced-pet-food) · [FDA: 동물 영양제 규정 안내 (철회된 CPG 690.100 페이지)](https://www.fda.gov/regulatory-information/search-fda-guidance-documents/cpg-sec-690100-nutritional-supplements-companion-animals-withdrawn-2202020) (검색 요약으로 확인) · [FDA: 자일리톨](https://www.fda.gov/consumers/consumer-updates/paws-xylitol-its-dangerous-dogs) · [Tufts: 유산균](https://sites.tufts.edu/petfoodology/2017/06/12/probiotics/) (장 질환·설사, 건강한 아이는 근거 없음, 균주마다 다름, 15개 중 2개만 라벨과 일치, 건사료·요거트). · 농림축산식품부 고시 「사료 등의 기준 및 규격」 제2024-27호 (국내에서 사료로 파는 영양제는 별표 2의 보조사료 범위에 있는 물질이어야 하고, 범위에 없는 물질은 사료로 팔거나 원료로 쓸 수 없음, 제5조·제5조의2. 요셉님이 올려 준 PDF로 확인). 동물용 의약품·의약외품으로 파는 제품의 규정은 아직 원문 확인 전이에요.
 
 ## 물 마시기
 
@@ -691,7 +691,7 @@ Merck·코넬 자료로 확인함. 벼룩은 심한 가려움과 벼룩 알러�
 - 산책 뒤에는 귀, 눈 주변, 발가락 사이, 겨드랑이를 확인해요.
 - 떼는 법: 맨손으로 만지지 말고, 핀셋으로 피부에 최대한 가까이 잡아 천천히 당겨요. 불붙인 성냥개를 대지 않아요. 물린 자리가 빨갛고 부으면 병원에 가요 (Merck).
 - 진드기가 많이 붙었으면 병원에서 떼요.
-- 한국에서는 진드기가 사람에게 중증열성혈소판감소증후군(SFTS)을 옮길 수 있어서, 진드기를 뗄 때 장갑을 끼는 것이 좋아요.
+- 한국에서는 SFTS 바이러스에 감염된 참진드기에게 물리면 사람이 중증열성혈소판감소증후군(SFTS)에 걸릴 수 있고, 주로 4\\~11월에 생겨요. 열, 피로감, 구토·설사 같은 증상이 있고 치명률이 약 20%예요. 환자의 피·체액으로도 옮을 수 있어요 (질병관리청). 그래서 반려동물에게서 진드기를 뗄 때는 장갑을 끼고, 산책 뒤 사람과 반려동물 모두 진드기가 붙었는지 확인해요. 진드기에 물린 뒤 열이 나면 사람도 병원에 가요.
 
 **병원에 가야 할 신호**
 
@@ -701,7 +701,7 @@ Merck·코넬 자료로 확인함. 벼룩은 심한 가려움과 벼룩 알러�
 
 **봇 답변 원칙**: 예방약 제품·용량을 정해 주지 않고 수의사와 정하도록 안내해요. 개용 제품을 고양이에게 쓰면 위험할 수 있다는 점을 함께 알려줘요 ('먹으면 안 되는 음식·중독' 참고).
 
-출처: [Merck 보호자용: 개의 진드기](https://www.merckvetmanual.com/dog-owners/skin-disorders-of-dogs/ticks-of-dogs) (피하기·풀 깎기, 핀셋으로 떼기, 맨손·성냥 금지, 옮기는 병) · [Merck 보호자용: 개의 벼룩](https://www.merckvetmanual.com/dog-owners/skin-disorders-of-dogs/fleas-of-dogs) (늦여름, 1살 미만 드묾, 모든 동물에게 꾸준히, 촌충을 옮김, 심하면 빈혈, 없애는 데 6주\\~3개월) · [코넬: 벼룩](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/fleas) (검색 요약으로 확인). SFTS 내용은 질병관리청 자료로 아직 확인 전이에요.
+출처: [Merck 보호자용: 개의 진드기](https://www.merckvetmanual.com/dog-owners/skin-disorders-of-dogs/ticks-of-dogs) (피하기·풀 깎기, 핀셋으로 떼기, 맨손·성냥 금지, 옮기는 병) · [Merck 보호자용: 개의 벼룩](https://www.merckvetmanual.com/dog-owners/skin-disorders-of-dogs/fleas-of-dogs) (늦여름, 1살 미만 드묾, 모든 동물에게 꾸준히, 촌충을 옮김, 심하면 빈혈, 없애는 데 6주\\~3개월) · [코넬: 벼룩](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/fleas) (검색 요약으로 확인) · 질병관리청: 중증열성혈소판감소증후군 안내 (참진드기, 4\\~11월, 증상, 치명률 약 20%, 혈액·체액 전파. 요셉님이 올려 준 화면으로 확인).
 
 ## 췌장염
 
@@ -1244,6 +1244,191 @@ ASPCA 자료로 확인함. 빗질은 털의 먼지를 털고 엉킴을 막고, �
 **봇 답변 원칙**: 목욕 횟수는 아이의 생활과 피부 상태에 따라 다르다고 말하고, 사람 샴푸를 권하지 않아요. 피부 이상이 있으면 목욕으로 해결하려 하지 말고 진료를 권해요.
 
 출처: [ASPCA: 강아지 그루밍 팁](https://www.aspca.org/pet-care/dog-care/dog-grooming-tips) (3개월에 한 번 이상, 목욕 순서, 미지근한 물, 솜·젖은 수건, 반려동물용 샴푸, 주름 관리, 털 종류별 빗질 횟수, 엉킨 털 자르기, 냄새, 피부 이상·링웜·핫스팟).
+
+## 자궁축농증 (중성화 안 한 암컷)
+
+Merck 자료로 확인함. 자궁축농증은 **중성화하지 않은 암컷의 자궁에 고름이 차는 세균 감염**이에요. 주로 5살 넘은 암컷 강아지에게 생기고, 발정이 끝나고 4\\~6주 뒤에 잘 생겨요. 발정을 여러 번 거치며 자궁 안쪽이 두꺼워지고 물혹이 생겨 세균이 자라기 쉬워져요. 호르몬 약(에스트로젠·프로게스테론 계열)을 쓴 뒤에도 생길 수 있어요. 빨리 나빠져 쇼크와 죽음으로 갈 수 있는 응급이에요 (Merck).
+
+**집에서 할 수 있는 것**
+
+- 중성화하지 않은 암컷이라면 마지막 발정 날짜를 적어 두어요. 발정 뒤 몇 주 동안 아래 신호가 있는지 봐요 (Merck).
+- 새끼를 낳게 할 계획이 없다면 중성화를 수의사와 상의해요. 중성화하면 자궁축농증이 생기지 않아요 (Merck, '중성화 후 관리·더위·추위' 참고).
+- 집에서 항생제나 다른 약으로 버티지 않아요.
+
+**병원에 가야 할 신호**
+
+- 발정 뒤 몇 주 안에 물을 많이 마시고 소변을 많이 봐요 (Merck).
+- 기운이 없고 밥을 안 먹거나 토해요 (Merck).
+- 생식기에서 고름이나 피 섞인 분비물이 나와요 (Merck).
+- 분비물이 없는데 배가 불러 와요. 자궁 입구가 닫힌 경우로 더 위험해요 (Merck).
+- 축 늘어지고 잇몸이 창백해요 (쇼크일 수 있는 응급).
+
+**봇 답변 원칙**: 중성화 안 한 암컷이 물을 많이 마시거나 기운이 없다고 하면 자궁축농증 가능성을 꼭 말하고 바로 진료를 권해요. 치료는 대부분 수술(중성화)이 권장된다고 말하되, 치료 방법은 수의사가 정한다고 안내해요.
+
+출처: [Merck 보호자용: 암컷 개의 생식기 질환](https://www.merckvetmanual.com/dog-owners/reproductive-disorders-of-dogs/reproductive-disorders-of-female-dogs) (5살 넘은 중성화 안 한 암컷, 발정 4\\~6주 뒤, 호르몬 약, 신호, 열린·닫힌 자궁 입구, 쇼크, 대부분 중성화 수술, 닫힌 경우 약물 치료 위험) · [Merck: 자궁내막증식증·자궁축농증 (전문가용)](https://www.merckvetmanual.com/reproductive-system/reproductive-diseases-of-the-female-small-animal/cystic-endometrial-hyperplasia-pyometra-complex-in-small-animals) (번식 계획이 없으면 수술 권장, 48시간 안에 나아지지 않으면 응급 수술).
+
+## 이물 삼킴 (양말·장난감·실)
+
+Merck 자료로 확인함. 강아지는 고양이보다 이물을 더 자주 삼키고, 고양이는 **실, 털실, 치실 같은 긴 끈**을 놀다가 삼키는 경우가 많아요. 어린 고양이와 어린 대형견이 특히 잘 삼켜요. 긴 끈은 한쪽 끝이 혀뿌리나 위에 걸린 채 나머지가 장을 따라 내려가면서 장을 주름지게 하고 찢을 수 있어 더 위험해요. 지우개처럼 작은 물건도 작은 고양이에게는 장을 막을 수 있어요 (Merck).
+
+**집에서 할 수 있는 것**
+
+- 양말, 머리끈, 실, 바늘, 치실, 작은 장난감, 뼈는 손이 닿지 않는 곳에 두어요 (Merck).
+- **입이나 항문에 실이 보여도 절대 잡아당기지 않아요.** 장에 걸려 있으면 당기다 장이 찢어질 수 있어요 (Merck).
+- 무엇을, 언제, 얼마나 먹었는지 적고, 남은 조각이나 같은 물건을 챙겨 병원에 가요. 없어진 장난감이나 바늘이 있으면 꼭 말해요 (Merck).
+- 수의사와 상의 없이 집에서 억지로 토하게 하지 않아요 ('중독 음식' 참고).
+
+**병원에 가야 할 신호**
+
+- 뭔가를 삼키는 것을 봤어요. 증상이 없어도 병원에 먼저 물어봐요.
+- 토하고, 밥을 안 먹어요 (Merck).
+- 기운이 없고, 배를 아파하거나 배가 부어요 (Merck).
+- 설사, 열, 또는 몸이 차가워지고 탈수돼요 (Merck).
+- 고양이 혀 밑에 실이 감겨 있어요.
+
+**봇 답변 원칙**: 실·끈을 삼켰다는 말에는 당기지 말라고 먼저 말하고 바로 진료를 권해요. "기다리면 변으로 나온다"고 말하지 않아요. 작은 물건이 저절로 나오는지 지켜볼지는 수의사가 엑스레이로 정한다고 안내해요.
+
+출처: [Merck: 개·고양이 위장관 폐색 (전문가용)](https://www.merckvetmanual.com/digestive-system/surgical-problems-of-the-gastrointestinal-tract-in-small-animals/gastrointestinal-obstruction-in-small-animals) (개가 더 자주 삼킴, 고양이는 끈, 어린 고양이·어린 대형견, 끈은 혀뿌리·위에 걸려 장 천공, 입의 끈은 당기지 않기, 작은 것은 엑스레이로 지켜보기도 함) · [Merck 보호자용: 고양이의 위·장 질환](https://www.merckvetmanual.com/cat-owners/digestive-disorders-of-cats/disorders-of-the-stomach-and-intestines-in-cats) (끈이 혀뿌리에 걸림, 신호, 끈·바늘·없어진 장난감을 알리기).
+
+## 백내장·녹내장 (눈이 뿌옇거나 아파해요)
+
+Merck·코넬 자료로 확인함. **백내장**은 눈 속 수정체가 뿌옇게 흐려져 빛을 막는 병으로, 조금 흐릿한 정도부터 실명까지 갈 수 있어요. 유전이 흔하고 당뇨, 염증, 다친 것도 원인이에요. 나이 든 개 눈 깊은 곳이 푸르스름하게 보이는데 잘 본다면 정상 노화(핵경화증)인 경우가 많아요. **녹내장**은 눈 속 압력이 높아져 망막과 시신경을 망가뜨리는 병이에요. 갑자기 생기면 심한 통증, 충혈, 시력 상실이 오는 응급이에요 (Merck·코넬).
+
+**집에서 할 수 있는 것**
+
+- 개는 냄새와 소리로 시력 저하를 메워서 백내장을 늦게 알아채기 쉬워요. 조심스럽게 걷거나 보호자 곁에만 있으려 하는지 봐요 (Merck).
+- 백내장 수술을 하지 않기로 했다면 정기적으로 눈 검사를 받아요. 오래된 백내장은 녹내장, 포도막염, 수정체 탈구를 일으킬 수 있어요. 코넬은 4\\~6개월마다 안압 검사를 권해요 (Merck·코넬).
+- 앞이 잘 안 보이는 아이는 가구 배치를 바꾸지 않으면 집에서 잘 적응해요 (코넬).
+- 당뇨가 있으면 백내장이 생길 수 있어요 ('당뇨·갑상선' 참고).
+
+**병원에 가야 할 신호**
+
+- 눈이 갑자기 빨갛고, 눈동자가 커진 채 잘 움직이지 않고, 각막이 뿌옇고, 아파해요. 급성 녹내장일 수 있어 바로 진료해요 (응급, Merck).
+- 한쪽 눈이 커 보이거나 튀어나와 보여요 (Merck).
+- 눈이 하얗게 뿌옇게 변했고 물건에 부딪혀요 (Merck).
+- 눈을 문지르거나, 기운이 없고 숨어요. 눈 통증은 깜빡임보다 행동 변화로 보일 때가 많아요 (Merck).
+
+**봇 답변 원칙**: 눈이 뿌옇다는 질문에 노화라고 단정하지 않고 진료로 백내장인지 확인하도록 안내해요. 눈 통증과 충혈이 함께 있으면 응급으로 봐요. 백내장 수술은 진행되기 전에 할수록 결과가 좋다고 말해요 (코넬). 사람 안약은 권하지 않아요.
+
+출처: [Merck 보호자용: 개 녹내장](https://www.merckvetmanual.com/dog-owners/eye-disorders-of-dogs/glaucoma-in-dogs) (안압, 열린·닫힌각, 초기 신호가 약함, 급성 신호, 즉시 진료, 장기 관리) · [Merck 보호자용: 개의 수정체 질환](https://www.merckvetmanual.com/dog-owners/eye-disorders-of-dogs/disorders-of-the-lens-in-dogs) (백내장 정의·원인, 노화와 구분, 늦게 알아챔, 수술, 수술 안 하면 녹내장 감시) · [코넬 Riney 개 건강센터: 개 백내장](https://www.vet.cornell.edu/departments-centers-and-institutes/riney-canine-health-center/canine-health-topics/canine-cataracts) (원인, 성숙 전 수술이 좋음, 성공률 80\\~90%, 녹내장·포도막염·탈구, 4\\~6개월마다 안압, 핵경화증).
+
+## 노령견·노령묘 치매 (인지기능장애)
+
+코넬·Merck 자료로 확인함. 인지기능장애는 **나이가 들며 뇌가 변해 생기는 병**으로, 사람의 알츠하이머와 비슷해요. 강아지는 9살쯤부터, 고양이는 10살쯤부터 신호가 눈에 띄어요. 천천히 진행돼 보호자가 노화로 여기고 놓치기 쉬워요 (코넬).
+
+**집에서 할 수 있는 것**
+
+- 몸과 머리를 쓰는 놀이·산책·훈련을 꾸준히 해요. 진행을 늦추고 신호를 줄이는 데 도움이 돼요 (Merck, 코넬).
+- 하루 일과를 규칙적으로 하고, 새 동물을 들이는 것처럼 스트레스가 될 일을 줄여요 (코넬).
+- 고양이는 턱이 낮은 화장실을 가까운 곳에 두어요 (코넬).
+- 뇌 건강용 처방식이나 약이 있어요. 수의사와 상의해요 (코넬, Merck).
+
+**병원에 가야 할 신호**
+
+- 익숙한 곳에서 길을 잃거나, 구석에 갇히거나, 멍하니 벽을 봐요 (코넬).
+- 밤에 집 안을 헤매고 낮에 더 많이 자요 (코넬).
+- 잘 가리던 대소변을 실수해요 (코넬).
+- 고양이가 이유 없이 크게 울고, 놀이·밥·물에 관심이 없어요 (코넬).
+- 같은 신호는 통증, 관절염, 신장병, 갑상선 항진증, 시력·청력 저하에서도 보여서, 검사로 다른 병을 먼저 확인해요 (코넬).
+
+**봇 답변 원칙**: 나이 든 아이의 행동 변화를 "치매"라고 단정하지 않고, 다른 병을 먼저 확인하는 검사를 권해요. 약 이름이나 용량은 정해 주지 않아요.
+
+출처: [코넬 Riney 개 건강센터: 인지기능장애](https://www.vet.cornell.edu/departments-centers-and-institutes/riney-canine-health-center/canine-health-topics/cognitive-dysfunction-syndrome) (9살쯤부터, 놓치기 쉬움, 방향 상실·수면 변화·배변 실수, 다른 병 배제, 환경 풍부화·처방식·약) · [코넬 고양이 건강센터: 인지기능장애](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/cognitive-dysfunction) (10살 이상, 신호, 갑상선·신장병 배제, 스트레스 줄이기, 낮은 화장실) · [Merck 보호자용: 개의 행동 문제](https://www.merckvetmanual.com/dog-owners/behavior-of-dogs/behavior-problems-in-dogs) (몸·머리 쓰는 활동이 진행을 늦춤).
+
+## 고양이 백혈병(FeLV)·면역결핍(FIV)
+
+코넬 자료로 확인함. 둘 다 고양이 면역을 약하게 하는 바이러스예요. **FeLV**는 고양이에게 가장 흔한 암의 원인이고, 감염된 고양이와 가까이 지내며 옮아요. 어린 고양이가 걸리면 더 나빠지기 쉬워요. **FIV**는 주로 싸우다 물린 상처로 옮고, 물그릇을 같이 쓰거나 서로 핥아 주는 정도로는 잘 옮지 않아요. 둘 다 완치하는 약은 없지만, 잘 관리하면 오랫동안 건강하게 사는 고양이도 많아요 (코넬).
+
+**집에서 할 수 있는 것**
+
+- 새 고양이를 들이기 전에 FeLV·FIV 검사를 해요 ('새 아이·합사' 참고, 코넬).
+- 실내에서 키우는 것이 가장 확실한 예방이에요. 바깥에 나간다면 지켜보거나 울타리 안에서만 나가게 해요 (코넬).
+- FeLV 백신은 새끼 고양이와 바깥에 나가는 고양이에게 권해요. 100% 막지는 못해요. FIV 백신은 현재 쓸 수 있는 것이 없어요 (코넬).
+- 감염된 고양이는 실내에서 다른 고양이와 따로 지내고, 밥그릇·물그릇·화장실을 따로 써요. 중성화하면 싸움과 돌아다니는 것이 줄어요 (코넬).
+- 감염된 고양이는 체중, 식욕, 활동량, 대소변, 입·눈 상태를 꾸준히 기록해요 (코넬).
+- 검사 결과는 한 번으로 확정하지 않아요. 최근 노출됐거나 양성이면 몇 주 뒤 다시 검사해요 (코넬).
+
+**병원에 가야 할 신호**
+
+- 밥을 안 먹고 살이 계속 빠져요 (코넬).
+- 열이 오래가거나, 잇몸이 창백해요 (코넬).
+- 잇몸·입안이 빨갛게 헐었어요 ('고양이 구내염' 참고, 코넬).
+- 피부, 방광, 코·목 감염이 자꾸 생기거나 설사가 오래가요 (코넬).
+- 경련이나 행동 변화가 있어요 (코넬).
+
+**봇 답변 원칙**: 양성 결과를 받은 보호자에게 바로 절망적으로 말하지 않고, 확인 검사와 관리 방법을 안내해요.
+
+출처: [코넬 고양이 건강센터: 고양이 백혈병 바이러스](https://www.vet.cornell.edu/departments/cornell-feline-health-center/health-information/feline-health-topics/feline-leukemia-virus) (감염 형태, 검사 반복, 신호, 완치 없음, 실내 사육, 그릇·화장실 분리, 백신은 새끼 고양이 기본, 진단 뒤 중앙 생존 2.5년·관리 기록) · [코넬 고양이 건강센터: 고양이 면역결핍바이러스](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-immunodeficiency-virus-fiv) (물린 상처로 전파, 가벼운 접촉은 잘 안 옮음, 바깥에 나가는 중성화 안 한 수컷 위험, 무증상기, 구내염, 항체 검사 2\\~6개월, 실내·중성화, 백신 없음, 오래 건강하게 살 수 있음).
+
+## 고양이 구내염 (침 흘림·입 냄새)
+
+Merck·코넬 자료로 확인함. 고양이 구내염은 **입안, 잇몸, 목 안쪽까지 깊게 생기는 염증**으로 점점 심해져요. 원인은 확실하지 않지만, 치아 표면 물질에 대한 과한 염증 반응으로 보이고, 칼리시바이러스를 오래 가진 고양이가 많아요. FeLV·FIV 고양이에게 더 흔해요. 고양이는 아픔을 잘 숨겨서 늦게 발견되기 쉬워요 (Merck·코넬).
+
+**집에서 할 수 있는 것**
+
+- 입 냄새, 침, 밥 먹는 모습을 평소에 봐 두어요 (코넬).
+- 매일 양치질과 정기 구강 검진을 해요 ('치아' 참고).
+- 치료는 약으로 염증을 줄이거나, 심하면 이빨 대부분을 빼는 수술을 하기도 해요 (코넬).
+
+**병원에 가야 할 신호**
+
+- 하품하거나 밥을 먹으려고 입을 벌릴 때 소리를 지르거나 펄쩍 뛰어요 (Merck).
+- 배고파서 밥그릇에 다가갔다가 하악질하고 도망가요 (Merck).
+- 입 냄새가 심하고, 침을 흘리고, 삼키기 힘들어해요 (Merck).
+- 입을 발로 긁거나 딱딱한 밥을 안 먹어요 (코넬).
+- 잇몸이 빨갛게 붓거나 헐었어요 (코넬).
+- 밥을 안 먹고 살이 빠져요. 고양이는 하루 넘게 굶으면 진료를 받아요.
+
+**봇 답변 원칙**: 침 흘림·입 냄새 질문에 "양치하면 된다"로 끝내지 않고 진료를 권해요. 사람 진통제나 구강 제품은 권하지 않아요. FeLV·FIV 검사를 받았는지 함께 물어봐요.
+
+출처: [Merck 보호자용: 고양이의 입 질환](https://www.merckvetmanual.com/cat-owners/digestive-disorders-of-cats/disorders-of-the-mouth-in-cats) (구내염 정의, 원인 불명·과한 염증 반응, 칼리시바이러스, 입 벌릴 때 통증, 다가갔다 도망감, 입 냄새·침·삼키기 어려움) · [코넬 고양이 건강센터: 고양이가 치과에 가야 할 때](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/when-kitty-needs-dentist) (치은염·구내염 증후군 약 100마리 중 1마리, FeLV·FIV, 발치, 신호, 고양이는 통증을 숨김).
+
+## 수술·마취 전후 관리
+
+ASPCA 자료로 확인함. 수술 전 금식, 수술 뒤 약과 활동 제한은 **수술한 병원 안내가 가장 우선**이에요. 아래는 중성화 같은 흔한 수술 뒤의 일반적인 관리예요 (ASPCA).
+
+**집에서 할 수 있는 것**
+
+- 수술 전 금식 시간은 병원 안내를 따라요.
+- 집에 와서 2시간쯤 뒤에 평소 양의 절반쯤 밥과 물을 줘요. 16주 미만이면 오자마자 절반쯤 줘요. 첫날 밤에 안 먹는 아이도 많아요 (ASPCA).
+- 넥카라는 7\\~10일 동안 해요. 밥 먹을 때 벗기면 옆에서 지켜보고 먹은 뒤 바로 다시 씌워요. 수술 부위를 핥으면 아픈 감염이 생길 수 있어요 (ASPCA).
+- 7일쯤은 뛰고 점프하고 노는 것을 막아요. 지켜볼 수 없을 때는 켄넬이나 작은 방에 두고, 작은 아이는 계단에서 안아 주고, 배변은 줄을 매고 짧게 해요 (ASPCA).
+- 매일 수술 부위를 봐요. 첫날 모습이 정상 기준이에요 (ASPCA).
+- 10일 동안 목욕시키지 않고, 병원에서 권하지 않은 연고나 약을 바르지 않아요 (ASPCA).
+- 사람 진통제는 절대 주지 않아요. 위험하고 죽을 수도 있어요 (ASPCA).
+- 병원에서 온 아이는 냄새가 달라 다른 동물과 싸울 수 있어서, 며칠은 따로 지내게 해요 (ASPCA).
+
+**병원에 가야 할 신호**
+
+- 토하거나, 설사하거나, 숨쉬기 힘들어하거나, 잇몸이 창백해요 (ASPCA).
+- 피가 나거나, 기운 없음, 식욕 저하, 떨림, 비틀거림이 24시간 넘게 이어져요 (ASPCA).
+- 수술 부위가 아주 빨갛거나, 초록·노란·붉은 분비물, 나쁜 냄새, 뭔가 튀어나옴, 열감, 커지는 멍·혹이 있어요 (ASPCA).
+- 넥카라를 해도 수술 부위를 핥아요 (ASPCA).
+- 소변에 피가 계속 섞여요. 암컷은 첫 24시간에 조금 보일 수 있어요 (ASPCA).
+
+**봇 답변 원칙**: 수술 뒤 질문에는 먼저 병원에서 받은 안내를 따르라고 말하고, 위 신호가 있으면 수술한 병원에 바로 연락하도록 안내해요. 사람 진통제·연고는 권하지 않아요.
+
+출처: [ASPCA: 수술 뒤 강아지 돌보기](https://www.aspca.org/sites/default/files/caring_for_your_dog_after_surgery-_2019.pdf) (이상 신호, 밥·물 절반, 넥카라 7\\~10일, 사람 약 금지, 수술 부위 확인, 활동 제한 7일, 다른 동물과 분리, 소변 피, 목욕 10일) · [ASPCA: 수술 뒤 고양이 돌보기](https://www.aspca.org/sites/default/files/aspca_caring_for_your_cat_after_surgery-_2019_eng.pdf) · [ASPCA: 중성화 수술 뒤 돌보기 안내](https://www.aspca.org/sites/default/files/upload/files/podischarge_instructionsny.pdf) (첫날 밤 안 먹는 경우 많음).
+
+## 건강검진 주기
+
+Merck·코넬 자료로 확인함. 아파 보이지 않아도 정기 검진으로 병을 일찍 찾을 수 있어요. **성견은 적어도 1년에 한 번, 7\\~8살 넘은 노령견은 1년에 두 번 이상** 검진을 받아요. 고양이는 12\\~14살부터 노령으로 보고 6개월마다 검진을 권해요 (Merck·코넬).
+
+**집에서 할 수 있는 것**
+
+- 강아지는 4개월까지 3\\~4주마다 병원에 가서 접종과 검진을 받아요 (Merck).
+- 성견·성묘는 1년에 한 번 검진 때 필요한 접종을 함께 정해요 ('접종·구충·심장사상충' 참고).
+- 1년에 한 번 변 검사로 장 기생충을 확인하고, 강아지는 해마다 심장사상충 검사를 받아요 (Merck).
+- 노령이 되면 수의사가 혈액검사, 엑스레이 같은 검사를 권할 수 있어요. 나이 든 고양이는 혈액·소변 검사와 혈압 측정이 특히 중요해요 (Merck, '신장병' 참고).
+- 평소 체중, 밥·물 양, 대소변, 행동 변화를 적어 가면 검진에 도움이 돼요.
+
+**병원에 가야 할 신호**
+
+- 다음 검진 날짜가 아니어도, 물을 많이 마시거나, 살이 빠지거나, 밥을 덜 먹거나, 행동이 바뀌면 미리 진료를 받아요.
+
+**봇 답변 원칙**: 검진 주기는 나이와 건강 상태에 따라 수의사가 정한다고 말하고, 검사 항목이나 비용을 정해 주지 않아요.
+
+출처: [Merck 보호자용: 개 정기 건강 관리](https://www.merckvetmanual.com/dog-owners/routine-care-of-dogs/routine-health-care-of-dogs) (강아지 3\\~4주마다, 성견 1년에 한 번 이상, 7\\~8살 넘으면 1년에 두 번 이상, 혈액검사·엑스레이, 해마다 변 검사·심장사상충 검사) · [코넬: 나이 든 고양이 돌보기](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/loving-care-older-cats) (12\\~14살, 6개월마다 검진).
 
 `;
 
