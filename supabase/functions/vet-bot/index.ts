@@ -40,7 +40,7 @@ const RULES = `너는 FILIN(필린) 앱의 반려동물 건강 안내 도우미�
 
 `;
 
-// 수의 지식 자료 rev 163 (FILIN 수의 지식 자료 문서에서 그대로 옮김)
+// 수의 지식 자료 rev 166 (FILIN 수의 지식 자료 문서에서 그대로 옮김)
 const KNOWLEDGE = `
 # FILIN 수의 지식 자료 (AI 봇용)
 
@@ -858,7 +858,7 @@ Merck 자료로 확인함. 아래 상황은 **바로 동물병원(가까운 24�
 - 하악거림·으르렁거림이 보이면 이전 단계로 돌아가요. 벌주거나 억지로 만나게 하지 않아요.
 - 밥그릇·물·화장실·높은 자리·숨을 곳을 여러 군데 두어 서로 다투지 않게 해요.
 - 몇 주에서 몇 달이 걸릴 수 있어요. 서두르지 않는 것이 가장 중요해요.
-- 강아지와 고양이를 합사할 때는 강아지에게 목줄을 하고, 고양이가 올라가 피할 수 있는 높은 곳을 마련해요.
+- 강아지와 고양이를 합사할 때는 강아지에게 목줄을 해서 보호자 옆에 조용히 앉혀 두고, 고양이가 스스로 다가오게 해요. 무서워하면 억지로 만나게 하지 말고 나중에 다시 해요. 간식이나 장난감으로 고양이를 조금씩 가까이 오게 하고, 그동안 강아지는 쥫아가지 않고 얘전히 앉아 있을 때마다 간식과 칭찬을 줘요 (코넬).
 
 **병원에 가야 할 신호**
 
@@ -872,7 +872,7 @@ Merck 자료로 확인함. 아래 상황은 **바로 동물병원(가까운 24�
 
 **봇 답변 원칙**: 합사 기간을 "며칠이면 된다"고 단정하지 않고, 싸움이 심하면 수의사나 행동 전문가 상담을 안내해요.
 
-출처: [코넬: 새 고양이 고르기와 돌보기](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/choosing-and-caring-your-new-cat) (빨리 검진, FeLV·FIV 검사, 검진 전 따로, 화장실 수+1, 스크래처) · [Merck 보호자용: 강아지 돌보기](https://www.merckvetmanual.com/dog-owners/routine-care-of-dogs/puppy-care) · [Merck 보호자용: 개의 행동 문제](https://www.merckvetmanual.com/dog-owners/behavior-of-dogs/behavior-problems-in-dogs) (배변 습관 8\\~9주) · [코넬: 고양이 공격성](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-behavior-problems-aggression) (따로 방, 하루 30분쯤 공간 바꾸기, 이동장·하네스로 멀리서 함께 밥, 몇 주에서 몇 달) · [ASPCA: 집 안 고양이끼리 공격성](https://www.aspca.org/pet-care/cat-care/common-cat-behavior-issues/aggression-between-cats-your-household) (자원 따로, 문 조금씩 열기, 매일 지켜보는 만남). 강아지·고양이 합사는 아직 원문 확인 전이에요.
+출처: [코넬: 새 고양이 고르기와 돌보기](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/choosing-and-caring-your-new-cat) (빨리 검진, FeLV·FIV 검사, 검진 전 따로, 화장실 수+1, 스크래처) · [Merck 보호자용: 강아지 돌보기](https://www.merckvetmanual.com/dog-owners/routine-care-of-dogs/puppy-care) · [Merck 보호자용: 개의 행동 문제](https://www.merckvetmanual.com/dog-owners/behavior-of-dogs/behavior-problems-in-dogs) (배변 습관 8\\~9주) · [코넬: 고양이 공격성](https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-behavior-problems-aggression) (따로 방, 하루 30분쯤 공간 바꾸기, 이동장·하네스로 멀리서 함께 밥, 몇 주에서 몇 달) · [ASPCA: 집 안 고양이끼리 공격성](https://www.aspca.org/pet-care/cat-care/common-cat-behavior-issues/aggression-between-cats-your-household) (자원 따로, 문 조금씩 열기, 매일 지켜보는 만남) · [코넬 Baker 연구소: 전문가 문답](https://www.vet.cornell.edu/baker-pet-talks-tips-cornell-experts-questions-viewers) (강아지와 새끼 고양이 만남: 강아지는 묶어 조용히, 고양이가 스스로, 억지로 만나게 하지 않기, 간식·장난감, 얘전한 강아지에게 보상).
 
 ## 임신·수유 중 급여
 
