@@ -202,7 +202,7 @@ h3{font-size:16px;font-weight:700;letter-spacing:-.01em}
 <body>
 <header class="top"><div class="in"><a class="logo" href="recommend.html" data-home title="처음 화면으로">FILIN<i>♥</i><small>맞춤 사료 추천</small></a></div></header>
 <div class="page"><main id="view"></main>
-<div class="foot"><img src="img/filin-badge.png" alt="FILIN 올리와 세리"><p>작은 감정까지, 소중하게.</p><p class="small">토우 · 퓨어비타 · 뉴트리소스 · 초이스 · 벨포아는 (주)히즈윌이 공식 수입해요.</p></div>
+<div class="foot"><img src="img/filin-badge.png" alt="FILIN 올리와 세리"><p>작은 감정까지, 소중하게.</p><p class="small">토우 · 퓨어비타 · 뉴트리소스 · 초이스 · 벨포아는 (주)히즈윌이 공식 수입해요.</p><p class="small"><a href="privacy.html" style="color:inherit;text-underline-offset:3px">개인정보 처리방침</a> · 문의 070-8876-2580</p></div>
 </div>
 <div class="toast" id="toast" hidden></div>
 <button class="savebar" type="button" data-tosave hidden>이 결과 저장하기 ↓</button>
@@ -346,7 +346,7 @@ function vResult(){
 const SUPABASE_URL = "https://eiojasxqcgfhypzvgdzp.supabase.co";
 const SUPABASE_KEY = "sb_publishable_IzblR7JHCcBhHfRniZG0Vw_Q3wl3wEJ";
 const sb = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {auth:{persistSession:false, autoRefreshToken:false}}) : null;
-const CONSENT_VERSION = "2026-11-02b"; // 동의 문구를 바꾸면 날짜도 바꿔요 (명단에 어느 문구로 동의했는지 남아요)
+const CONSENT_VERSION = "2026-11-26"; // 동의 문구를 바꾸면 날짜도 바꿔요 (명단에 어느 문구로 동의했는지 남아요)
 const ss = { get:k=>{try{return sessionStorage.getItem(k);}catch(e){return null;}}, set:(k,v)=>{try{sessionStorage.setItem(k,v);}catch(e){}} };
 // 처음 들어온 링크의 utm_… 값과 이전 페이지를 기억해 둬요 (질문을 다시 해도 유지)
 const SRC = (()=>{
@@ -371,6 +371,7 @@ function vSave(){
       <label class="agree"><input type="checkbox" name="age14" required><span><b>[필수]</b> 만 14세 이상이에요</span></label>
       <label class="agree"><input type="checkbox" name="privacy" required><span><b>[필수]</b> 개인정보 수집·이용에 동의해요<button class="link" type="button" data-terms="privacy">내용 보기</button></span></label>
       <label class="agree"><input type="checkbox" name="marketing"><span><b>[선택]</b> 혜택·새 소식 알림(문자·카카오 알림톡)을 받을게요<button class="link" type="button" data-terms="marketing">내용 보기</button></span></label>
+      <p class="small muted" style="margin-top:-4px">문의·삭제 요청 070-8876-2580 · <a class="link" href="privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a></p>
       ${saveErr?`<p class="err" role="alert">${esc(saveErr)}</p>`:""}
       <button class="btn dark block" type="submit" ${busy?"disabled":""}>${busy?"저장하는 중…":"결과 저장하기"}</button>
     </form>
@@ -382,7 +383,9 @@ const TERMS = {
       <tr><th>수집 항목</th><td>휴대폰 번호, 아이 이름(남긴 경우), 추천 질문의 답(강아지·고양이, 나이대, 몸 크기, 찾는 밥, 피할 재료, 활동량), 추천받은 제품, 들어온 경로(링크 정보·이전 페이지)</td></tr>
       <tr><th>이용 목적</th><td>추천 결과 저장, 저장한 결과에 대한 문의 응대, 맞춤 추천 개선 (광고성 안내는 [선택] 알림에 동의한 경우에만 보내요)</td></tr>
       <tr><th>보관 기간</th><td>남긴 날부터 1년. 그 전에 삭제를 요청하면 바로 지워요.</td></tr>
+      <tr><th>문의·삭제 요청</th><td>070-8876-2580</td></tr>
     </table>
+    <p>자세한 내용은 <a href="privacy.html" target="_blank" rel="noopener">개인정보 처리방침</a>에서 볼 수 있어요.</p>
     <p>동의하지 않을 수 있어요. 동의하지 않으면 결과 저장만 할 수 없고, 맞춤 추천은 그대로 이용할 수 있어요. 만 14세 미만은 결과를 저장할 수 없어요.</p>`},
   marketing:{title:"혜택·새 소식 알림 수신 동의 (선택)", body:`<table>
       <tr><th>보내는 곳</th><td>(주)히즈윌 (FILIN)</td></tr>
@@ -390,7 +393,7 @@ const TERMS = {
       <tr><th>보내는 방법</th><td>문자(SMS), 카카오 알림톡</td></tr>
       <tr><th>보관 기간</th><td>남긴 날부터 1년, 또는 수신을 거부할 때까지</td></tr>
     </table>
-    <p>동의하지 않아도 결과 저장은 할 수 있어요. 받은 메시지 안의 수신 거부 방법으로 언제든 그만 받을 수 있어요.</p>`}
+    <p>동의하지 않아도 결과 저장은 할 수 있어요. 받은 메시지 안의 수신 거부 방법이나 070-8876-2580으로 언제든 그만 받을 수 있어요.</p>`}
 };
 function openTerms(k){
   const t=TERMS[k];
