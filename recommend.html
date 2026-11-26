@@ -203,6 +203,9 @@ h3{font-size:16px;font-weight:700;letter-spacing:-.01em}
 .feed .seg{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:3px;flex:1 1 170px}
 .feed .seg button{flex:1;border:0;background:none;font:inherit;font-size:13.5px;color:var(--muted);border-radius:9px;padding:9px 6px;cursor:pointer}
 .feed .seg button[aria-pressed=true]{background:var(--slate);color:#fff;font-weight:700}
+.tofeed{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;margin-top:8px;border:0;border-radius:12px;padding:11px 14px;background:var(--amber-soft);color:var(--amber-ink);font:inherit;font-size:13.5px;cursor:pointer;text-align:left}
+.tofeed b{white-space:nowrap;font-weight:700}
+#feedBox{scroll-margin-top:70px}
 .feed .mealrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-size:13.5px;font-weight:500}
 .feed .mealrow .seg{flex:1 1 200px}
 .feed .need{background:var(--surface);border-radius:14px;padding:12px 14px;display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
@@ -298,6 +301,7 @@ function recCard(r,i){
       <ul>${r.why.slice(0,3).map(w=>`<li>${esc(w)}</li>`).join("")}</ul>
       ${r.caution?`<p class="caution">⚠ ${esc(r.caution)}</p>`:""}
       <div class="acts">${top?`<a class="btn primary" href="${storeUrl(p)}" target="_blank" rel="noopener">네이버 스토어에서 구매</a>`:""}<button class="btn ghost${top?"":" sm"}" type="button" data-open="${p.id}">${top?"자세히 보기":"원료·용량별 가격 보기"}</button></div>
+      ${top?`<button class="tofeed" type="button" data-tofeed><span>하루에 얼마나 주면 될까요?</span><b>급여량 계산하기 ↓</b></button>`:""}
     </div>
   </article>`;
 }
@@ -579,7 +583,8 @@ function openProduct(id){
       ${p.also&&Object.keys(p.also).length?`<dt>함께 든 원료</dt><dd>${Object.entries(p.also).map(([k,v])=>`${allergenName(k)} (${esc(v)})`).join(", ")}</dd>`:""}
       <dt>열량</dt><dd>${p.kcal?`${p.kcal.toLocaleString("ko-KR")} kcal/kg`:"표기 준비 중"}</dd>
     </dl>
-    <a class="btn primary block" href="${storeUrl(p)}" target="_blank" rel="noopener">네이버 스토어에서 구매하기</a>`;
+    <a class="btn primary block" href="${storeUrl(p)}" target="_blank" rel="noopener">네이버 스토어에서 구매하기</a>
+    <button class="btn ghost block" type="button" data-tofeed>하루 급여량 계산하기</button>`;
   $("#sheetBg").hidden=false; document.body.style.overflow="hidden"; $("#sheet").scrollTop=0;
   $("#sheet [data-close]").focus();
 }
@@ -592,6 +597,7 @@ document.addEventListener("click", e=>{
   const t=e.target.closest("button"); if(!t) return; const d=t.dataset;
   if("neut" in d){ feed.neut=d.neut==="1"; $("#feedBox").querySelectorAll("[data-neut]").forEach(b=>b.setAttribute("aria-pressed", String((b.dataset.neut==="1")===feed.neut))); $("#feedOut").innerHTML=feedOut(); return; }
   if("meals" in d){ feed.meals=+d.meals; $("#feedBox").querySelectorAll("[data-meals]").forEach(b=>b.setAttribute("aria-pressed", String(+b.dataset.meals===feed.meals))); $("#feedOut").innerHTML=feedOut(); return; }
+  if("tofeed" in d){ closeSheet(); const b=$("#feedBox"); if(b){ b.scrollIntoView({block:"start",behavior:"smooth"}); setTimeout(()=>{ const i=b.querySelector("[name=weight]"); if(i && !i.value) i.focus({preventScroll:true}); },450); } return; }
   if("tosave" in d){ const b=$("#saveBox"); if(b){ b.scrollIntoView({block:"start",behavior:"smooth"}); setTimeout(()=>{ const i=$("#saveForm [name=phone]"); if(i) i.focus({preventScroll:true}); },450); } return; }
   if("begin" in d){ step=0; render(); scrollTo(".chat .answer"); }
   else if(d.ans!==undefined){
