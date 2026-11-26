@@ -195,6 +195,26 @@ h3{font-size:16px;font-weight:700;letter-spacing:-.01em}
 .sechead span{font-size:13px;color:var(--muted)}
 .cta{background:linear-gradient(160deg,#e2f5ea,#eef9f1);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:10px}
 .save{background:var(--surface);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow)}
+.feed{background:linear-gradient(160deg,#fff3cf,#fff9e8);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.feed .in{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
+.feed label.w{display:flex;flex-direction:column;gap:4px;font-size:13.5px;font-weight:500;flex:1 1 130px}
+.feed .wbox{display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:0 12px}
+.feed .wbox:focus-within{outline:2px solid var(--amber);outline-offset:1px}
+.feed input[name=weight]{font:inherit;font-size:17px;font-weight:700;border:0;outline:0;background:none;color:var(--ink);padding:10px 0;width:100%;min-width:0}
+.feed .seg{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:3px;flex:1 1 170px}
+.feed .seg button{flex:1;border:0;background:none;font:inherit;font-size:13.5px;color:var(--muted);border-radius:9px;padding:9px 6px;cursor:pointer}
+.feed .seg button[aria-pressed=true]{background:var(--slate);color:#fff;font-weight:700}
+.feed .need{background:var(--surface);border-radius:14px;padding:12px 14px;display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.feed .need b{font-size:20px;color:var(--slate);white-space:nowrap}
+.feed table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:14px;overflow:hidden;font-size:13.5px}
+.feed th,.feed td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
+.feed tr:last-child th,.feed tr:last-child td{border-bottom:0}
+.feed thead th{font-size:12px;font-weight:500;color:var(--muted)}
+.feed td.g{font-weight:700;color:var(--slate);white-space:nowrap}
+.feed td.m{white-space:nowrap}
+.feed tbody th{font-weight:500}
+.feed tbody th small{display:block;font-weight:400;color:var(--muted);font-size:11.5px}
+.feed h4{margin:4px 0 0;font-size:14px}
 .compare{background:var(--surface);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow)}
 .foot{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;font-size:12.5px;color:var(--muted);margin-top:auto;padding-top:36px}
 .foot img{width:72px;height:auto}
@@ -505,14 +525,60 @@ function vResult(){
   h += chatNav();
   if(recs.length) h += `<button class="savehint" type="button" data-tosave ${saveState==="done"?"hidden":""}><span>번호를 남기면 이 결과를 저장해 둘 수 있어요</span><b>저장해 두기 ↓</b></button>`;
   h += `<section class="stack" id="recEnd" style="gap:12px">${recs.length?`<div class="sechead"><h2>올리의 추천 ${recs.length}가지</h2><span>${esc(spName(ans.sp))} · ${esc(stageName(ans.stage,ans.sp))}</span></div>`:""}${recs.map(recCard).join("")}</section>`;
+  if(recs.length) h += vFeed();
   if(recs.length) h += vSave(); // 추천 카드 바로 아래에 둬서 놓치지 않게 해요
   if(recs.length>1) h += compareTable(recs);
   if(out.length) h += `<p class="note">피해야 할 재료(${ans.allergies.map(allergenName).join("·")})가 주 원료인 제품 ${out.length}가지는 추천에서 뺐어요.</p>`;
   if(recs.length) h += `<section class="cta"><h3>마음에 드는 사료를 찾았나요?</h3><p class="small">1순위 추천 <b>${esc(BRANDS[recs[0].p.b].name+" "+recs[0].p.n)}</b>, 네이버 스토어에서 바로 살 수 있어요. 다른 추천 사료도 카드를 눌러 구매 버튼을 찾을 수 있어요.</p>
       <div class="row"><a class="btn primary" href="${storeUrl(recs[0].p)}" target="_blank" rel="noopener">네이버 스토어에서 구매하기</a><button class="btn ghost" type="button" data-share>결과 링크 복사</button></div></section>`;
-  h += `<p class="note">추천은 참고용이에요. 사료 전환은 7~10일에 걸쳐 천천히, 알러지나 건강 고민은 수의사 선생님과 먼저 상담해 주세요. 가격은 스마트스토어 기준(2026-10-30)이라 바뀔 수 있어요.</p>
+  h += `<p class="note">추천은 참고용이에요. 사료는 10일쯤에 걸쳐 천천히 바꾸고, 알러지나 건강 고민은 수의사 선생님과 먼저 상담해 주세요. 가격은 스마트스토어 기준(2026-10-30)이라 바뀔 수 있어요.</p>
     <button class="btn ghost block" type="button" data-restart>처음부터 다시</button>`;
   return h;
+}
+/* ---------- 급여량 안내 ----------
+   하루 필요 열량 = 기초 대사량(70 × 몸무게kg^0.75) × 계수. 계수는 수의 영양에서 널리 쓰는 값이에요.
+   하루 급여량(g) = 필요 열량 ÷ 제품 열량(kcal/kg) × 1000. 입력한 몸무게는 저장하지 않아요. */
+let feed = {w:"", neut:true};
+function feedFactor(){
+  const {sp,stage,active}=ans, n=feed.neut;
+  if(sp==="dog"){
+    if(stage==="puppy") return 2.0;                       // 4개월 미만은 3.0 (아래에 따로 안내)
+    if(stage==="senior") return active==="high"?1.6:active==="low"?1.2:1.4;
+    return active==="high"?2.0:active==="low"?1.3:n?1.6:1.8;
+  }
+  if(stage==="kitten") return 2.5;
+  if(stage==="senior") return active==="high"?1.4:active==="low"?1.0:1.1;
+  return active==="high"?1.6:active==="low"?1.0:n?1.2:1.4;
+}
+const feedMeals = ()=> (ans.stage==="puppy"||ans.stage==="kitten") ? [3,"3~4번"] : [2, ans.sp==="cat"?"2~3번":"2번"];
+const roundG = g=> g>=100 ? Math.round(g/5)*5 : Math.round(g);
+function feedOut(){
+  const w=parseFloat(feed.w), max=ans.sp==="cat"?15:90;
+  if(!feed.w) return `<p class="small muted">몸무게를 넣으면 추천 사료별로 하루에 몇 g, 몇 번 주면 되는지 알려 드려요.</p>`;
+  if(!(w>=0.5 && w<=max)) return `<p class="small muted">몸무게를 0.5~${max}kg 사이로 넣어 주세요.</p>`;
+  const kcal=70*Math.pow(w,0.75)*feedFactor(), [n,nTxt]=feedMeals();
+  const recs=recommend({sp:ans.sp, stage:ans.stage, size:ans.sp==="dog"?ans.size:"small", concerns:ans.concerns, allergies:ans.allergies, active:ans.active});
+  const rows=recs.map(({p})=>{ const g=p.kcal?roundG(kcal/p.kcal*1000):0;
+    return `<tr><th>${esc(BRANDS[p.b].name)} ${esc(p.n)}<small>${p.kcal?p.kcal.toLocaleString("ko-KR")+" kcal/kg":"열량 표기 준비 중"}</small></th>${g?`<td class="g">약 ${g}g</td><td class="m">${roundG(g/n)}g씩 ${n}번</td>`:`<td colspan="2" class="small muted">포장의 급여표를 봐 주세요</td>`}</tr>`; }).join("");
+  const top=recs.find(r=>r.p.kcal), g=top?roundG(kcal/top.p.kcal*1000):0;
+  const sw=[["1~3일","25%",.25],["4~6일","50%",.5],["7~9일","75%",.75],["10일부터","100%",1]];
+  let h=`<div class="need"><span>하루에 필요한 열량</span><b>약 ${Math.round(kcal/5)*5} kcal</b></div>
+    <table><thead><tr><th>추천 사료</th><th>하루 양</th><th>한 번에 (하루 ${nTxt})</th></tr></thead><tbody>${rows}</tbody></table>`;
+  if(ans.sp==="dog" && ans.stage==="puppy") h+=`<p class="small muted">4개월이 안 된 강아지는 더 많이 필요해서 위 양의 약 1.5배가 기준이에요.</p>`;
+  if(top) h+=`<h4>사료를 바꿀 때는 이렇게 섞어 주세요</h4>
+    <table><thead><tr><th>기간</th><th>새 사료 (${esc(top.p.n)})</th><th>먹던 사료</th></tr></thead><tbody>${sw.map(([d,pc,r])=>`<tr><th>${d}</th><td class="g">${pc} · 약 ${roundG(g*r)}g</td><td class="m">${r<1?`평소 양의 ${Math.round((1-r)*100)}%`:"없음"}</td></tr>`).join("")}</tbody></table>
+    <p class="small muted">변이 묽어지면 앞 단계로 돌아가 며칠 더 천천히 바꿔 주세요.</p>`;
+  h+=`<p class="small muted">계산은 참고용이에요(기초 대사량 70 × 몸무게^0.75에 나이·중성화·활동량 계수를 곱한 값). 간식을 준다면 그만큼 줄이고, 2~3주 동안 몸무게와 체형을 보면서 10% 안팎으로 조절해 주세요. 살을 빼야 하거나 임신·수유 중이거나 아픈 아이는 수의사 선생님과 상의해 주세요.</p>`;
+  return h;
+}
+function vFeed(){
+  const adult = ans.stage==="adult";
+  return `<section class="feed" id="feedBox">
+    <div class="stack" style="gap:4px"><h3>하루에 얼마나 주면 될까요?</h3><p class="small muted">몸무게만 넣으면 계산해 드려요. 입력한 값은 저장하지 않아요.</p></div>
+    <div class="in"><label class="w">몸무게<span class="wbox"><input type="text" name="weight" inputmode="decimal" maxlength="5" autocomplete="off" placeholder="예: 4.5" value="${esc(feed.w)}"><span class="muted" style="white-space:nowrap">kg</span></span></label>
+      ${adult?`<div class="seg" role="group" aria-label="중성화 여부"><button type="button" data-neut="1" aria-pressed="${feed.neut}">중성화 했어요</button><button type="button" data-neut="0" aria-pressed="${!feed.neut}">안 했어요</button></div>`:""}</div>
+    <div class="stack" id="feedOut" style="gap:10px">${feedOut()}</div>
+  </section>`;
 }
 /* ---------- 결과 저장 (고객 명단) ----------
    추천 결과 아래에서 휴대폰 번호와 동의를 받아 Supabase leads 표에 넣어요 (supabase/leads.sql).
@@ -606,6 +672,10 @@ async function submitSave(form){
 }
 document.addEventListener("submit", e=>{ if(e.target.id==="saveForm"){ e.preventDefault(); if(saveState!=="sending") submitSave(e.target); } });
 document.addEventListener("input", e=>{
+  if(e.target.name==="weight" && e.target.closest("#feedBox")){
+    let v=e.target.value.replace(",",".").replace(/[^0-9.]/g,""); const i=v.indexOf("."); if(i>=0) v=v.slice(0,i+1)+v.slice(i+1).replace(/\./g,"").slice(0,1);
+    e.target.value=feed.w=v; $("#feedOut").innerHTML=feedOut(); return;
+  }
   if(e.target.name==="phone" && e.target.closest("#saveForm")){ // 숫자만 받고 010-1234-5678 꼴로 보여 줘요
     const d=e.target.value.replace(/\D/g,"").slice(0,11);
     e.target.value = d.length<4?d : d.length<8?`${d.slice(0,3)}-${d.slice(3)}` : `${d.slice(0,3)}-${d.slice(3,d.length-4)}-${d.slice(-4)}`;
@@ -687,6 +757,7 @@ document.addEventListener("click", e=>{
   if(home){ e.preventDefault(); closeSheet(); ans=fresh(); step=-1; render(); document.scrollingElement.scrollTop=0; return; } // 왼쪽 위 FILIN: 처음 시작 화면으로
   if(e.target===$("#sheetBg")) return closeSheet();
   const t=e.target.closest("button"); if(!t) return; const d=t.dataset;
+  if("neut" in d){ feed.neut=d.neut==="1"; $("#feedBox").querySelectorAll("[data-neut]").forEach(b=>b.setAttribute("aria-pressed", String((b.dataset.neut==="1")===feed.neut))); $("#feedOut").innerHTML=feedOut(); return; }
   if("tosave" in d){ const b=$("#saveBox"); if(b){ b.scrollIntoView({block:"start",behavior:"smooth"}); setTimeout(()=>{ const i=$("#saveForm [name=phone]"); if(i) i.focus({preventScroll:true}); },450); } return; }
   if("begin" in d){ step=0; render(); scrollTo(".chat .answer"); }
   else if(d.ans!==undefined){
