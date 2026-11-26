@@ -52,8 +52,8 @@ def build_app():
     s = read("index.html")
     for line in [
         '<link rel="manifest" href="manifest.webmanifest">\n',
-        '<link rel="icon" href="icons/icon-192.png?v=4">\n',
-        '<link rel="apple-touch-icon" href="icons/apple-touch-icon.png?v=4">\n',
+        '<link rel="icon" href="icons/icon-192.png?v=5">\n',
+        '<link rel="apple-touch-icon" href="icons/apple-touch-icon.png?v=5">\n',
         '<script src="vendor/supabase-js-2.117.3.js"></script>\n',  # 파일로 열면 로그인을 못 해서 빼요
     ]:
         s = replace_once(s, line, "")
@@ -73,7 +73,7 @@ def build_app():
 
 def build_recommend():
     s = read("recommend.html")
-    s = replace_once(s, '<link rel="icon" href="icons/icon-192.png?v=4">\n',
+    s = replace_once(s, '<link rel="icon" href="icons/icon-192.png?v=5">\n',
                      f'<link rel="icon" href="{data_uri("icons/icon-192.png")}">\n'
                      "<!-- 사진까지 한 파일에 담은 버전이에요. 고칠 때는 recommend.html을 고친 뒤 이 파일을 다시 만들어 주세요. -->\n")
     s = replace_once(s, 'content="img/oli-seri-mealtime.jpg"', f'content="{data_uri("img/oli-seri-mealtime.jpg")}"')
